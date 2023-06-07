@@ -31,7 +31,6 @@
             android:name=".CatergoryForm"
             android:exported="false" />
 
-
         <activity
             android:name=".MainTaskActivity"
             android:exported="true" />

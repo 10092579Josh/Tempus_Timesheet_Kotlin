@@ -13,9 +13,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +20,7 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.login)
         signup()
         signin()
-        FirebaseApp.initializeApp(this)
+
     }
 
 
@@ -46,30 +43,36 @@ class Login : AppCompatActivity() {
         var pass: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.passwords)
         var pass2 = pass.editText
 
+        var  check1 = registrationActivty.SourceClass.datas[0][0].toString().replace("\\s".toRegex(), "")
+        var  check2 = registrationActivty.SourceClass.datas[0][1].toString().replace("\\s".toRegex(), "")
         var signin: Button = findViewById(R.id.insign)
         signin.setOnClickListener()
         {
-            val auth = Firebase.auth
 
-// Sign in with email and password
-            auth.signInWithEmailAndPassword(usernames?.text.toString().trim(), pass2?.text.toString().trim())
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success
-                        val user = auth.currentUser
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
+            // do database check and authentication here
+            // read from and compare stored pass to entered pass
+            if(pass2?.text.toString().replace("\\s".toRegex(), "") == check2 && usernames?.text.toString().replace("\\s".toRegex(), "") ==check1)
+            {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
 
-                        var message  = "USER ${usernames?.text.toString()} HAS LOGGED IN "
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-                    } else {
-                        // Sign in failed
-                        Toast.makeText(this, "Incorrect username or password", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-
+            }
+            else if(pass2?.text.toString().replace("\\s".toRegex(), "") !=check2 && usernames?.text.toString().replace("\\s".toRegex(), "") != check1)
+            {
+                var message  = "incorrect password please try again "
+                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+            }
+            else if(pass2?.text.toString().replace("\\s".toRegex(), "") !=check2 && usernames?.text.toString().replace("\\s".toRegex(), "") == check1)
+            {
+                var message  = "incorrect password please try again "
+                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+            }
+            else if(pass2?.text.toString().replace("\\s".toRegex(), "") ==check2 && usernames?.text.toString().replace("\\s".toRegex(), "") != check1)
+            {
+                var message  = "incorrect USERNAME please try again "
+                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+            }
 
 
         }

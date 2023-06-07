@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.media3.common.util.Log
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 // THIS PAGE HANDLES THE DISPLAY OF THE TASKS WHEN A SPECIFIC TASK IS CLICKED
 class TaskPage: AppCompatActivity() {
@@ -92,39 +90,43 @@ class TaskPage: AppCompatActivity() {
 
             //THIS INDEX LETS THE FOR LOOP SORT THE SPECIFIC INDEX WHICH WONT CHANGE AS PER THE POSITION WHICH WILL CHANGE
 
+            val columnIndex1 = 1
+            val columnIndex2 = 2
+            val columnIndex3 = 3
+            val columnIndex4 = 4
+            val columnIndex5 = 5
+            val columnIndex6 = 6
+            val columnIndex7 = 7
+            val columnIndex11 = 11
 
-            val db = FirebaseFirestore.getInstance()
+            // CALLING THE ARRAY TO PASS OVER THE DATA
+            val array = intent.getSerializableExtra("myDataList") as? Array<Array<String>>
 
+            //ASSIGNING THE SPECIFIC INDEXES TO THE RELEVANT VARIABLES
+            val category = array?.get(rowIndex)?.get(columnIndex1)
+            val Description = array?.get(rowIndex)?.get(columnIndex2)
+            val startdate = array?.get(rowIndex)?.get(columnIndex3)
+            val Starttime = array?.get(rowIndex)?.get(columnIndex4)
+            val Endtime = array?.get(rowIndex)?.get(columnIndex5)
+            val mingoal = array?.get(rowIndex)?.get(columnIndex6)
+            val maxgoal = array?.get(rowIndex)?.get(columnIndex7)
 
-
-            val userid = FirebaseAuth.getInstance().currentUser?.uid
-// Query Firestore to get the data for the clicked item
-            db.collection("Tasks")
-                .whereEqualTo("userid",userid.toString().trim())
-                .limit(position + 1.toLong()) // Limit the results to the first (position + 1) items
-                .get()
-                .addOnSuccessListener { documents ->
-                    // Get the last document in the result, which corresponds to the clicked item
-                    val document = documents.documents.lastOrNull()
-                    if (document != null) {
-                        // Get the data for the clicked item from the document
-                        val item = document.toObject(MainTaskActivity.ItemsViewModel::class.java)
-                        if (item != null) {
-                            // Use the data from Firestore to populate the fields in your form
-                            tname.text = document.getString("name")
-                            catname.text = document.getString("category")
-                            desc.text = document.getString("description")
-                            sdate.text = document.getString("startDate")
-                            edate.text = document.getString("endDate")
-                            hours2.text = document.getString("hours")
-                            min.text = document.getString("minGoal")
-                            max.text = document.getString("maxGoal")
-                            date.text = document.getString("date")
-
-                        }
-                    }
-                }
-
+            try {
+                val uri = array?.get(rowIndex)?.get(columnIndex11)
+                taskimage.setImageURI(uri?.toUri())
+            } catch (e: SecurityException) {
+                Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+            //PRINTING THE DATA ACCORDING TO DATA ENTERED
+            tname.text = task.toString().trim()
+            catname.text = category.toString().trim()
+            desc.text = Description.toString().trim()
+            sdate.text = Starttime.toString().trim()
+            edate.text = Endtime.toString().trim()
+            hours2.text = hours.toString().trim()
+            min.text = mingoal.toString().trim()
+            max.text = maxgoal.toString().trim()
+            date.text = startdate.toString().trim()
 
 
         }

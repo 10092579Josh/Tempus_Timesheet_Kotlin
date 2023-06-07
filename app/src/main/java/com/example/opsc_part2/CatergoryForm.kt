@@ -4,9 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-// THIS ALLOWS THE USER TO CREATE A CATEGORY
-// THIS HOLDS THE DATA ASSIGNMENT
-//ASSIGNS TO THE ARRAY
+// THIS ALLOWS THE USER TO CREATRE
 class CatergoryForm: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
