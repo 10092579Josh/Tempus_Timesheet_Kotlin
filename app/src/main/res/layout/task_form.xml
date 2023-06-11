@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    >
+
+    <RelativeLayout
+        android:id="@+id/top_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/logo"/>
+
+        <ImageView
+            android:id="@+id/tempus"
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:layout_toRightOf="@id/logo"
+            android:layout_toLeftOf="@id/search_btn"
+            android:src="@drawable/tempus_title"/>
+
+        <ImageButton
+            android:id="@+id/search_btn"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:paddingRight="100dp"
+            android:text="hi"
+            android:background="@drawable/search_icon"
+            android:contentDescription="Search"/>
+
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/create_task_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Task"
+        android:textColor="@color/purple_700"
+
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:background="@drawable/sharp_square_background"
+        android:layout_below="@id/top_menu" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/create_task_title"
+        android:layout_above="@id/bottom_menu">
+        <RelativeLayout
+            android:id="@+id/create_task_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+            <TextView
+                android:id="@+id/uploadTaskImage"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Upload Task Image"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/purple_700"/>
+
+
+            <View
+                android:layout_width="104dp"
+                android:layout_below="@id/uploadTaskImage"
+                android:layout_height="104dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/image_background" />
+
+            <ImageView
+                android:id="@+id/imgGallery"
+                android:layout_width="99dp"
+                android:layout_height="99dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:scaleType="fitXY" />
+
+            <Button
+                android:id="@+id/uploadPicturetbtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="Home"
+                android:scaleType="fitCenter"
+                android:layout_below="@id/uploadTaskImage"
+                android:layout_toLeftOf="@id/imgGallery"
+                android:background="@drawable/camera_icon" />
+
+            <TextView
+                android:id="@+id/taskNameLabel"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgGallery"
+                android:layout_marginTop="78dp"
+                android:layout_marginBottom="8dp"
+                android:text="Task Name"
+
+                android:textColor="@color/purple_700"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/taskNameInput"
+                android:layout_width="250dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="50dp"
+                android:hint="    Enter task name"
+                android:paddingRight="5dp"
+                android:background="@drawable/rounded_square_background"
+                android:layout_below="@id/taskNameLabel"
+                android:gravity="top|start"
+                android:paddingStart="20dp"
+                android:layout_marginBottom="12dp"/>
+
+            <TextView
+                android:id="@+id/taskDescriptionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Task Description"
+                android:textColor="@color/purple_700"
+                android:textSize="20sp"
+                android:layout_below="@id/taskNameInput"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/taskDescriptionInput"
+                android:layout_width="250dp"
+                android:layout_centerHorizontal="true"
+                android:paddingStart="20dp"
+                android:layout_height="250dp"
+                android:hint="    Enter Task description"
+                android:layout_below="@id/taskDescriptionLabel"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/rounded_square_background"
+                android:maxLines="10"
+                android:inputType="textMultiLine"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:gravity="top|start"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/taskDescriptionInput">
+
+                <TextView
+                    android:id="@+id/dateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date:"
+                    android:textColor="@color/purple_700"
+                    android:textSize="20sp"
+                    android:layout_marginTop="8dp" />
+
+                <TextView
+                    android:id="@+id/selectedDateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/selectDateButton"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/selectDateButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_toRightOf="@id/dateView"
+                    android:layout_marginEnd="0dp"
+                    android:onClick="selectDate"
+                    android:background="@drawable/calendar"
+                    android:drawablePadding="8dp"
+                    />
+
+                <View
+                    android:id="@+id/dateView"
+                    android:layout_width="200dp"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/dateLabel"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/startTimeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start Time:"
+                    android:layout_below="@id/dateLabel"
+                    android:textColor="@color/purple_700"
+                    android:textSize="20sp"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/selectedStartTimeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dateView"
+                    android:layout_toLeftOf="@+id/selectStartTimeButton"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/selectStartTimeButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_below="@id/selectDateButton"
+
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_toRightOf="@id/endTimeView"
+                    android:onClick="selectTime"
+                    android:background="@drawable/clock"/>
+
+                <View
+                    android:id="@+id/startTimeView"
+                    android:layout_width="200dp"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/startTimeLabel"
+                    android:background="@android:color/darker_gray" />
+                <TextView
+                    android:id="@+id/endTimeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="End Time:"
+                    android:layout_below="@id/startTimeLabel"
+                    android:textColor="@color/purple_700"
+                    android:textSize="20sp"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:id="@+id/selectedEndTimeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/selectEndTimeButton"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_below="@id/startTimeView"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/selectEndTimeButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_below="@id/selectDateButton"
+
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_toRightOf="@id/endTimeView"
+                    android:onClick="selectEndTime"
+                    android:background="@drawable/clock"
+                    />
+
+                <View
+                    android:id="@+id/endTimeView"
+                    android:layout_width="200dp"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/endTimeLabel"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+
+                    android:id="@+id/minimumGoalLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:text="Minimum Goal"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/purple_700"
+                    android:textSize="20sp"
+                    android:layout_below="@id/endTimeView" />
+
+                <Spinner
+                    android:id="@+id/minimumGoalSpinner"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/spinner_background"
+                    android:layout_below="@id/minimumGoalLabel"
+                    android:spinnerMode="dropdown" />
+
+                <TextView
+                    android:id="@+id/maximumGoalLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Maximum Goal"
+                    android:textColor="@color/purple_700"
+                    android:textSize="20sp"
+                    android:layout_below="@id/minimumGoalSpinner"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp" />
+
+                <Spinner
+                    android:id="@+id/maximumGoalSpinner"
+                    android:layout_width="200dp"
+                    android:layout_height="45dp"
+                    android:layout_below="@id/maximumGoalLabel"
+                    android:layout_marginTop="8dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/spinner_background"
+                    android:spinnerMode="dropdown" />
+
+                <TextView
+                    android:id="@+id/category_spinnerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/maximumGoalSpinner"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="19dp"
+                    android:layout_marginEnd="147dp"
+                    android:text="Category"
+                    android:textColor="@color/purple_700"
+                    android:textSize="20sp" />
+
+                <Spinner
+                    android:id="@+id/category_spinner"
+                    android:layout_width="200dp"
+                    android:layout_height="45dp"
+                    android:layout_below="@id/category_spinnerName"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/spinner_background"
+                    android:spinnerMode="dropdown" />
+                <Button
+                    android:id="@+id/createTask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Create"
+                    android:layout_below="@id/category_spinner"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="35dp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+    <RelativeLayout
+        android:id="@+id/bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/hometbtn"
+            android:layout_width="86dp"
+            android:layout_height="50dp"
+            android:padding= "5dp"
+            android:layout_centerVertical="true"
+            android:contentDescription="Home"
+            android:src="@drawable/home_icon"
+            android:background="@drawable/rectangle"/>
+
+        <ImageButton
+            android:id="@+id/breakstbtn"
+            android:layout_width="86dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/hometbtn"
+            android:contentDescription="Breaks"
+            android:src="@drawable/break_icon"
+            android:background="@drawable/rectangle"/>
+
+        <ImageButton
+            android:id="@+id/addbtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/breakstbtn"
+            android:contentDescription="Add"
+            android:src="@drawable/add_icon"
+            android:background="@drawable/gradient_add"/>
+
+        <ImageButton
+            android:id="@+id/statstbtn"
+            android:layout_width="86dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/addbtn"
+            android:contentDescription="Stats"
+            android:src="@drawable/stats_icon"
+            android:background="@drawable/rectangle"/>
+
+        <ImageButton
+            android:id="@+id/settingstbtn"
+            android:layout_width="86dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/statstbtn"
+            android:contentDescription="Setting"
+            android:src="@drawable/settings_icon"
+            android:background="@drawable/rectangle"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
