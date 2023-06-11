@@ -16,7 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.play.core.tasks.Tasks
 import java.util.*
-
+// THIS DEALS WITH THE TASK AND CONTAINS THE RECYCLER VIEW
+// THIS HAS ALL NEEDED MODELS FOR THE VIEW
 class MainTaskActivity : AppCompatActivity() {
     object DateClass {
         //ASSIGNING TASKS

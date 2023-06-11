@@ -15,7 +15,10 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.FirebaseApp
 
+// THIS PAGE DEALS WITH THE CATEGORY
+// THIS POPULATES THE RECYCLER VIEW
 class MainActivity : AppCompatActivity() {
     private val REQUEST_CODE_PERMISSIONS = 1
     private val REQUIRED_PERMISSIONS = arrayOf(
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
 
     )
+    // OBJECT CLASS TO ADD DATA TO AND CONTAINS THE ARRRAYS
     object TaskClass {
         //ASSIGNING TASKS
         val rows = 10
@@ -47,9 +51,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 try {
-
+    FirebaseApp.initializeApp(this)
     permissions()
     print()
+    // SETTING THE TOTAL DATA
     MainActivity.TaskClass.hours[8][1] = MainActivity.TaskClass.hours[2][0].toString()
     MainActivity.TaskClass.hours[7][1] = MainActivity.TaskClass.hours[7][0].toString()
     MainActivity.TaskClass.hours[6][1] = MainActivity.TaskClass.hours[6][0].toString()
@@ -68,7 +73,7 @@ try {
 
     val cat = findViewById<Button>(R.id.category_selected)
     val task = findViewById<Button>(R.id.task_selected)
-
+// THIS ALLOWS FOR SWITCHING BETWEEN THE PAGES
     task.setOnClickListener()
     {
         val cat = Intent(this, MainActivity::class.java)
@@ -131,7 +136,7 @@ catch (e:Exception)
 
 
 
-
+// THIS PRINTS THE CATEGORIES
         val myDataList = mutableListOf<ItemsViewModel>()
         for (i in TaskClass.tasks.indices) {
 
@@ -157,6 +162,7 @@ catch (e:Exception)
 
 
     }
+    // PROMPT THE USER FOR PERMISSIONS
     fun permissions()
     {
         if (!allPermissionsGranted()) {
