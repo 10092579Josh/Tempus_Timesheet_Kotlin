@@ -7,7 +7,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.opsc_part2.R
+import com.example.tempus_project.R
 
 class EditDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

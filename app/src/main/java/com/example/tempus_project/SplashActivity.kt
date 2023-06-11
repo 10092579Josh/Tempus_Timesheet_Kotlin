@@ -5,7 +5,7 @@ import android.widget.ImageView
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
-import com.example.opsc_part2.R
+import com.example.tempus_project.R
 
 class SplashActivity : AppCompatActivity() {
 

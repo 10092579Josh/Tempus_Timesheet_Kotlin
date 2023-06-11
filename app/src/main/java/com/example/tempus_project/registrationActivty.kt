@@ -17,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import android.content.Context
 import android.view.View
-import com.example.opsc_part2.R
+import com.example.tempus_project.R
 
 
 class registrationActivty : AppCompatActivity() {

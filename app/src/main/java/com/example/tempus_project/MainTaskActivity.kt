@@ -16,7 +16,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.opsc_part2.R
+
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
@@ -151,7 +152,7 @@ class MainTaskActivity : AppCompatActivity() {
                 val description = document.getString("hours") ?: ""
                 val sub = document.getString("catergorytask") ?: ""
                 val date = document.getString("date") ?: ""
-                val imageUrl = document.getString("imageUrl") ?: ""
+                val imageUrl = document.getString("image") ?: ""
                 val item = ItemsViewModel(name, description,sub,date,imageUrl)
                 items.add(item)
             }

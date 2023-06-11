@@ -20,7 +20,7 @@ import android.widget.Button
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.opsc_part2.R
+import com.example.tempus_project.R
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
