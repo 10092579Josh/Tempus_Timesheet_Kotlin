@@ -105,7 +105,7 @@ class registrationActivty : AppCompatActivity() {
 
                 val database = FirebaseDatabase.getInstance()
                 val myRef = database.getReference("users")
-
+//stuff
 
 
 // Capture user details
