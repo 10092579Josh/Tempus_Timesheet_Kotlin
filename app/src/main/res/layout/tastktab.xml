@@ -16,7 +16,7 @@
             android:id="@+id/task_item_image"
             android:layout_width="65dp"
             android:layout_height="65dp"
-            android:background="@drawable/circle"/>
+           />
 
         <TextView
             android:id="@+id/mTitle2"

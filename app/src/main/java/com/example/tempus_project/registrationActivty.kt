@@ -1,25 +1,96 @@
-package com.example.opsc_part2
+package com.example.tempus_project
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import android.content.Context
+import android.view.View
+import com.example.opsc_part2.R
 
 
 class registrationActivty : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration)
-        input()
+notifications()
         FirebaseApp.initializeApp(this)
-    }
 
+    }
+fun notifications()
+{
+    var back:ImageButton = findViewById(R.id.back_btn)
+    back.setOnClickListener(){
+
+        val intent = Intent(this, Login::class.java)
+        startActivity(intent)
+        finish();
+
+    }
+    val layoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    val regpopupView = layoutInflater.inflate(R.layout.popup_window, null)
+    val newpopupWindow = PopupWindow(
+        regpopupView,
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT
+    )
+
+    var email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
+    email1.editText?.addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            val email = s.toString()
+            if (check(email)) {
+                // email is valid
+                newpopupWindow.dismiss()
+                input()
+
+
+
+
+
+
+            } else {
+                // email is not valid
+                if (!newpopupWindow.isShowing) {
+                    newpopupWindow.showAsDropDown(email1.editText, 0, 0)
+                }
+                if (email.contains("#")) {
+                    // email contains invalid character '#'
+                }
+                // add additional checks for other invalid characters here
+            }
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+    })
+
+    email1.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+        if (!hasFocus) {
+            // email EditText field lost focus
+            newpopupWindow.dismiss()
+        } }
+
+
+}
+    fun check(str: String): Boolean{
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(str).matches()
+    }
 
     object SourceClass {
         val rows = 5
@@ -28,10 +99,11 @@ class registrationActivty : AppCompatActivity() {
         val datas = Array(rows) { arrayOfNulls<String>(columns) }
     }
 
+
     fun input ()
     { //variables
 
-        var back:ImageButton = findViewById(R.id.back_btn)
+
 
         var submitting: Button = findViewById(R.id.sub)
         var name1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.firstName)
@@ -51,13 +123,10 @@ class registrationActivty : AppCompatActivity() {
         var pass2 = confirmpassword.editText
         var email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
         var emails = email1.editText
-        back.setOnClickListener(){
 
-            val intent = Intent(this, Login::class.java)
-            startActivity(intent)
-            finish();
 
-        }
+
+
 
         submitting.setOnClickListener()
 
@@ -94,7 +163,6 @@ class registrationActivty : AppCompatActivity() {
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
             }
-
             else if(emails?.text.toString().isEmpty())
             {
                 var message  = " no email entered "

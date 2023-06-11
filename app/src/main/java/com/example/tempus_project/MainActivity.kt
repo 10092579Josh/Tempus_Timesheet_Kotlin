@@ -1,4 +1,4 @@
-package com.example.opsc_part2
+package com.example.tempus_project
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +14,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.opsc_part2.R
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore

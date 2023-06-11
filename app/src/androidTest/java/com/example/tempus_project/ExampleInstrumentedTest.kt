@@ -1,4 +1,4 @@
-package com.example.opsc_part2
+package com.example.tempus_project
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

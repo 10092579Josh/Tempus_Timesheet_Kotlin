@@ -1,4 +1,4 @@
-package com.example.opsc_part2
+package com.example.tempus_project
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
-import androidx.media3.common.util.Log
+import com.example.opsc_part2.R
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -19,7 +19,9 @@ class TaskPage: AppCompatActivity() {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.task_page)
 // CALLING THE METHOD
+            FirebaseApp.initializeApp(this)
             taskpopulation()
+
 
             val homebtn = findViewById<ImageButton>(R.id.hometbtn)
             val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
@@ -108,20 +110,20 @@ class TaskPage: AppCompatActivity() {
                     val document = documents.documents.lastOrNull()
                     if (document != null) {
                         // Get the data for the clicked item from the document
-                        val item = document.toObject(MainTaskActivity.ItemsViewModel::class.java)
-                        if (item != null) {
+
+
                             // Use the data from Firestore to populate the fields in your form
-                            tname.text = document.getString("name")
-                            catname.text = document.getString("category")
+                            tname.text = document.getString("taskname")
+                            catname.text = document.getString("categorytask")
                             desc.text = document.getString("description")
-                            sdate.text = document.getString("startDate")
-                            edate.text = document.getString("endDate")
+                            sdate.text = document.getString("startime")
+                            edate.text = document.getString("endtime")
                             hours2.text = document.getString("hours")
-                            min.text = document.getString("minGoal")
-                            max.text = document.getString("maxGoal")
+                            min.text = document.getString("mingoal")
+                            max.text = document.getString("maxgoal")
                             date.text = document.getString("date")
 
-                        }
+
                     }
                 }
 

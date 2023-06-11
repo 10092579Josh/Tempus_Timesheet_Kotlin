@@ -1,4 +1,4 @@
-package com.example.opsc_part2
+package com.example.tempus_project
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -10,11 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.play.core.tasks.Tasks
+import com.bumptech.glide.Glide
+import com.example.opsc_part2.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 // THIS DEALS WITH THE TASK AND CONTAINS THE RECYCLER VIEW
 // THIS HAS ALL NEEDED MODELS FOR THE VIEW
@@ -43,30 +47,6 @@ class MainTaskActivity : AppCompatActivity() {
             val message = DateClass.startDate.toString()
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-            val myDataList = mutableListOf<ItemsViewModel>()
-            for (i in MainActivity.TaskClass.tasks.indices) {
-                val hours = MainActivity.TaskClass.hours[i][0]
-                val task = MainActivity.TaskClass.tasks[i][0]
-                val category = MainActivity.TaskClass.tasks[i][1]
-                val dateStr = MainActivity.TaskClass.tasks[i][3]
-
-                if (task != null && date != null) {
-                    if (dateStr.toString() in startDate..endDate) {
-                        myDataList.add(
-                            ItemsViewModel(
-                                task.toString(),
-                                hours.toString(),
-                                category.toString(),
-                                date.toString()
-                            )
-                        )
-                    }
-                }
-            }
-
-            // This will pass the ArrayList to our Adapter
-            val adapter = CustomAdapter(myDataList)
-            recyclerview.adapter = adapter
         }
 
         cat.setOnClickListener {
@@ -140,64 +120,59 @@ class MainTaskActivity : AppCompatActivity() {
     }
 
     fun applyFilter(view: View) {
-        val startDate = DateClass.startDate
-        val endDate = DateClass.endDate
 
-        if (startDate.isNotEmpty() && endDate.isNotEmpty()) {
-            val filteredTasks = ArrayList<ItemsViewModel>()
 
-            for (i in 0 until MainActivity.TaskClass.tasks.size) {
-                val task = MainActivity.TaskClass.tasks[i][0]
-                val category = MainActivity.TaskClass.tasks[i][1]
-                val date = MainActivity.TaskClass.tasks[i][3]
-                val hours = MainActivity.TaskClass.hours[i][0]
-
-                if (task != null && date != null) {
-                    if (isDateInRange(date, startDate, endDate)) {
-                        filteredTasks.add(
-                            ItemsViewModel(
-                                task.toString(),
-                                hours.toString(),
-                                category.toString(),
-                                date.toString()
-                            )
-                        )
-                    }
-                }
-            }
-
-            val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
-            val adapter = CustomAdapter(filteredTasks)
-            recyclerview.adapter = adapter
-            adapter.notifyDataSetChanged()
-        } else {
-            Toast.makeText(this, "Please select start and end dates", Toast.LENGTH_SHORT).show()
-        }
 
     }
 
     fun print() {
         val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
         recyclerview.layoutManager = LinearLayoutManager(this)
+        val db = FirebaseFirestore.getInstance()
+        val itemsRef = db.collection("Tasks")
 
-        val myDataList = mutableListOf<ItemsViewModel>()
-        for (i in MainActivity.TaskClass.tasks.indices) {
-            val task = MainActivity.TaskClass.tasks[i][0]
-            val category = MainActivity.TaskClass.tasks[i][1]
-            val date = MainActivity.TaskClass.tasks[i][3]
-            val hours = MainActivity.TaskClass.hours[i][0]
+// Get the user ID (this will depend on how you are authenticating users)
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
 
-            if (task != null && date != null) {
-                myDataList.add(ItemsViewModel(task.toString(), hours.toString(), category.toString(), date.toString()))
+// Create a query that only returns documents where the userId field matches the current user's ID
+        val query = itemsRef.whereEqualTo("userid",userid.toString().trim())
+
+// Execute the query and get the results as a Task
+        val task = query.get()
+
+// Add an OnSuccessListener to the Task to get the results
+        task.addOnSuccessListener { documents ->
+            // Create an empty list to hold the items
+            val items = mutableListOf<ItemsViewModel>()
+
+            for (document in documents) {
+                // Get the data for each document
+                val name = document.getString("taskname") ?: ""
+                val description = document.getString("hours") ?: ""
+                val sub = document.getString("catergorytask") ?: ""
+                val date = document.getString("date") ?: ""
+                val imageUrl = document.getString("imageUrl") ?: ""
+                val item = ItemsViewModel(name, description,sub,date,imageUrl)
+                items.add(item)
+            }
+
+            // Update the RecyclerView with the new data
+            // ...
+            val sortedItems = items.sortedBy { it.text }
+            try {
+
+                val adapter = CustomAdapter(sortedItems.toMutableList())
+                recyclerview.adapter = adapter
+
+            } catch (e: Exception) {
+
+
             }
         }
-
-        val adapter = CustomAdapter(myDataList)
-        recyclerview.adapter = adapter
     }
 
 
-    data class ItemsViewModel(val text: String, val hours: String, val sub: String, val date: String)
+    data class ItemsViewModel(val text: String, val hours: String, val sub: String, val date: String,val imageUrl: String)
 
     class CustomAdapter(val myDataList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
@@ -210,6 +185,9 @@ class MainTaskActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val itemsViewModel = myDataList[position]
+            Glide.with(holder.itemView)
+                .load(itemsViewModel.imageUrl)
+                .into(holder.imageView)
 
             holder.textView.text = itemsViewModel.text
             holder.textView2.text = itemsViewModel.hours
@@ -242,6 +220,7 @@ class MainTaskActivity : AppCompatActivity() {
             val textView: TextView = itemView.findViewById(R.id.mTitle2)
             val textView2: TextView = itemView.findViewById(R.id.mHpurs)
             val textView3: TextView = itemView.findViewById(R.id.mSubtitle)
+            val imageView :ImageView = itemView.findViewById(R.id.task_item_image)
           }
       }
 }

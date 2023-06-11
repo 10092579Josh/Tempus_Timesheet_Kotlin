@@ -1,4 +1,4 @@
-package com.example.opsc_part2
+package com.example.tempus_project
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.opsc_part2.R
 
 class EditDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

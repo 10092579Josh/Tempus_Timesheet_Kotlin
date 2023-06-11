@@ -1,4 +1,4 @@
-package com.example.opsc_part2.adapter
+package com.example.tempus_project.adapter
 
 import android.content.Context
 import android.view.View
@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.opsc_part2.R
-import com.example.opsc_part2.model.Category
+
+
+import com.example.tempus_project.model.Category
 
 class CategoryAdapter(val c:Context, val catList: ArrayList<Category>): RecyclerView.Adapter<CategoryAdapter.UserViewHolder>()
 {

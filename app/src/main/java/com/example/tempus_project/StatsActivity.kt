@@ -1,9 +1,10 @@
-package com.example.opsc_part2
+package com.example.tempus_project
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import com.example.opsc_part2.R
 
 class StatsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

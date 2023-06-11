@@ -1,4 +1,4 @@
-package com.example.opsc_part2.model
+package com.example.tempus_project.model
 
 import android.widget.DatePicker
 
