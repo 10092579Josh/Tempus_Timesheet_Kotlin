@@ -5,20 +5,23 @@ import android.app.DatePickerDialog
 import java.util.Calendar
 import android.view.View
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.widget.*
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.tempus_project.R
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.io.ByteArrayOutputStream
 
 // THIS IS FOR THE CREATION OF THE TASK
 // THIS HAS THE VARIABLE ASSIGNMENT
@@ -58,7 +61,33 @@ class TaskForm:AppCompatActivity() {
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
 
             uploadPictureBtn.setOnClickListener {
-                getContent.launch("image/*")
+                val task = findViewById<EditText>(R.id.taskNameInput)
+                if(task.text.toString().isNullOrEmpty())
+                {
+
+
+                    val message = "TASK MUST BE ENTERED FIRST! "
+                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+
+
+                }
+                else if (task.text.toString() != null) {
+                    // create an AlertDialog to let the user choose between the camera and the gallery
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("Choose an option")
+                    builder.setItems(arrayOf("Take a photo", "Pick from gallery")) { _, which ->
+                        when (which) {
+
+                            0 -> camera.launch()
+                            1 -> GalleryContent.launch("image/*")
+                        }
+                    }
+                    val dialog = builder.create()
+
+// show the dialog
+                    dialog.show()
+                }
+
             }
 
             // this creates a vertical layout Manager
@@ -97,25 +126,48 @@ class TaskForm:AppCompatActivity() {
             Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
-    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+    private val GalleryContent = registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
         // handle the result here
         val task = findViewById<EditText>(R.id.taskNameInput)
-        if (uri != null) {
+        if (url != null) {
             // display the image in an ImageView
             val imageView = findViewById<ImageView>(R.id.imgGallery)
-            imageView.setImageURI(uri)
-            val storageRef = Firebase.storage.reference.child("Images/${task.text.toString().trim()}")
+            imageView.setImageURI(url)
+            val istore = Firebase.storage.reference.child(task.text.toString().trim())
 
             // upload the image to Firebase storage
-            val uploadTask = storageRef.putFile(uri)
-            uploadTask.addOnSuccessListener {
+            val uploadchoice = istore.putFile(url)
+            uploadchoice.addOnSuccessListener {
                 // handle successful upload here
             }.addOnFailureListener {
                 // handle failed upload here
             }
         }
     }
+    private val camera = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { photo: Bitmap? ->
+        // display the photo in an ImageView
+        val task = findViewById<EditText>(R.id.taskNameInput)
 
+        val imageView = findViewById<ImageView>(R.id.imgGallery)
+        imageView.setImageBitmap(photo)
+
+        // create a reference to the image file in Firebase storage
+
+        val storageRef = Firebase.storage.reference.child(task.text.toString().trim())
+
+        // convert the photo to a byte array
+        val baos = ByteArrayOutputStream()
+        photo?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        // upload the photo to Firebase storage
+        val uploadTask = storageRef.putBytes(data)
+        uploadTask.addOnSuccessListener {
+            // handle successful upload here
+        }.addOnFailureListener {
+            // handle failed upload here
+        }
+    }
 
 
 
@@ -258,7 +310,7 @@ class TaskForm:AppCompatActivity() {
             val end = findViewById<TextView>(R.id.selectedEndTimeText)
             val minimum = findViewById<Spinner>(R.id.minimumGoalSpinner)
 
-            val storageRef = Firebase.storage.reference.child("Images/${task.text.toString().trim()}")
+
 
 // get the download URL of the uploaded image
 
@@ -310,6 +362,7 @@ class TaskForm:AppCompatActivity() {
 
                         // Get the current user's unique ID
                         val firestore = Firebase.firestore
+                        val storageRef = Firebase.storage.reference.child(task.text.toString().trim())
                         storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
                             picture = downloadUrl.toString()
 
@@ -346,8 +399,6 @@ class TaskForm:AppCompatActivity() {
                             val hours = parsed
 
 
-                            val message = "TASK ${task.text} ADDED "
-                            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
 
                             val tasksadd = taskstore(
@@ -367,6 +418,8 @@ class TaskForm:AppCompatActivity() {
                             val docRef = itemsadd.document(taskname)
                             docRef.set(tasksadd)
 
+                            val message = "TASK ${task.text} ADDED "
+                            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
                         }
 

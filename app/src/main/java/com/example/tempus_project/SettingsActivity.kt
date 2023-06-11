@@ -4,23 +4,62 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import com.bumptech.glide.Glide
 import com.example.tempus_project.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        var name: EditText = findViewById(R.id.nameEditText)
-        var surname: EditText = findViewById(R.id.surnameEditText)
-        var username: EditText = findViewById(R.id.userName_text)
-        var names = registrationActivty.SourceClass.datas[0][2].toString()
-        name.setText(names.toString())
-        var unames = registrationActivty.SourceClass.datas[0][0].toString()
-        username.setText(unames.toString())
-        surname.setText(registrationActivty.SourceClass.datas[0][3].toString())
-        var email : EditText = findViewById(R.id.emailEditText)
-        email.setText(registrationActivty.SourceClass.datas[0][4].toString())
+
+
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+        val database = Firebase.database
+        val myRef = database.getReference("users")
+
+        val user = Firebase.auth.currentUser
+
+
+        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (ds in dataSnapshot.children) {
+                        val userId = ds.child("userid").getValue(String::class.java)
+
+                        if (userId.toString().trim() == userid.toString().trim()) {
+                            var name2: EditText = findViewById(R.id.nameEditText)
+                            var surname2: EditText = findViewById(R.id.surnameEditText)
+                            var username2: EditText = findViewById(R.id.userName_text)
+                            var email2 : EditText = findViewById(R.id.emailEditText)
+                            val name = ds.child("name").getValue(String::class.java)
+                            val email = ds.child("email").getValue(String::class.java)
+                            val surname = ds.child("surname").getValue(String::class.java)
+                            val username = ds.child("usersname").getValue(String::class.java)
+
+                            // Update UI with retrieved data
+                            name2.setText(name)
+                            surname2.setText(surname)
+                            username2.setText(username)
+                            email2.setText(email)
+
+                        }
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    // Handle error
+                }
+            })
+
+
 
         val homebtn = findViewById<ImageButton>(R.id.hometbtn)
         val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
@@ -53,9 +92,35 @@ class SettingsActivity : AppCompatActivity() {
             finish();
         }
         confirm.setOnClickListener()
-         {   val details = Intent(this, EditDetails::class.java)
-             startActivity(details)
-             finish();
+         {
+
+             var name2: EditText = findViewById(R.id.nameEditText)
+             var surname2: EditText = findViewById(R.id.surnameEditText)
+             if (name2.text.isNullOrEmpty())
+             {  var message = " ERROR NEED NAME TO UPDATE ID"
+                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()}
+             else  if (surname2.text.isNullOrEmpty())
+             {
+                 var message = " ERROR NEED SURNAME TO UPDATE ID"
+                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+             }
+             else if (name2.text.isNullOrEmpty()&& surname2.text.isNullOrEmpty())
+             {
+
+                 var message = " ERROR NEED NAME AND SURNAME TO UPDATE ID"
+                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+             }
+             else
+             {
+                 val details = Intent(this, EditDetails::class.java)
+                 startActivity(details)
+                 finish();
+                 val userid = FirebaseAuth.getInstance().currentUser?.uid
+                 val myRef = database.getReference("users")
+
+                 val childKey = name2.text.toString().trim()+surname2.text.toString().trim()
+                 myRef.child(childKey).child("userid").setValue(userid)
+             }
 
          }
 
@@ -68,12 +133,15 @@ class SettingsActivity : AppCompatActivity() {
         }
         logout.setOnClickListener()
         {
+            FirebaseAuth.getInstance().signOut()
             val Logout = Intent(this, Login::class.java)
             startActivity(Logout)
             finish();
             var username: EditText = findViewById(R.id.userName_text)
             var message = " ${username.text.toString()} HAS LOGGED OUT!"
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+
+
         }
 
     }

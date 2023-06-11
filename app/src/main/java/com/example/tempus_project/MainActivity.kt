@@ -24,18 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 // THIS PAGE DEALS WITH THE CATEGORY
 // THIS POPULATES THE RECYCLER VIEW
 class MainActivity : AppCompatActivity() {
-    private val REQUEST_CODE_PERMISSIONS = 1
-    private val REQUIRED_PERMISSIONS = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.READ_MEDIA_IMAGES,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.ACCESS_MEDIA_LOCATION,
-        Manifest.permission.READ_MEDIA_AUDIO,
-        Manifest.permission.READ_MEDIA_VIDEO
 
-
-    )
     companion object {
         private const val TAG = "MainActivity" // Replace "MyActivity" with the name of your class
     }
@@ -57,11 +46,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         try {
             FirebaseApp.initializeApp(this)
             val firestore = Firebase.firestore
 
-            permissions()
+
             print()
             // SETTING THE TOTAL DATA
 
@@ -183,59 +173,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // PROMPT THE USER FOR PERMISSIONS
-    fun permissions() {
-        if (!allPermissionsGranted()) {
-            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
-        }
-        val permission = Manifest.permission.MANAGE_EXTERNAL_STORAGE
-        val requestCode = 2
 
-        if (ContextCompat.checkSelfPermission(
-                this,
-                permission
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
-        }
-        val permission2 = Manifest.permission.READ_MEDIA_IMAGES
-        val requestCode2 = 3
-
-        if (ContextCompat.checkSelfPermission(
-                this,
-                permission2
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(this, arrayOf(permission2), requestCode2)
-        }
-
-    }
-
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            val deniedPermissions = mutableListOf<String>()
-            for (i in grantResults.indices) {
-                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                    deniedPermissions.add(permissions[i])
-                }
-            }
-            if (deniedPermissions.isEmpty()) {
-                // All permissions were granted
-            } else {
-                // One or more permissions were denied
-                Toast.makeText(this, ": ${deniedPermissions.joinToString()}", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-    }
 
     data class ItemsViewModel(val text: String, val hours: String) {
 

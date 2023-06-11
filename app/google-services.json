@@ -8,35 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:400180899063:android:342a231c78c19c8fc677f2",
-        "android_client_info": {
-          "package_name": "com.example.opsc_part2"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "400180899063-b5m7st9hdia5qshc19am4fbcdnh55863.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBiBan25rsLsBezAGbogwLfC5eWo-jdQws"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "400180899063-b5m7st9hdia5qshc19am4fbcdnh55863.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:400180899063:android:e5f2ed662021ea47c677f2",
         "android_client_info": {
           "package_name": "com.example.tempus_project"

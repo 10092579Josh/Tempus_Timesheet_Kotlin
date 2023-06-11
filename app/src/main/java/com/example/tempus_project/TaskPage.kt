@@ -7,6 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import com.bumptech.glide.Glide
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -122,6 +124,14 @@ class TaskPage: AppCompatActivity() {
                             min.text = document.getString("mingoal")
                             max.text = document.getString("maxgoal")
                             date.text = document.getString("date")
+                        val url = document.getString("image")
+
+
+                        Glide.with(this)
+                            .load(url)
+                            .into(taskimage)
+
+
 
 
                     }

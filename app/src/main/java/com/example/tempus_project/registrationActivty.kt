@@ -175,7 +175,7 @@ fun notifications()
                 val myRef = database.getReference("users")
 //stuff
 
-
+                val auth = Firebase.auth
 // Capture user details
                 val name = names?.text.toString().replace("\\s".toRegex(), "")
                 val surname = surnames?.text.toString().replace("\\s".toRegex(), "")
@@ -185,14 +185,6 @@ fun notifications()
                 val confirm = pass2?.text.toString().replace("\\s".toRegex(), "")
 
 
-// Create a User object to hold the captured data
-                val user = User(name,surname,usersname, email, password, confirm)
-
-
-
-// Save the user data to the database
-                myRef.child(usersname.toString()).setValue(user)
-                val auth = Firebase.auth
 
 // Create a new user with email and password
                 auth.createUserWithEmailAndPassword(email, password)
@@ -213,6 +205,16 @@ fun notifications()
                             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                         }
                     }
+                val userid = auth.currentUser?.uid.toString()
+                val user = User(name,surname,usersname, email, password, confirm,userid)
+
+
+
+// Save the user data to the database
+                myRef.child(name+surname).setValue(user)
+
+
+// Create a User object to hold the captured data
 
 
 
