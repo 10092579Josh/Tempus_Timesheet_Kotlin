@@ -37,7 +37,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(homepage)
             finish();
         }
-
+//
         breaksbtn.setOnClickListener {
             val breakspage = Intent(this, BreaksActivity::class.java)
             startActivity(breakspage)
