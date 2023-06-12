@@ -5,4 +5,5 @@
     android:text="Not a valid email address"
     android:textColor="@android:color/white"
     android:background="@android:color/holo_red_dark"
-    android:padding="8dp" />
+    android:padding="8dp"
+    android:id="@+id/pop"/>

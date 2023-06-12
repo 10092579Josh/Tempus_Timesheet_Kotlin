@@ -9,12 +9,10 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.*
-import android.Manifest
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.example.tempus_project.R
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import androidx.core.app.NotificationCompat
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -41,12 +39,33 @@ class MainActivity : AppCompatActivity() {
         val hours = Array(rows) { arrayOfNulls<String>(columns) }
 
     }
+    fun loggedonnotification()
+    {
+        val user = FirebaseAuth.getInstance().currentUser?.email
+        val channelId = "login"
+        val channelName = "Loginuser"
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val notificationChannel = NotificationChannel(channelId, channelName, importance)
+
+        val TempusManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        TempusManager.createNotificationChannel(notificationChannel)
+
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle("$user logged in")
+            .setContentText("welcome to tempus $user")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_EVENT)
+
+        TempusManager.notify(0, builder.build())
+
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+     loggedonnotification()
         try {
             FirebaseApp.initializeApp(this)
             val firestore = Firebase.firestore

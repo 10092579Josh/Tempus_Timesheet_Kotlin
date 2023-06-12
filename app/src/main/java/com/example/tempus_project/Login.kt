@@ -9,6 +9,8 @@ package com.example.tempus_project
 // no remember me ? please advise
 // sign up colour needs to be changed due to can not see if it works
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,9 +22,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupWindow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.example.tempus_project.R
 import com.google.firebase.FirebaseApp
@@ -41,7 +45,7 @@ class Login : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
     }
     fun notifications()
-    {
+    {  var pass: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.passwords)
         var usernames1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.usernames)
         val layoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = layoutInflater.inflate(R.layout.popup_window, null)
@@ -49,13 +53,14 @@ class Login : AppCompatActivity() {
             popupView,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
+
         )
 
 
         usernames1.editText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val email = s.toString()
-                if (isValidString(email)) {
+                if (isValidString(email) && pass.editText.toString() != null) {
                     // email is valid
 
                     signin()
@@ -75,7 +80,8 @@ class Login : AppCompatActivity() {
                     if (email.contains("#")) {
                         // email contains invalid character '#'
                     }
-                    // add additional checks for other invalid characters here
+
+
                 }
             }
 
@@ -120,7 +126,8 @@ class Login : AppCompatActivity() {
         var signin: Button = findViewById(R.id.insign)
         signin.setOnClickListener()
         {
-            // firebase authorisations
+
+
             val security = Firebase.auth
 
 // Sign in with email and password
@@ -167,8 +174,8 @@ class Login : AppCompatActivity() {
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_MEDIA_LOCATION) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(this,Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED) {
-
+            ContextCompat.checkSelfPermission(this,Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, arrayOf(
                 Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -176,11 +183,11 @@ class Login : AppCompatActivity() {
                 Manifest.permission.ACCESS_MEDIA_LOCATION,
                 Manifest.permission.READ_MEDIA_IMAGES,
                 Manifest.permission.READ_MEDIA_AUDIO,
-                Manifest.permission.READ_MEDIA_VIDEO
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.POST_NOTIFICATIONS
             ), MY_PERMISSIONS_REQUEST_CODE)
         }
     }
-
 
 
 

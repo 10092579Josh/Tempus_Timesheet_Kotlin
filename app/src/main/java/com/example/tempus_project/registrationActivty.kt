@@ -18,6 +18,10 @@ import com.google.firebase.ktx.Firebase
 import android.content.Context
 import android.view.View
 import com.example.tempus_project.R
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import de.keyboardsurfer.android.widget.crouton.Crouton
+import de.keyboardsurfer.android.widget.crouton.Style
 
 
 class registrationActivty : AppCompatActivity() {
@@ -98,7 +102,10 @@ fun notifications()
 
         val datas = Array(rows) { arrayOfNulls<String>(columns) }
     }
-
+    fun regerror(errors: Errors) {
+        val crouton = Crouton.makeText(this, errors.RegEmailError, Style.ALERT)
+        crouton.show()
+    }
 
     fun input ()
     { //variables
@@ -189,6 +196,7 @@ fun notifications()
 // Create a new user with email and password
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
+                        val exception = task.exception
                         if (task.isSuccessful) {
                             // User account created
                             val intent = Intent(this, Login::class.java)
@@ -199,10 +207,12 @@ fun notifications()
                             var message  = "USER ${user2?.text} HAS REGISTERED "
                             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
+                        } else if (exception is FirebaseAuthException && exception.errorCode == "ERROR_EMAIL_ALREADY_IN_USE") {
+
+                                 regerror( Errors())
+
                         } else {
-                            // Account creation failed\
-                            var message  = "USER ${user2?.text} is not registred "
-                            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                            // Show other error messages
                         }
                     }
                 val userid = auth.currentUser?.uid.toString()
