@@ -8,6 +8,9 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tempus_project.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class EditDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,12 +71,17 @@ class EditDetails : AppCompatActivity() {
         var email : EditText = findViewById(R.id.emailEditText)
         var savebutton: Button = findViewById(R.id.saveButton)
 
-        username.setText(registrationActivty.SourceClass.datas[0][0].toString())
+        username.setText(    SettingsActivity.preloads.usersname)
         password.setText(registrationActivty.SourceClass.datas[0][1].toString())
-        name.setText(registrationActivty.SourceClass.datas[0][2].toString())
-        surname.setText(registrationActivty.SourceClass.datas[0][3].toString())
-        email.setText(registrationActivty.SourceClass.datas[0][4].toString())
+        name.setText(  SettingsActivity.preloads.names )
+        surname.setText(  SettingsActivity.preloads.surname)
+        email.setText(  SettingsActivity.preloads.emails )
         conpassword.setText(registrationActivty.SourceClass.datas[0][5].toString())
+
+
+
+
+
         savebutton.setOnClickListener() {
 
 
@@ -99,18 +107,20 @@ class EditDetails : AppCompatActivity() {
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             } else { // move to the next screen if filled
 
-                registrationActivty.SourceClass.datas[0][0] =
-                    username?.text.toString().replace("\\s".toRegex(), "")
-                registrationActivty.SourceClass.datas[0][1] =
-                    password?.text.toString().replace("\\s".toRegex(), "")
-                registrationActivty.SourceClass.datas[0][2] =
-                    name?.text.toString().replace("\\s".toRegex(), "")
-                registrationActivty.SourceClass.datas[0][3] =
+                val database = Firebase.database
+                val userid = FirebaseAuth.getInstance().currentUser?.uid
+                val myRef = database.getReference("users")
+                myRef.child(userid.toString()).child("username").setValue( username?.text.toString().replace("\\s".toRegex(), ""))
+                myRef.child(userid.toString()).child("password").setValue(  password?.text.toString().replace("\\s".toRegex(), ""))
+                myRef.child(userid.toString()).child("confirm").setValue( conpassword?.text.toString().replace("\\s".toRegex(), ""))
+                myRef.child(userid.toString()).child("confirm").setValue(   name?.text.toString().replace("\\s".toRegex(), ""))
+
+
                     surname?.text.toString().replace("\\s".toRegex(), "")
                 registrationActivty.SourceClass.datas[0][4] =
                     email?.text.toString().replace("\\s".toRegex(), "")
-                registrationActivty.SourceClass.datas[0][5] =
-                    conpassword?.text.toString().replace("\\s".toRegex(), "")
+
+
                 Toast.makeText(this, ":New Details Captured", Toast.LENGTH_SHORT).show()
 
 

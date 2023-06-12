@@ -190,7 +190,7 @@ fun notifications()
                 val email = emails?.text.toString().replace("\\s".toRegex(), "")
                 val password = pass?.text.toString().replace("\\s".toRegex(), "")
                 val confirm = pass2?.text.toString().replace("\\s".toRegex(), "")
-
+                val userid = auth.currentUser?.uid.toString()
 
 
 // Create a new user with email and password
@@ -200,10 +200,12 @@ fun notifications()
                         if (task.isSuccessful) {
                             // User account created
                             val intent = Intent(this, Login::class.java)
+
                             startActivity(intent)
                             finish()
                             val user = auth.currentUser
-
+                            val users = User(name,surname,usersname, email, password, confirm,userid)
+                            myRef.child(usersname+password).setValue(users)
                             var message  = "USER ${user2?.text} HAS REGISTERED "
                             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
@@ -215,13 +217,7 @@ fun notifications()
                             // Show other error messages
                         }
                     }
-                val userid = auth.currentUser?.uid.toString()
-                val user = User(name,surname,usersname, email, password, confirm,userid)
 
-
-
-// Save the user data to the database
-                myRef.child(name+surname).setValue(user)
 
 
 // Create a User object to hold the captured data

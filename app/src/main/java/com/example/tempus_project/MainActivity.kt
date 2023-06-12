@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.google.firebase.FirebaseApp
@@ -18,63 +19,32 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 
 // THIS PAGE DEALS WITH THE CATEGORY
 // THIS POPULATES THE RECYCLER VIEW
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        private const val TAG = "MainActivity" // Replace "MyActivity" with the name of your class
-    }
-
-
-    // OBJECT CLASS TO ADD DATA TO AND CONTAINS THE ARRRAYS
-    object TaskClass {
-        //ASSIGNING TASKS
-        val rows = 10
-        val columns = 12
-
-        //ARRAYS FOR THE TASK DATA
-        val tasks = Array(rows) { arrayOfNulls<String>(columns) }
-        val hours = Array(rows) { arrayOfNulls<String>(columns) }
-
-    }
-    fun loggedonnotification()
-    {
-        val user = FirebaseAuth.getInstance().currentUser?.email
-        val channelId = "login"
-        val channelName = "Loginuser"
-        val importance = NotificationManager.IMPORTANCE_HIGH
-        val notificationChannel = NotificationChannel(channelId, channelName, importance)
-
-        val TempusManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        TempusManager.createNotificationChannel(notificationChannel)
-
-        val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.usericon)
-            .setContentTitle("$user logged in")
-            .setContentText("welcome to tempus $user")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_EVENT)
-
-        TempusManager.notify(0, builder.build())
-
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-     loggedonnotification()
+        populatefields()
+        val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+        if (sharedPreferences.getBoolean("isFirstLogin", true)) {
+         loggedonnotification()
+            sharedPreferences.edit().putBoolean("isFirstLogin", false).apply()
+        }
+
+
         try {
             FirebaseApp.initializeApp(this)
-            val firestore = Firebase.firestore
+
 
 
             print()
-            // SETTING THE TOTAL DATA
-
-            // VARIABLES FOR BUTTONS
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
             val homebtn = findViewById<ImageButton>(R.id.hometbtn)
             val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
@@ -139,6 +109,19 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+    companion object {
+        private const val TAG = "MainActivity"
+    }
+    object TaskClass {
+        //ASSIGNING TASKS
+        val rows = 10
+        val columns = 12
+
+        //ARRAYS FOR THE TASK DATA
+        val tasks = Array(rows) { arrayOfNulls<String>(columns) }
+        val hours = Array(rows) { arrayOfNulls<String>(columns) }
+
     }
 
     fun print() {
@@ -250,6 +233,109 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+    fun loggedonnotification()
+    {
+        val intent = Intent(this, SettingsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val settingsIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
+
+        val user = FirebaseAuth.getInstance().currentUser?.email
+        val channelId = "login"
+        val channelName = "Loginuser"
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val notificationChannel = NotificationChannel(channelId, channelName, importance)
+
+        val TempusManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        TempusManager.createNotificationChannel(notificationChannel)
+
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.imageuser)
+            .setContentTitle("$user logged in")
+            .setContentText("welcome to tempus $user")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_EVENT)
+            .setContentIntent(settingsIntent)
+            .setAutoCancel(true)
+
+
+
+        val unverifiedbuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.imageuser)
+            .setContentTitle("$user logged in")
+            .setContentText("welcome to tempus new $user please verify your account")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_EVENT)
+            .setContentIntent(settingsIntent)
+            .setAutoCancel(true)
+
+
+
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+        val database = Firebase.database
+        val myRef = database.getReference("users")
+        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (ds in dataSnapshot.children) {
+                    val userId = ds.child("userid").getValue(String::class.java)
+
+                    if (userId.toString().trim() == userid.toString().trim()) {
+
+                        TempusManager.notify(0, builder.build())
+                        break
+                    }
+                    else if (userId.toString().trim() != userid.toString().trim())
+                    {
+                        TempusManager.notify(1, unverifiedbuilder.build())
+
+
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle error
+            }
+        })
+
+    }
+    fun populatefields()
+    {
+
+
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+        val database = Firebase.database
+        val myRef = database.getReference("users")
+
+
+
+        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (data in dataSnapshot.children) {
+                    val userId = data.child("userid").getValue(String::class.java)
+
+                    if (userId.toString().trim() == userid.toString().trim()) {
+
+                        SettingsActivity.preloads.names = data.child("name").getValue(String::class.java).toString()
+                        SettingsActivity.preloads.emails = data.child("email").getValue(String::class.java).toString()
+                        SettingsActivity.preloads.surname = data.child("surname").getValue(String::class.java).toString()
+                        SettingsActivity.preloads.usersname = data.child("usersname").getValue(String::class.java).toString()
+                        SettingsActivity.preloads.conpass = data.child("confirm").getValue(String::class.java).toString()
+                        SettingsActivity.preloads.pass = data.child("password").getValue(String::class.java).toString()
+
+                    }
+
+
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle error
+            }
+        })
+
+    }
+
 }
 
 

@@ -30,6 +30,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.example.tempus_project.R
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -38,11 +39,13 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
+        persistlogin()
         permissions()
         signup()
         notifications()
 
         FirebaseApp.initializeApp(this)
+
     }
     fun notifications()
     {  var pass: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.passwords)
@@ -189,7 +192,18 @@ class Login : AppCompatActivity() {
         }
     }
 
+fun persistlogin()
+{
 
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+    if (currentUser != null) {
+        // User is signed in, redirect to main activity
+        val main = Intent(this, MainActivity::class.java)
+        startActivity(main)
+        finish()
+    }
+}
 
 
 }
