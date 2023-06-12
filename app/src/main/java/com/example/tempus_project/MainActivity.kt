@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         TempusManager.createNotificationChannel(notificationChannel)
 
         val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.notification_icon)
+            .setSmallIcon(R.drawable.usericon)
             .setContentTitle("$user logged in")
             .setContentText("welcome to tempus $user")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
