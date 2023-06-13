@@ -13,6 +13,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -121,6 +122,7 @@ class MainActivity : AppCompatActivity() {
         //ARRAYS FOR THE TASK DATA
         val tasks = Array(rows) { arrayOfNulls<String>(columns) }
         val hours = Array(rows) { arrayOfNulls<String>(columns) }
+        var check:Int? = null
 
     }
 
@@ -270,7 +272,6 @@ class MainActivity : AppCompatActivity() {
             .setAutoCancel(true)
 
 
-
         val userid = FirebaseAuth.getInstance().currentUser?.uid
         val database = Firebase.database
         val myRef = database.getReference("users")
@@ -279,16 +280,20 @@ class MainActivity : AppCompatActivity() {
                 for (ds in dataSnapshot.children) {
                     val userId = ds.child("userid").getValue(String::class.java)
 
-                    if (userId.toString().trim() == userid.toString().trim()) {
-
+                    Log.d("MyTag", "userId: $userid")
+                    if (userId.toString().trim() == userid.toString().trim() ) {
                         TempusManager.notify(0, builder.build())
+                        Log.d("MyTag", "Condition 2 met")
                         break
                     }
-                    else if (userId.toString().trim() != userid.toString().trim())
-                    {
-                        TempusManager.notify(1, unverifiedbuilder.build())
+                    else {
+                        TaskClass.check = 0
+                        if (userId.toString().trim() != userid.toString().trim() && TaskClass.check == 0) {
+                            Log.d("MyTag", "Condition 3 met")
+                            TempusManager.notify(1, unverifiedbuilder.build())
 
 
+                        }
                     }
                 }
             }
