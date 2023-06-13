@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home">
+
+    <RelativeLayout
+        android:id="@+id/top_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/logo"/>
+
+        <ImageView
+            android:id="@+id/tempus"
+            android:layout_width="290dp"
+            android:layout_height="100dp"
+            android:layout_toRightOf="@id/logo"
+            android:src="@drawable/tempus_title"/>
+
+        <ImageButton
+            android:id="@+id/search_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:paddingRight="100dp"
+            android:layout_toRightOf="@id/tempus"
+            android:background="@drawable/search_icon"
+            android:contentDescription="Search"/>
+
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_menu">
+
+        <LinearLayout
+            android:id="@+id/center_menu"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp">
+
+            <LinearLayout
+                android:id="@+id/home_nav_btns"
+                android:layout_width="210dp"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@drawable/home_nav">
+
+                <Button
+                    android:id="@+id/task_selected"
+                    android:layout_width="89dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:backgroundTint= "@color/nav_unselected"
+                    android:text="Category"
+                    android:textSize="9sp"
+                    android:textColor="@color/black"/>
+
+                <Button
+                    android:id="@+id/category_selected"
+                    android:layout_width="95dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/nav_selected"
+                    android:text="Task"
+                    android:textSize="9sp"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mRecycler_task"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/selectStartDate_cat"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/calendar"
+            android:background="@drawable/home_nav"
+            android:layout_toLeftOf="@id/selectEndDate_cat"
+            android:onClick="selectstartDate" />
+
+        <ImageButton
+            android:id="@+id/selectEndDate_cat"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/calendar"
+            android:background="@drawable/home_nav"
+            android:layout_alignParentEnd="true"
+            android:onClick="selectendDate" />
+
+        <Button
+            android:id="@+id/filterDates_btn"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/nav_unselected"
+            android:onClick="applyFilter"
+            android:text="Apply"
+            android:layout_below="@id/selectEndDate_cat"
+            android:textColor="@color/black"
+            android:textSize="10dp" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/addbtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="5dp"
+            android:contentDescription="Add"
+            android:src="@drawable/add_icon"
+            android:background="@drawable/gradient_add"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

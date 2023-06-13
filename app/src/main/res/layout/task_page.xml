@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home">
+
+    <RelativeLayout
+        android:id="@+id/top_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/logo"/>
+
+        <ImageView
+            android:id="@+id/tempus"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_toRightOf="@id/logo"
+            android:layout_toLeftOf="@id/search_btn"
+            android:src="@drawable/tempus_title"/>
+
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:paddingRight="100dp"
+            android:text="hi"
+            android:background="@drawable/search_icon"
+            android:contentDescription="Search"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_menu"
+        android:layout_above="@id/bottom_menu">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#D6D6D6"
+            android:padding="20dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/date_display"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date goes here "
+                        android:textSize="15sp"
+                        android:textColor="@color/black"/>
+
+                    <ImageView
+                        android:id="@+id/task_image"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerHorizontal="true"/>
+
+                    <TextView
+                        android:id="@+id/task_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="Task Name"
+                        android:textSize="30sp"
+                        android:layout_below="@id/task_image"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/category_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="category name"
+                        android:textSize="15sp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/task_name"
+                        android:textColor="#949494"/>
+
+                    <TextView
+                        android:id="@+id/description_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Description:"
+                        android:textSize="17sp"
+                        android:layout_below="@id/category_name"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/description_text"
+                        android:layout_width="350dp"
+                        android:layout_height="100dp"
+                        android:textSize="15sp"
+                        android:text="The description goes here... "
+                        android:textColor="#949494"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/description_title"
+                        android:background="@drawable/description_rectangle"/>
+
+                    <TextView
+                        android:id="@+id/start_date"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:text="Start Time:"
+                        android:textSize="15sp"
+                        android:layout_below="@id/description_text"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/start_date_display"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp"
+                        android:layout_below="@id/description_text"
+                        android:layout_toRightOf="@id/start_date"
+                        android:background="@drawable/description_rectangle"
+                        android:gravity="center"
+                        android:text="2002/07/16"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/end_date"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:text="End Time:"
+                        android:textSize="15sp"
+                        android:layout_below="@id/start_date"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/end_date_display"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp"
+                        android:text="2002/07/20"
+                        android:textSize="15sp"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:layout_below="@id/start_date"
+                        android:layout_toRightOf="@id/end_date"
+                        android:background="@drawable/description_rectangle"/>
+
+                    <TextView
+                        android:id="@+id/max_title"
+                        android:text="Max Daily Goal:"
+                        android:textColor="@color/black"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/end_date"
+                        android:paddingTop="4dp"/>
+
+                    <TextView
+                        android:id="@+id/max_text"
+                        android:layout_width="100dp"
+                        android:layout_below="@id/end_date"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center"
+                        android:layout_toRightOf="@id/max_title"
+                        android:background="@drawable/description_rectangle"/>
+
+                    <TextView
+                        android:id="@+id/min_title"
+                        android:text="Min Daily Goal:"
+                        android:textColor="@color/black"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/max_title"
+                        android:paddingTop="4dp"/>
+
+                    <TextView
+                        android:id="@+id/min_text"
+                        android:layout_width="100dp"
+                        android:layout_below="@id/max_title"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center"
+                        android:layout_toRightOf="@id/min_title"
+                        android:background="@drawable/description_rectangle"/>
+
+
+                    <TextView
+                        android:id="@+id/hour_title"
+                        android:text="Total Hours:"
+                        android:textColor="@color/black"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:layout_below="@id/min_text"
+                        android:paddingTop="4dp"/>
+
+                    <TextView
+                        android:id="@+id/hour_text"
+                        android:layout_width="100dp"
+                        android:layout_below="@id/min_title"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center"
+                        android:layout_toEndOf="@id/hour_title"
+                        android:background="@drawable/description_rectangle"/>
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/hometbtn"
+            android:layout_width="86dp"
+            android:layout_height="50dp"
+            android:padding= "5dp"
+            android:layout_centerVertical="true"
+            android:contentDescription="Home"
+            android:src="@drawable/home_icon"
+            android:background="@drawable/rectangle"/>
+
+        <ImageButton
+            android:id="@+id/breakstbtn"
+            android:layout_width="86dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/hometbtn"
+            android:contentDescription="Breaks"
+            android:src="@drawable/break_icon"
+            android:background="@drawable/rectangle"/>
+
+        <ImageButton
+            android:id="@+id/addbtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/breakstbtn"
+            android:contentDescription="Add"
+            android:src="@drawable/add_icon"
+            android:background="@drawable/gradient_add"/>
+
+        <ImageButton
+            android:id="@+id/statstbtn"
+            android:layout_width="86dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/addbtn"
+            android:contentDescription="Stats"
+            android:src="@drawable/stats_icon"
+            android:background="@drawable/rectangle"/>
+
+        <ImageButton
+            android:id="@+id/settingstbtn"
+            android:layout_width="86dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/statstbtn"
+            android:contentDescription="Setting"
+            android:src="@drawable/settings_icon"
+            android:background="@drawable/rectangle"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
