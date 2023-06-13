@@ -4,9 +4,14 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -15,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -43,25 +49,25 @@ class AppSettings : AppCompatActivity() {
         homebtn.setOnClickListener {
             val homepage = Intent(this, Home::class.java)
             startActivity(homepage)
-            finish();
+            finish()
         }
 //
         breaksbtn.setOnClickListener {
             val breakspage = Intent(this, Breaks::class.java)
             startActivity(breakspage)
-            finish();
+            finish()
         }
 
         statsbtn.setOnClickListener {
             val statspage = Intent(this, Statistics::class.java)
             startActivity(statspage)
-            finish();
+            finish()
         }
 
         settingsbtn.setOnClickListener {
             val settingspage = Intent(this, AppSettings::class.java)
             startActivity(settingspage)
-            finish();
+            finish()
         }
         confirm.setOnClickListener()
          {    var username2: EditText = findViewById(R.id.userName_text)
@@ -72,7 +78,7 @@ class AppSettings : AppCompatActivity() {
              else {
                   val details = Intent(this, UserDetails::class.java)
                   startActivity(details)
-                  finish();
+                  finish()
 
               }
 
@@ -90,9 +96,9 @@ class AppSettings : AppCompatActivity() {
             FirebaseAuth.getInstance().signOut()
             val Logout = Intent(this, Login::class.java)
             startActivity(Logout)
-            finish();
+            finish()
             var username: EditText = findViewById(R.id.userName_text)
-            var message = " ${username.text.toString()} HAS LOGGED OUT!"
+            var message = " ${username.text} HAS LOGGED OUT!"
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
@@ -144,7 +150,7 @@ class AppSettings : AppCompatActivity() {
 
 
                 // Set up the buttons
-                builder.setPositiveButton("OK") { dialog, which ->
+                builder.setPositiveButton("SUBMIT") { dialog, which ->
                     val username = usernameInput.text.toString().trim()
                     val password = passwordInput.text.toString().trim()
                     val verify = username + password
@@ -155,7 +161,7 @@ class AppSettings : AppCompatActivity() {
 
 
                     val oldRef =
-                        FirebaseDatabase.getInstance().getReference("users/${verify.toString()}")
+                        FirebaseDatabase.getInstance().getReference("users/$verify")
                     val newRef =
                         FirebaseDatabase.getInstance().getReference("users/${userid.toString()}")
                     if (usernameInput.text.isNullOrEmpty()) {
@@ -197,16 +203,31 @@ class AppSettings : AppCompatActivity() {
 
                     isDialogOpen = false
                 }
-                builder.setNegativeButton("Cancel") { dialog, which ->
-                    dialog.cancel()
-                    isDialogOpen = false
-                }
 
-                builder.setOnCancelListener {
-                    isDialogOpen = false
-                }
+            builder.setNegativeButton("222", DialogInterface.OnClickListener {
+                    dialog, which -> dialog.dismiss()
 
-                builder.show()
+                isDialogOpen = false
+
+
+            })
+            builder.setNegativeButton("CLOSE", DialogInterface.OnClickListener { dialog, which ->
+                dialog.dismiss()
+                isDialogOpen = false
+            })
+            val dialog = builder.create()
+            dialog.show()
+            val b = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            b?.setBackgroundColor(ContextCompat.getColor(this, R.color.my_button_color))
+            b?.setTextColor(Color.WHITE)
+            b?.setLeftTopRightBottom(600,0,0,0)
+
+            builder.setOnCancelListener {
+                    isDialogOpen = false
+
+               }
+
+
             }
 
     }
@@ -214,97 +235,10 @@ class AppSettings : AppCompatActivity() {
 
 
 
-    fun accountverify2() {
-
-        val buttonLayout = layoutInflater.inflate(R.layout.authenticate_buttons, null)
-            val builder = AlertDialog.Builder(this)
-
-        val dialog = builder.create()
-
-            // Set up the custom title view
-            val titleView = layoutInflater.inflate(R.layout.authenticate_title, null)
-            builder.setCustomTitle(titleView)
-
-            val layout = LinearLayout(this)
-            layout.orientation = LinearLayout.VERTICAL
-
-            // Set up the username input
-            val usernameInput = EditText(this)
-            usernameInput.hint = "Username"
-            layout.addView(usernameInput)
-
-            // Set up the password input
-            val passwordInput = EditText(this)
-            passwordInput.hint = "Password"
-            passwordInput.inputType =
-                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            layout.addView(passwordInput)
-
-
-        val okButton = buttonLayout.findViewById<Button>(R.id.positive_button)
-        val cancelButton = buttonLayout.findViewById<Button>(R.id.negative_button)
-        layout.addView(buttonLayout)
-
-        builder.setView(layout)
-
-
-        builder.show()
-
-
-
-        cancelButton.setOnClickListener {
-
-            dialog.dismiss()
-
-
-        }
-            okButton.setOnClickListener {
-                val username = usernameInput.text.toString().trim()
-                val password = passwordInput.text.toString().trim()
-                val verify =username+password
-
-                val database = Firebase.database
-                val userid = FirebaseAuth.getInstance().currentUser?.uid
-                val myRef = database.getReference("users")
-
-
-                val oldRef = FirebaseDatabase.getInstance().getReference("users/${verify.toString()}")
-                val newRef = FirebaseDatabase.getInstance().getReference("users/${userid.toString()}")
-
-                oldRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val data = dataSnapshot.value as? Map<*, *>
-                        if (dataSnapshot.exists()) {
-                            if (data != null) {
-                                newRef.setValue(data) { error, _ ->
-                                    if (error == null) {
-                                        oldRef.removeValue()
-                                        myRef.child(userid.toString()).child("userid").setValue(userid)
-                                    }
-                                }
-                            } else {
-                                // The document does not exist
-
-                                validerror( Errors())
-                            }
-                        }
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        // Handle error
-                    }
-                })
-
-
-
-
-
-        }
-    }
-
     fun validerror(errors: Errors) {
         val crouton = Crouton.makeText(this, errors.ValidationError, Style.ALERT)
         crouton.show()
+
     }
 
     fun populatefields()
