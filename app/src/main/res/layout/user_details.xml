@@ -194,9 +194,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/confirmPasswordEditText"
+                        android:layout_centerHorizontal="true"
                         android:layout_marginTop="21dp"
-                        android:text="Confirm"
-                        android:layout_centerHorizontal="true"/>
+                        android:backgroundTint="#168AE6"
+                        android:text="Confirm" />
 
 
 

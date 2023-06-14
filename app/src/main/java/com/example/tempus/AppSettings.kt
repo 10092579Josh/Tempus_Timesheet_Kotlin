@@ -149,8 +149,19 @@ class AppSettings : AppCompatActivity() {
             builder.setView(layout)
 
             with(builder){
-                                                     setNegativeButtonIcon(ContextCompat.getDrawable(context, R.drawable.close_icon))
-                setPositiveButtonIcon(ContextCompat.getDrawable(context, R.drawable.sub))
+
+                                                     setNegativeButtonIcon(ContextCompat.getDrawable(context, R.drawable.baseline_cancel_presentation_24))
+                                                         .setNegativeButton("CLOSE") { _, _ ->
+                                                             Log.d("MyTag", "closing")
+                                                             val alertDialog = builder.create()
+                                                             alertDialog.dismiss()
+                                                             Log.d("MyTag", "closed")
+                                                             isDialogOpen = false
+                                                             Log.d("MyTag", "$isDialogOpen")
+
+
+                                                         }
+                setPositiveButtonIcon(ContextCompat.getDrawable(context, R.drawable.baseline_check_box_24))
                 .setPositiveButton("SUBMIT",) { _, _ ->
 
 
@@ -207,12 +218,14 @@ class AppSettings : AppCompatActivity() {
                     isDialogOpen = false
 
                 }
+
+
                        }.create()
-
-
             val alertDialog = builder.create()
-            alertDialog.show()
-                // Set up the buttons
+
+
+
+            // Set up the buttons
 
             alertDialog.show()
             val button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
@@ -220,24 +233,18 @@ class AppSettings : AppCompatActivity() {
 
                 setPadding(0, 0, 20, 0)
                 setTextColor(Color.WHITE)
-                setBackgroundColor(Color.GREEN)
+                setBackgroundColor(Color.WHITE)
 
 
                 val layoutParams = button.layoutParams as LinearLayout.LayoutParams
                 layoutParams.weight = 10f
                 button.layoutParams = layoutParams
             }
-            builder.setNegativeButton("CLOSE") { _, _ ->
 
-                alertDialog.dismiss()
-                isDialogOpen = false
-
-
-            }
             alertDialog.show()
             val buttons = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
             with(buttons) {
-                setPadding(0, 0, 20, 0)
+                setPadding(250, 0, 20, 0)
                 setTextColor(Color.WHITE)
 
 

@@ -54,11 +54,25 @@ upgraded to flamingo
 new assets dynamic icons and colours 
 fixed again user loop issue 
 fixed user notifications
+ended 00:36 14/6/2023
+
+started at 9:30 14/06/2023
 added colour to buttons 
 found a button solution for dialog's 
 upgraded all plug ins to new versions
 upgraded gradle 
 fixed issue where clicking ok on empty dialogue would wipe firebase
-
+beta dialog is ready for broad implementation
+beta notification is ready for broad implementation
+croutons are ready for replacing toast front end needs to decide on a design
+fixed dialog works with no issues
+edit user now works and can update user details
+sign up button colour wont change 
+all part 2 except date and total hours work well 
+added custom buttons
+added custom possible layouts
+need to implement error handling and comments
+app is ready for beta 2
+ended at 17:45 14/06/2023
 
 

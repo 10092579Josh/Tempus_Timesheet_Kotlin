@@ -71,11 +71,11 @@ class UserDetails : AppCompatActivity() {
         var savebutton: Button = findViewById(R.id.saveButton)
 
         username.setText(    AppSettings.preloads.usersname)
-        password.setText(Registration.SourceClass.datas[0][1].toString())
+        password.setText(AppSettings.preloads.pass)
         name.setText(  AppSettings.preloads.names )
         surname.setText(  AppSettings.preloads.surname)
         email.setText(  AppSettings.preloads.emails )
-        conpassword.setText(Registration.SourceClass.datas[0][5].toString())
+        conpassword.setText(AppSettings.preloads.conpass)
 
 
 
@@ -109,18 +109,17 @@ class UserDetails : AppCompatActivity() {
                 val database = Firebase.database
                 val userid = FirebaseAuth.getInstance().currentUser?.uid
                 val myRef = database.getReference("users")
-                myRef.child(userid.toString()).child("username").setValue( username?.text.toString().replace("\\s".toRegex(), ""))
+                myRef.child(userid.toString()).child("usersname").setValue( username?.text.toString().replace("\\s".toRegex(), ""))
                 myRef.child(userid.toString()).child("password").setValue(  password?.text.toString().replace("\\s".toRegex(), ""))
                 myRef.child(userid.toString()).child("confirm").setValue( conpassword?.text.toString().replace("\\s".toRegex(), ""))
-                myRef.child(userid.toString()).child("confirm").setValue(   name?.text.toString().replace("\\s".toRegex(), ""))
+                myRef.child(userid.toString()).child("name").setValue(   name?.text.toString().replace("\\s".toRegex(), ""))
+                myRef.child(userid.toString()).child("surname").setValue(surname?.text.toString().replace("\\s".toRegex(), ""))
+                myRef.child(userid.toString()).child("email").setValue(email?.text.toString().replace("\\s".toRegex(), ""))
 
 
-                    surname?.text.toString().replace("\\s".toRegex(), "")
-
-                    email?.text.toString().replace("\\s".toRegex(), "")
 
 
-                Toast.makeText(this, ":New Details Captured", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "${username.text}:New Details Captured", Toast.LENGTH_SHORT).show()
 
 
             }
