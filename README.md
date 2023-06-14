@@ -55,5 +55,10 @@ new assets dynamic icons and colours
 fixed again user loop issue 
 fixed user notifications
 added colour to buttons 
+found a button solution for dialog's 
+upgraded all plug ins to new versions
+upgraded gradle 
+fixed issue where clicking ok on empty dialogue would wipe firebase
+
 
 

@@ -127,6 +127,7 @@ class AppSettings : AppCompatActivity() {
         if (!isDialogOpen) {
             isDialogOpen = true
             val builder = AlertDialog.Builder(this)
+
             val titleView = layoutInflater.inflate(R.layout.authenticate_title, null)
             builder.setCustomTitle(titleView)
 
@@ -147,10 +148,12 @@ class AppSettings : AppCompatActivity() {
 
             builder.setView(layout)
 
+            with(builder){
+                                                     setNegativeButtonIcon(ContextCompat.getDrawable(context, R.drawable.close_icon))
+                setPositiveButtonIcon(ContextCompat.getDrawable(context, R.drawable.sub))
+                .setPositiveButton("SUBMIT",) { _, _ ->
 
 
-                // Set up the buttons
-                builder.setPositiveButton("SUBMIT") { dialog, which ->
                     val username = usernameInput.text.toString().trim()
                     val password = passwordInput.text.toString().trim()
                     val verify = username + password
@@ -202,25 +205,51 @@ class AppSettings : AppCompatActivity() {
 
 
                     isDialogOpen = false
+
                 }
+                       }.create()
 
-            builder.setNegativeButton("222", DialogInterface.OnClickListener {
-                    dialog, which -> dialog.dismiss()
 
+            val alertDialog = builder.create()
+            alertDialog.show()
+                // Set up the buttons
+
+            alertDialog.show()
+            val button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            with(button) {
+
+                setPadding(0, 0, 20, 0)
+                setTextColor(Color.WHITE)
+                setBackgroundColor(Color.GREEN)
+
+
+                val layoutParams = button.layoutParams as LinearLayout.LayoutParams
+                layoutParams.weight = 10f
+                button.layoutParams = layoutParams
+            }
+            builder.setNegativeButton("CLOSE") { _, _ ->
+
+                alertDialog.dismiss()
                 isDialogOpen = false
 
 
-            })
-            builder.setNegativeButton("CLOSE", DialogInterface.OnClickListener { dialog, which ->
-                dialog.dismiss()
-                isDialogOpen = false
-            })
-            val dialog = builder.create()
-            dialog.show()
-            val b = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-            b?.setBackgroundColor(ContextCompat.getColor(this, R.color.my_button_color))
-            b?.setTextColor(Color.WHITE)
-            b?.setLeftTopRightBottom(600,0,0,0)
+            }
+            alertDialog.show()
+            val buttons = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            with(buttons) {
+                setPadding(0, 0, 20, 0)
+                setTextColor(Color.WHITE)
+
+
+
+                val layoutParams = buttons.layoutParams as LinearLayout.LayoutParams
+                layoutParams.weight = 10f
+                buttons.layoutParams = layoutParams}
+
+
+
+
+
 
             builder.setOnCancelListener {
                     isDialogOpen = false

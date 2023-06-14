@@ -27,7 +27,6 @@ import com.google.firebase.database.ktx.database
 // THIS PAGE DEALS WITH THE CATEGORY
 // THIS POPULATES THE RECYCLER VIEW
 class Home : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home)
