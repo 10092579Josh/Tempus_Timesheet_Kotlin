@@ -76,3 +76,7 @@ app is ready for beta 2
 ended at 17:45 14/06/2023
 
 started at 8:55 15/06/2023
+added KH UI for settings
+added logout code for logout button
+added total hours logic 
+
