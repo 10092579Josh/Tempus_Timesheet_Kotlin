@@ -29,7 +29,10 @@ import com.google.firebase.database.ktx.database
 class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home)
+
+        val mainLayoutId = intent.getIntExtra("home", 0)
+        val mainLayout = layoutInflater.inflate(mainLayoutId, null)
+        setContentView(mainLayout)
         populatefields()
 
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
@@ -63,13 +66,17 @@ class Home : AppCompatActivity() {
             {
                 val tasks = Intent(this, Tasks::class.java)
                 startActivity(tasks)
+                overridePendingTransition(0, 0)
                 finish()
 
             }
 
             homebtn.setOnClickListener {
-                val homepage = Intent(this, Home::class.java)
-                startActivity(homepage)
+
+                val intent = Intent(this, Home::class.java)
+                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+                startActivity(intent)
+                overridePendingTransition(0, 0)
                 finish()
 
 

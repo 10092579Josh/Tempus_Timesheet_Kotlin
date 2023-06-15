@@ -24,14 +24,19 @@ class Statistics : AppCompatActivity() {
 
         }
         homebtn.setOnClickListener {
-            val homepage = Intent(this, Home::class.java)
-            startActivity(homepage)
-            finish();
+            val intent = Intent(this, Home::class.java)
+            intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+
+
         }
 
         breaksbtn.setOnClickListener {
             val breakspage = Intent(this, Breaks::class.java)
             startActivity(breakspage)
+            overridePendingTransition(0, 0)
             finish();
         }
 

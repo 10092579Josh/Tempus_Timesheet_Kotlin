@@ -41,9 +41,12 @@ class TaskPage: AppCompatActivity() {
             }
 
             homebtn.setOnClickListener {
-                val homepage = Intent(this, Home::class.java)
-                startActivity(homepage)
+                val intent = Intent(this, Home::class.java)
+                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+                startActivity(intent)
+                overridePendingTransition(0, 0)
                 finish()
+
 
             }
 

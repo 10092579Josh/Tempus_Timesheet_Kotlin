@@ -79,4 +79,15 @@ started at 8:55 15/06/2023
 added KH UI for settings
 added logout code for logout button
 added total hours logic 
+added progress bar to hide preload clocked at 4.8 seconds
+added caching to thread for layout
+pages to cache: reg,login,home,account setting and tasks due to heavy data use
+smooth transition implemented 
+icon fixed
+app start up matches loading screen
+planned optimisation of image background loading
+planned optimisation of strings
+found git website for custom stuff 
+removed animation from stats and half of home 
 
+ended 23:10 15/06/2023

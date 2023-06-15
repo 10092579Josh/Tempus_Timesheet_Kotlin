@@ -20,12 +20,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupWindow
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import de.keyboardsurfer.android.widget.crouton.Crouton
@@ -34,7 +32,9 @@ import de.keyboardsurfer.android.widget.crouton.Style
 class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login)
+        val loginLayoutId = intent.getIntExtra("login", 0)
+        val loginLayout = layoutInflater.inflate(loginLayoutId, null)
+        setContentView(loginLayout)
         persistlogin()
         permissions()
         signup()
@@ -147,11 +147,11 @@ else {
                 val appuser = security.currentUser
                 // shows the logged in user
 
-                // moves to the next page
-                val intent = Intent(this, Home::class.java)
+                val intent = Intent(this@Login, Home::class.java)
+                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
                 startActivity(intent)
+                overridePendingTransition(0, 0)
                 finish()
-
             } else {
 
                 incorrect( Errors())
@@ -198,14 +198,8 @@ else {
 fun persistlogin()
 {
 
-    val auth = FirebaseAuth.getInstance()
-    val currentUser = auth.currentUser
-    if (currentUser != null) {
-        // User is signed in, redirect to main activity
-        val main = Intent(this, Home::class.java)
-        startActivity(main)
-        finish()
-    }
+
+
 }
     fun passwerror(errors: Errors) {
         val crouton = Crouton.makeText(this, errors.NoNullsPassWord, Style.ALERT)

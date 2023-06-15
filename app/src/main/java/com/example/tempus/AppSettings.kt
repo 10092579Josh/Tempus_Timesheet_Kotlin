@@ -33,6 +33,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 
 class AppSettings : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.app_settings)
@@ -44,7 +45,7 @@ class AppSettings : AppCompatActivity() {
         val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
         val statsbtn = findViewById<ImageButton>(R.id.statstbtn)
         val settingsbtn = findViewById<ImageButton>(R.id.settingstbtn)
-
+        val accsetting = findViewById<CardView>(R.id.account_setting)
         val addbtn = findViewById<ImageButton>(R.id.addbtn)
         val logout = findViewById<CardView>(R.id.logout)
         homebtn.setOnClickListener {
@@ -91,11 +92,24 @@ class AppSettings : AppCompatActivity() {
             val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
             preloads.usersname = null
-
+            val intent = Intent(this@AppSettings, Login::class.java)
+            intent.putExtra("login", R.layout.login)
+            startActivity(intent)
 
 
         }
+        accsetting.setOnClickListener()
+        {
+            if (preloads.usersname == null) {
+                accountverify()
+            } else {
+                val accsettings = Intent(this, UserDetails::class.java)
+                startActivity(accsettings)
+                finish()
 
+
+            }
+        }
     }
     object preloads
     { var names:String = ""
