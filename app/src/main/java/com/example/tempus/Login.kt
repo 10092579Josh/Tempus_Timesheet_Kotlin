@@ -28,6 +28,8 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import de.keyboardsurfer.android.widget.crouton.Crouton
+import de.keyboardsurfer.android.widget.crouton.Style
 
 class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,9 +47,9 @@ class Login : AppCompatActivity() {
     {  var pass: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.passwords)
         var usernames1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.usernames)
         val layoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = layoutInflater.inflate(R.layout.popup_window, null)
-        val popupWindow = PopupWindow(
-            popupView,
+        val emailpopup = layoutInflater.inflate(R.layout.popup_window, null)
+        val emailWindow = PopupWindow(
+            emailpopup,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
 
@@ -61,7 +63,7 @@ class Login : AppCompatActivity() {
                     // email is valid
 
                     signin()
-                    popupWindow.dismiss()
+                    emailWindow.dismiss()
 
 
 
@@ -71,8 +73,8 @@ class Login : AppCompatActivity() {
 
                 } else {
                     // email is not valid
-                    if (!popupWindow.isShowing) {
-                        popupWindow.showAsDropDown(usernames1.editText, 0, 0)
+                    if (!emailWindow.isShowing) {
+                        emailWindow.showAsDropDown(usernames1.editText, 0, 0)
                     }
                     if (email.contains("#")) {
                         // email contains invalid character '#'
@@ -91,7 +93,7 @@ class Login : AppCompatActivity() {
         usernames1.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 // email EditText field lost focus
-                popupWindow.dismiss()
+                emailWindow.dismiss()
             } }
 
 
@@ -126,6 +128,7 @@ class Login : AppCompatActivity() {
 if(pass2?.text.isNullOrEmpty())
 {
 
+    passwerror( Errors())
 
 }
 else {
@@ -150,8 +153,8 @@ else {
                 finish()
 
             } else {
-                // Sign in failed
-                Toast.makeText(this, "Incorrect username or password", Toast.LENGTH_SHORT).show()
+
+                incorrect( Errors())
             }
         }
 
@@ -204,6 +207,13 @@ fun persistlogin()
         finish()
     }
 }
-
+    fun passwerror(errors: Errors) {
+        val crouton = Crouton.makeText(this, errors.NoNullsPassWord, Style.ALERT)
+        crouton.show()
+    }
+    fun incorrect(errors: Errors) {
+        val crouton = Crouton.makeText(this, errors.LoginError, Style.ALERT)
+        crouton.show()
+    }
 
 }

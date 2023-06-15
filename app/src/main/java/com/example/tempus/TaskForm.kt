@@ -277,12 +277,15 @@ class TaskForm:AppCompatActivity() {
 
             val myArray = arrayOf(Home.TaskClass.tasks)
             val spinner = findViewById<Spinner>(R.id.category_spinner)
-
+            val userid = Firebase.auth.currentUser?.uid
             val db = FirebaseFirestore.getInstance()
             val spinnerList = mutableListOf<String>()
 
+
             db.collection("Categories") // Replace with the name of your collection
+                .whereEqualTo("userid", userid)
                 .get()
+
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
                         val value =
@@ -383,6 +386,39 @@ class TaskForm:AppCompatActivity() {
                             val end = end.text.toString().replace(Regex("[^\\w\\s]"), "")
 
                             val result = Integer.parseInt(end) - Integer.parseInt(start)
+                            val categoryName = selectedItem.trim()
+
+                            val db = Firebase.firestore
+                            val categoryRef = db.collection("Categories").document(categoryName)
+                            categoryRef.get()
+                                .addOnSuccessListener { document ->
+                                    val currentHours = document.get("cathours")
+
+
+                                    val h = currentHours.toString().substring(0, 2).toInt() // 1
+                                    val minutes2 = currentHours.toString().substring(2, 4).toInt() // 30
+
+                                    val hours = result.toString().substring(0, 2).toInt() // 6
+                                    val minutes = result.toString().substring(2, 4).toInt() // 30
+
+                                    val totalMinutes = minutes2 + minutes
+                                    val additionalHours = totalMinutes / 60
+                                    val remainingMinutes = totalMinutes % 60
+
+                                    val totalHours = h + hours + additionalHours
+                                   if (remainingMinutes >= 60) {
+                                        val extraHours = remainingMinutes / 60
+                                        val finalMinutes = remainingMinutes % 60
+                                        val finalHours = totalHours + extraHours
+
+                                       categoryRef.update("cathours",   "$finalHours.$finalMinutes")
+                                    } else {
+
+                                       categoryRef.update("cathours",   "$totalHours.$remainingMinutes")
+                                    } // "7.60"
+
+
+                                }
 
                             val symbol = "-"
                             val outputs = result.toString().removePrefix(symbol)
@@ -419,6 +455,9 @@ class TaskForm:AppCompatActivity() {
 
                             val message = "TASK ${task.text} ADDED "
                             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+
+
+
 
                         }
 

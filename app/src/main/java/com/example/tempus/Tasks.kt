@@ -188,6 +188,7 @@ class Tasks : AppCompatActivity() {
             val itemsViewModel = myDataList[position]
             Glide.with(holder.itemView)
                 .load(itemsViewModel.imageUrl)
+                .circleCrop()
                 .into(holder.imageView)
 
             holder.textView.text = itemsViewModel.text

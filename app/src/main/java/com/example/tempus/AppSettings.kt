@@ -20,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -43,9 +44,9 @@ class AppSettings : AppCompatActivity() {
         val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
         val statsbtn = findViewById<ImageButton>(R.id.statstbtn)
         val settingsbtn = findViewById<ImageButton>(R.id.settingstbtn)
-       val confirm  = findViewById<Button>(R.id.editButton)
+
         val addbtn = findViewById<ImageButton>(R.id.addbtn)
-        val logout = findViewById<Button>(R.id.logoutButton)
+        val logout = findViewById<CardView>(R.id.logout)
         homebtn.setOnClickListener {
             val homepage = Intent(this, Home::class.java)
             startActivity(homepage)
@@ -69,20 +70,7 @@ class AppSettings : AppCompatActivity() {
             startActivity(settingspage)
             finish()
         }
-        confirm.setOnClickListener()
-         {    var username2: EditText = findViewById(R.id.userName_text)
 
-              if (username2.text.isNullOrEmpty()) {
-
-              }
-             else {
-                  val details = Intent(this, UserDetails::class.java)
-                  startActivity(details)
-                  finish()
-
-              }
-
-         }
 
         addbtn.setOnClickListener()
         {
@@ -97,8 +85,8 @@ class AppSettings : AppCompatActivity() {
             val Logout = Intent(this, Login::class.java)
             startActivity(Logout)
             finish()
-            var username: EditText = findViewById(R.id.userName_text)
-            var message = " ${username.text} HAS LOGGED OUT!"
+
+            var message = " ${preloads.usersname} HAS LOGGED OUT!"
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
@@ -285,8 +273,6 @@ class AppSettings : AppCompatActivity() {
         val database = Firebase.database
         val myRef = database.getReference("users")
 
-        var username2: EditText = findViewById(R.id.userName_text)
-
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (data in dataSnapshot.children) {
@@ -294,10 +280,6 @@ class AppSettings : AppCompatActivity() {
 
                     if (userId.toString().trim() == userid.toString().trim()) {
 
-                        var name2: EditText = findViewById(R.id.nameEditText)
-                        var surname2: EditText = findViewById(R.id.surnameEditText)
-
-                        var email2 : EditText = findViewById(R.id.emailEditText)
                         if(preloads.names.isNullOrEmpty()) {
                             preloads.names =
                                 data.child("name").getValue(String::class.java).toString()
@@ -314,11 +296,6 @@ class AppSettings : AppCompatActivity() {
 
 
                         }
-
-                        name2.setText( preloads.names)
-                        surname2.setText(preloads.surname)
-                        username2.setText(preloads.usersname)
-                        email2.setText(preloads.emails)
                     }
                     else if (preloads.usersname == null)
                     {
