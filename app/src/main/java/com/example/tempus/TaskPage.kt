@@ -96,11 +96,11 @@ class TaskPage: AppCompatActivity() {
             val max = findViewById<TextView>(R.id.max_text)
             val date = findViewById<TextView>(R.id.date_display)
             val taskimage = findViewById<ImageView>(R.id.task_image)
-            val position = intent.getIntExtra("position", 0)
+            val position = intent.getIntExtra("position1", 0)
             val hours = intent.getStringExtra("hours")
             val task = intent.getStringExtra("task")
             val rowIndex = position
-
+            val itemId = intent.getStringExtra("itemId")
             //THIS INDEX LETS THE FOR LOOP SORT THE SPECIFIC INDEX WHICH WONT CHANGE AS PER THE POSITION WHICH WILL CHANGE
 
 
@@ -112,7 +112,7 @@ class TaskPage: AppCompatActivity() {
 // Query Firestore to get the data for the clicked item
             db.collection("Tasks")
                 .whereEqualTo("userid",userid.toString().trim())
-                .limit(position + 1.toLong()) // Limit the results to the first (position + 1) items
+                .whereEqualTo("taskname", itemId)
                 .get()
                 .addOnSuccessListener { documents ->
                     // Get the last document in the result, which corresponds to the clicked item

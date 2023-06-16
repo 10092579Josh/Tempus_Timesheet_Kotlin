@@ -2,9 +2,9 @@ package com.example.tempus
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +12,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -39,16 +38,60 @@ class Tasks : AppCompatActivity() {
         val addbtn = findViewById<ImageButton>(R.id.addbtn)
         val cats = findViewById<Button>(R.id.task_selected)
         val date = findViewById<Button>(R.id.filterDates_btn)
-        date.setOnClickListener {
-            val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
-            recyclerview.layoutManager = LinearLayoutManager(this)
-            SimpleDateFormat("yyyy-MM-dd")
-            DateClass.startDate
-            DateClass.endDate
-            val message = DateClass.startDate
-            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-        }
+        date.setOnClickListener {
+                val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
+                recyclerview.layoutManager = LinearLayoutManager(this)
+                val db = FirebaseFirestore.getInstance()
+                val itemsRef = db.collection("Tasks")
+
+// Get the user ID (this will depend on how you are authenticating users)
+                val userid = FirebaseAuth.getInstance().currentUser?.uid
+
+// Create a query that only returns documents where the userId field matches the current user's ID
+                val datequery = itemsRef.whereEqualTo("userid",userid.toString().trim())
+                    .whereGreaterThanOrEqualTo("date", DateClass.startDate)
+                    .whereLessThanOrEqualTo("date", DateClass.endDate)
+
+// Execute the query and get the results as a Task
+                val task = datequery.get()
+
+// Add an OnSuccessListener to the Task to get the results
+                task.addOnSuccessListener { documents ->
+                    // Create an empty list to hold the items
+                    val items = mutableListOf<ItemsViewModel>()
+                    if (documents.size() > 0) {
+
+                        for (document in documents) {
+                            // Get the data for each document
+                            val name = document.getString("taskname") ?: ""
+                            val description = document.getString("hours") ?: ""
+                            val sub = document.getString("catergorytask") ?: ""
+                            val date = document.getString("date") ?: ""
+                            val imageUrl = document.getString("image") ?: ""
+                            val item = ItemsViewModel(name, description,sub,date,imageUrl)
+                            items.add(item)
+                        }
+
+                        // Update the RecyclerView with the new data
+                        // ...
+                        val sortedItems = items.sortedBy { it.date }
+                        try {
+
+                            val adapter = CustomAdapter(sortedItems.toMutableList())
+                            recyclerview.adapter = adapter
+                            adapter.notifyDataSetChanged()
+
+                        } catch (e: Exception) {
+
+
+                        }
+                    } else {
+                    }
+
+                }
+            }
+
 
         cat.setOnClickListener {
             val intent = Intent(this, Home::class.java)
@@ -118,20 +161,6 @@ class Tasks : AppCompatActivity() {
         datePickerDialog.show()
     }
 
-    fun isDateInRange(creationDate: String, startDate: String, endDate: String): Boolean {
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val created = sdf.parse(creationDate)
-        val start = sdf.parse(startDate)
-        val end = sdf.parse(endDate)
-
-        return created >= start && created <= end
-    }
-
-    fun applyFilter(view: View) {
-
-
-
-    }
 
     fun print() {
         val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
@@ -180,9 +209,9 @@ class Tasks : AppCompatActivity() {
     }
 
 
-    data class ItemsViewModel(val text: String, val hours: String, val sub: String, val date: String,val imageUrl: String)
+    data class ItemsViewModel(val text: String, val hours: String, val sub: String, var date: String, val imageUrl: String)
 
-    class CustomAdapter(val myDataList: MutableList<ItemsViewModel> = mutableListOf()) :
+    class CustomAdapter(var myDataList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -212,11 +241,12 @@ class Tasks : AppCompatActivity() {
                 val bundle2 = Bundle()
 
                 bundle.putSerializable("myDataList", Home.TaskClass.tasks)
-                intent.putExtra("position", position) // use "position" as the key
+                intent.putExtra("position1", position) // use "position" as the key
                 intent.putExtras(bundle)
                 bundle2.putSerializable("Hours", Home.TaskClass.hours)
-                intent.putExtra("position", position) // use "position" as the key
+                intent.putExtra("position2", position) // use "position" as the key
                 intent.putExtras(bundle2)
+                intent.putExtra("itemId", clickedData.text)
                 context.startActivity(intent)
             }
         }

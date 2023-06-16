@@ -101,3 +101,8 @@ fixed calculation
 fixed image issue
 added more error handling
 first apk generated 
+added filtering by user selectable period
+added filtering by task name no more index position
+elements on recycler view tied to task names instead 
+created work schedule 
+solidified positions 
