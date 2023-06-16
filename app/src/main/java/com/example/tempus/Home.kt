@@ -30,10 +30,9 @@ class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val mainLayoutId = intent.getIntExtra("home", 0)
-        val mainLayout = layoutInflater.inflate(mainLayoutId, null)
-        setContentView(mainLayout)
-        populatefields()
+        val homeID = intent.getIntExtra("home", 0)
+        val homelayout = layoutInflater.inflate(homeID, null)
+        setContentView(homelayout)
 
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
         if (sharedPreferences.getBoolean("isFirstLogin", true)) {
@@ -58,9 +57,12 @@ class Home : AppCompatActivity() {
 // THIS ALLOWS FOR SWITCHING BETWEEN THE PAGES
             task.setOnClickListener()
             {
-                val cat = Intent(this, Home::class.java)
-                startActivity(cat)
+                val intent = Intent(this, Home::class.java)
+                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+                startActivity(intent)
+                overridePendingTransition(0, 0)
                 finish()
+
             }
             cat.setOnClickListener()
             {
@@ -85,6 +87,7 @@ class Home : AppCompatActivity() {
             breaksbtn.setOnClickListener {
                 val breakspage = Intent(this, Breaks::class.java)
                 startActivity(breakspage)
+                overridePendingTransition(0, 0)
                 finish()
 
             }
@@ -92,6 +95,7 @@ class Home : AppCompatActivity() {
             statsbtn.setOnClickListener {
                 val statspage = Intent(this, Statistics::class.java)
                 startActivity(statspage)
+                overridePendingTransition(0, 0)
                 finish()
 
             }
@@ -99,6 +103,7 @@ class Home : AppCompatActivity() {
             settingsbtn.setOnClickListener {
                 val settingspage = Intent(this, AppSettings::class.java)
                 startActivity(settingspage)
+                overridePendingTransition(0, 0)
                 finish()
 
             }
@@ -107,6 +112,7 @@ class Home : AppCompatActivity() {
             {
                 val cform = Intent(this, CatergoryForm::class.java)
                 startActivity(cform)
+                overridePendingTransition(0, 0)
                 finish()
 
 
@@ -310,42 +316,7 @@ class Home : AppCompatActivity() {
         })
 
     }
-    fun populatefields()
-    {
-
-
-        val userid = FirebaseAuth.getInstance().currentUser?.uid
-        val database = Firebase.database
-        val myRef = database.getReference("users")
-
-
-
-        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (data in dataSnapshot.children) {
-                    val userId = data.child("userid").getValue(String::class.java)
-
-                    if (userId.toString().trim() == userid.toString().trim()) {
-
-                        AppSettings.preloads.names = data.child("name").getValue(String::class.java).toString()
-                        AppSettings.preloads.emails = data.child("email").getValue(String::class.java).toString()
-                        AppSettings.preloads.surname = data.child("surname").getValue(String::class.java).toString()
-                        AppSettings.preloads.usersname = data.child("usersname").getValue(String::class.java).toString()
-                        AppSettings.preloads.conpass = data.child("confirm").getValue(String::class.java).toString()
-                        AppSettings.preloads.pass = data.child("password").getValue(String::class.java).toString()
-
-                    }
-
-
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle error
-            }
-        })
-
-    }
+ 
 
 }
 

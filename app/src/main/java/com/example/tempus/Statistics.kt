@@ -43,12 +43,14 @@ class Statistics : AppCompatActivity() {
         statsbtn.setOnClickListener {
             val statspage = Intent(this, Statistics::class.java)
             startActivity(statspage)
+            overridePendingTransition(0, 0)
             finish();
         }
 
         settingsbtn.setOnClickListener {
             val settingspage = Intent(this, AppSettings::class.java)
             startActivity(settingspage)
+            overridePendingTransition(0, 0)
             finish();
         }
 

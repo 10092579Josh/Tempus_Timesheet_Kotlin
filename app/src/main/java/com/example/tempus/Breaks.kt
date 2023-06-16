@@ -17,32 +17,39 @@ class Breaks : AppCompatActivity() {
         val add = findViewById<ImageButton>(R.id.addbtn)
 
         home.setOnClickListener {
-            val homepage = Intent(this, Home::class.java)
-            startActivity(homepage)
+            val intent = Intent(this, Home::class.java)
+            intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+            startActivity(intent)
+            overridePendingTransition(0, 0)
             finish()
+
         }
 
         breaks.setOnClickListener {
             val breakspage = Intent(this, Breaks::class.java)
             startActivity(breakspage)
+            overridePendingTransition(0, 0)
             finish()
         }
 
         stats.setOnClickListener {
             val statspage = Intent(this, Statistics::class.java)
             startActivity(statspage)
+            overridePendingTransition(0, 0)
             finish()
         }
 
         settings.setOnClickListener {
             val settingspage = Intent(this, AppSettings::class.java)
             startActivity(settingspage)
+            overridePendingTransition(0, 0)
             finish()
         }
         add.setOnClickListener()
         {
             val taskform = Intent(this, TaskForm::class.java)
             startActivity(taskform)
+            overridePendingTransition(0, 0)
             finish()
 
         }

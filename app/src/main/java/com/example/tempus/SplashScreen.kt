@@ -12,6 +12,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 
 class SplashScreen : AppCompatActivity() {
@@ -39,12 +44,7 @@ class SplashScreen : AppCompatActivity() {
             Log.d("MyApp", "Method X started")
 
             // Preload the layout for the Home activity
-
-            val intent = Intent(this@SplashScreen, Home::class.java)
-            intent.putExtra("home", R.layout.home)
-            startActivity(intent)
-
-            finish()
+ populatefields()
             updateBar(progressBar, progressText, 75)
             val splashImageView = findViewById<ImageView>(R.id.splashImageView)
             splashImageView.setImageResource(R.drawable.splash_screen_logo) // Replace with your image resource
@@ -98,5 +98,41 @@ class SplashScreen : AppCompatActivity() {
             }
         }
         Animator.start()
+    }
+    fun populatefields()
+    {
+
+
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+        val database = Firebase.database
+        val myRef = database.getReference("users")
+
+
+
+        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (data in dataSnapshot.children) {
+                    val userId = data.child("userid").getValue(String::class.java)
+
+                    if (userId.toString().trim() == userid.toString().trim()) {
+
+                        AppSettings.preloads.names = data.child("name").getValue(String::class.java).toString()
+                        AppSettings.preloads.emails = data.child("email").getValue(String::class.java).toString()
+                        AppSettings.preloads.surname = data.child("surname").getValue(String::class.java).toString()
+                        AppSettings.preloads.usersname = data.child("usersname").getValue(String::class.java).toString()
+                        AppSettings.preloads.conpass = data.child("confirm").getValue(String::class.java).toString()
+                        AppSettings.preloads.pass = data.child("password").getValue(String::class.java).toString()
+
+                    }
+
+
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle error
+            }
+        })
+
     }
 }

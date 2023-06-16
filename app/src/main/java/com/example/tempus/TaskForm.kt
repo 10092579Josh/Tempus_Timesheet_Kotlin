@@ -100,10 +100,12 @@ class TaskForm:AppCompatActivity() {
             }
 
             homebtn.setOnClickListener {
-                val intent = Intent(this@TaskForm, Login::class.java)
-                intent.putExtra("login", R.layout.login)
-                overridePendingTransition(0, 0)
+                val intent = Intent(this, Home::class.java)
+                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
                 startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
+
             }
 
             breaksbtn.setOnClickListener {

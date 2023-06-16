@@ -51,15 +51,21 @@ class Tasks : AppCompatActivity() {
         }
 
         cat.setOnClickListener {
-            val cat = Intent(this, Home::class.java)
-            startActivity(cat)
+            val intent = Intent(this, Home::class.java)
+            intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+            startActivity(intent)
+            overridePendingTransition(0, 0)
             finish()
+
         }
 
         cats.setOnClickListener {
-            val tasks = Intent(this, Home::class.java)
-            startActivity(tasks)
+            val intent = Intent(this, Home::class.java)
+            intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+            startActivity(intent)
+            overridePendingTransition(0, 0)
             finish()
+
         }
 
         addbtn.setOnClickListener {
