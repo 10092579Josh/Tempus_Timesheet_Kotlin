@@ -29,9 +29,9 @@ class CatergoryForm: AppCompatActivity() {
 
 
             homebtn.setOnClickListener {
-                val homepage = Intent(this, Home::class.java)
-                startActivity(homepage)
-                finish()
+                val intent = Intent(this, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                startActivity(intent)
 
 
             }

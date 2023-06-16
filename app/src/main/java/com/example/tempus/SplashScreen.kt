@@ -53,9 +53,9 @@ class SplashScreen : AppCompatActivity() {
             splashImageView.invalidate()
             updateBar(progressBar, progressText, 100)
             Handler(Looper.getMainLooper()).postDelayed({
-                val intent = Intent(this@SplashScreen, Home::class.java)
-                intent.putExtra("home", R.layout.home)
-                startActivity(intent)
+                val homepage = Intent(this@SplashScreen, Home::class.java)
+                homepage.putExtra("home", R.layout.home)
+                startActivity(homepage)
 
                 finish()
 
@@ -71,11 +71,11 @@ class SplashScreen : AppCompatActivity() {
 
             Handler(Looper.getMainLooper()).postDelayed({
 
-                val intent = Intent(this@SplashScreen, Login::class.java)
-                intent.putExtra("login", R.layout.login)
+                val loginpage = Intent(this@SplashScreen, Login::class.java)
+                loginpage.putExtra("login", R.layout.login)
 
 
-                startActivity(intent)
+                startActivity(loginpage)
                 finish()
 
             }, SPLASH_DELAY)
@@ -84,11 +84,10 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun updateBar(progressBar: ProgressBar, progressText: TextView, progress: Int) {
-        val progressAnimator =
-            ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, progress)
-        progressAnimator.duration = 4900
-        progressAnimator.interpolator = LinearInterpolator()
-        progressAnimator.addUpdateListener {
+        val Animator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, progress)
+        Animator.duration = 4900
+        Animator.interpolator = LinearInterpolator()
+        Animator.addUpdateListener {
             val currentProgress = it.animatedValue as Int
             percentageText.text = "${currentProgress}%"
             when (currentProgress) {
@@ -98,6 +97,6 @@ class SplashScreen : AppCompatActivity() {
                 in 76..100 -> progressText.text = "Done!"
             }
         }
-        progressAnimator.start()
+        Animator.start()
     }
 }

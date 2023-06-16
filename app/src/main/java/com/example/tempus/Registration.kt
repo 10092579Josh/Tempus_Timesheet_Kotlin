@@ -19,7 +19,6 @@ import android.content.Context
 import android.view.View
 
 import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 
@@ -199,10 +198,11 @@ fun notifications()
                         val exception = task.exception
                         if (task.isSuccessful) {
                             // User account created
-                            val intent = Intent(this, Login::class.java)
-
-                            startActivity(intent)
+                            val loginpage = Intent(this@Registration, Login::class.java)
+                            loginpage.putExtra("login", R.layout.login)
+                            startActivity(loginpage)
                             finish()
+
                             val user = auth.currentUser
                             val users = User(name,surname,usersname, email, password, confirm,userid)
                             myRef.child(usersname+password).setValue(users)

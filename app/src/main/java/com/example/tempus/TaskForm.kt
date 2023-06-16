@@ -94,31 +94,36 @@ class TaskForm:AppCompatActivity() {
             {
                 val homepage = Intent(this, TaskForm::class.java)
                 startActivity(homepage)
+                overridePendingTransition(0, 0)
                 finish()
 
             }
 
             homebtn.setOnClickListener {
-                val homepage = Intent(this, Home::class.java)
-                startActivity(homepage)
-                finish()
+                val intent = Intent(this@TaskForm, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                overridePendingTransition(0, 0)
+                startActivity(intent)
             }
 
             breaksbtn.setOnClickListener {
                 val breakspage = Intent(this, Breaks::class.java)
                 startActivity(breakspage)
+                overridePendingTransition(0, 0)
                 finish()
             }
 
             statsbtn.setOnClickListener {
                 val statspage = Intent(this, Statistics::class.java)
                 startActivity(statspage)
+                overridePendingTransition(0, 0)
                 finish()
             }
 
             settingsbtn.setOnClickListener {
                 val settingspage = Intent(this, AppSettings::class.java)
                 startActivity(settingspage)
+                overridePendingTransition(0, 0)
                 finish()
             }
         } catch (e: Exception) {

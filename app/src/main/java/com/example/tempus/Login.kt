@@ -147,9 +147,9 @@ else {
                 val appuser = security.currentUser
                 // shows the logged in user
 
-                val intent = Intent(this@Login, Home::class.java)
-                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
-                startActivity(intent)
+                val homepage = Intent(this@Login, Home::class.java)
+                homepage.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+                startActivity(homepage)
                 overridePendingTransition(0, 0)
                 finish()
             } else {
