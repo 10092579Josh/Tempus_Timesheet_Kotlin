@@ -86,7 +86,7 @@ class CatergoryForm: AppCompatActivity() {
 
 
                         val catname = catnames.text.toString().trim()
-                        val cathours = "0"
+                        val cathours = "00:00"
 
 
 // Add as many items
@@ -94,7 +94,8 @@ class CatergoryForm: AppCompatActivity() {
 
                         val docRef = itemsadd.document(catname)
                         docRef.set(cat)
-
+                        var message = "$catname added "
+                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                     }
 
 // Add all the items in

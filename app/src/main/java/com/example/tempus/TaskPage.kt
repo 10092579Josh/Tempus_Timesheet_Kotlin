@@ -35,6 +35,7 @@ class TaskPage: AppCompatActivity() {
             addbtn.setOnClickListener()
             {
                 val tform = Intent(this, TaskForm::class.java)
+                overridePendingTransition(0, 0)
                 startActivity(tform)
                 finish()
 
@@ -52,6 +53,7 @@ class TaskPage: AppCompatActivity() {
 
             breaksbtn.setOnClickListener {
                 val breakspage = Intent(this, Breaks::class.java)
+                overridePendingTransition(0, 0)
                 startActivity(breakspage)
                 finish()
 
@@ -59,6 +61,7 @@ class TaskPage: AppCompatActivity() {
 
             statsbtn.setOnClickListener {
                 val statspage = Intent(this, Statistics::class.java)
+                overridePendingTransition(0, 0)
                 startActivity(statspage)
                 finish()
 
@@ -66,6 +69,7 @@ class TaskPage: AppCompatActivity() {
 
             settingsbtn.setOnClickListener {
                 val settingspage = Intent(this, AppSettings::class.java)
+                overridePendingTransition(0, 0)
                 startActivity(settingspage)
                 finish()
 
