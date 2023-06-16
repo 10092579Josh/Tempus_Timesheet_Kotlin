@@ -96,3 +96,8 @@ started 9:00 16/06/2023
 add new code to places left out 
 added override transition 
 moved data loading to splash screen
+fixed hours
+fixed calculation
+fixed image issue
+added more error handling
+first apk generated 

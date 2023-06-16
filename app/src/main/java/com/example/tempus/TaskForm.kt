@@ -21,6 +21,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
+import kotlin.math.absoluteValue
 
 // THIS IS FOR THE CREATION OF THE TASK
 // THIS HAS THE VARIABLE ASSIGNMENT
@@ -33,10 +34,6 @@ class TaskForm:AppCompatActivity() {
     private val myDataList = mutableListOf<Tasks.ItemsViewModel>()
     private val customAdapter = Tasks.CustomAdapter(myDataList)
 
-
-    companion object {
-        val IMAGE_REQUEST_CODE = 100
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,16 +131,19 @@ class TaskForm:AppCompatActivity() {
     }
     private val GalleryContent = registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
         // handle the result here
-        val task = findViewById<EditText>(R.id.taskNameInput)
+
         if (url != null) {
+            val task = findViewById<EditText>(R.id.taskNameInput)
             // display the image in an ImageView
             val imageView = findViewById<ImageView>(R.id.imgGallery)
             imageView.setImageURI(url)
-            val istore = Firebase.storage.reference.child(task.text.toString().trim())
+
+            val store =
+                Firebase.storage.reference.child(task.text.toString().trim())
 
             // upload the image to Firebase storage
-            val uploadchoice = istore.putFile(url)
-            uploadchoice.addOnSuccessListener {
+            val choice = store.putFile(url)
+            choice.addOnSuccessListener {
                 // handle successful upload here
             }.addOnFailureListener {
                 // handle failed upload here
@@ -162,16 +162,18 @@ class TaskForm:AppCompatActivity() {
         val storageRef = Firebase.storage.reference.child(task.text.toString().trim())
 
         // convert the photo to a byte array
-        val baos = ByteArrayOutputStream()
-        photo?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
+        val stream = ByteArrayOutputStream()
+        photo?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        val data = stream.toByteArray()
 
         // upload the photo to Firebase storage
         val uploadTask = storageRef.putBytes(data)
         uploadTask.addOnSuccessListener {
-            // handle successful upload here
+            val message = "IMAGE UPLOADED "
+            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
-            // handle failed upload here
+            val message = "INVALID IMAGE!"
+            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -343,27 +345,27 @@ class TaskForm:AppCompatActivity() {
                     val max = maximumGoalSpinner.selectedItem.toString()
                     val min = minimum.selectedItem.toString()
                     val selectedItem = spinner.selectedItem.toString()
-                    if (task.text.toString().isNullOrEmpty()) {
+                    if (task.text.toString().isEmpty()) {
                         val message = "ERROR: TASK NAME CAN NOT BE EMPTY "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-                    } else if (description.text.toString().isNullOrEmpty()) {
+                    } else if (description.text.toString().isEmpty()) {
                         val message = "ERROR: DESCRIPTION CAN NOT BE EMPTY "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-                    } else if (dates.text.toString().isNullOrEmpty()) {
+                    } else if (dates.text.toString().isEmpty()) {
                         val message = "ERROR: START DATE CAN NOT BE EMPTY "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-                    } else if (selectedItem.toString().isNullOrEmpty()) {
+                    } else if (selectedItem.isEmpty()) {
                         val message = "ERROR: START DATE CAN NOT BE EMPTY "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-                    } else if (max.toString().isNullOrEmpty()) {
+                    } else if (max.isEmpty()) {
                         val message = "ERROR: START DATE CAN NOT BE EMPTY "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-                    } else if (min.toString().isNullOrEmpty()) {
+                    } else if (min.isEmpty()) {
                         val message = "ERROR: START DATE CAN NOT BE EMPTY "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                     } else {
@@ -388,95 +390,101 @@ class TaskForm:AppCompatActivity() {
                             val date = dates.text.toString().trim()
 
                             val userid = Firebase.auth.currentUser?.uid
+                            val start = start.text.toString().replace(Regex("[^\\w\\s:]"), "")
+                            val end = end.text.toString().replace(Regex("[^\\w\\s:]"), "")
 
-                            val start = start.text.toString().replace(Regex("[^\\w\\s]"), "")
-                            val end = end.text.toString().replace(Regex("[^\\w\\s]"), "")
+                            val startsplit = start.split(":")
+                            val sHours = startsplit[0].toInt()
+                            val sMinutes = startsplit[1].toInt()
 
-                            val result = Integer.parseInt(end) - Integer.parseInt(start)
+                            val endTimeParts = end.split(":")
+                            val endHours = endTimeParts[0].toInt()
+                            val endMinutes = endTimeParts[1].toInt()
+
+// convert start and end times to minutes
+                            val startTotalMinutes = sHours * 60 + sMinutes
+                            val endTotalMinutes = endHours * 60 + endMinutes
+
+// calculate difference in minutes
+                            val diffMinutes = (endTotalMinutes - startTotalMinutes).absoluteValue
+
+// convert difference back to hours and minutes
+                            val diffHours = diffMinutes / 60
+                            val diffRemainingMinutes = diffMinutes % 60
+
                             val categoryName = selectedItem.trim()
 
                             val db = Firebase.firestore
                             val categoryRef = db.collection("Categories").document(categoryName)
                             categoryRef.get()
                                 .addOnSuccessListener { document ->
-                                    val currentHours = document.get("cathours")
+                                    val CategoryHours = document.get("cathours")
+                                    val currentsplit = CategoryHours.toString().split(":")
+                                    val HoursValue = currentsplit[0].toInt()
+                                    val MinutesValue = currentsplit[1].toInt()
 
-
-                                    val h = currentHours.toString().substring(0, 2).toInt() // 1
-                                    val minutes2 = currentHours.toString().substring(2, 4).toInt() // 30
-
-                                    val hours = result.toString().substring(0, 2).toInt() // 6
-                                    val minutes = result.toString().substring(2, 4).toInt() // 30
-
-                                    val totalMinutes = minutes2 + minutes
-                                    val additionalHours = totalMinutes / 60
-                                    val remainingMinutes = totalMinutes % 60
-
-                                    val totalHours = h + hours + additionalHours
-                                   if (remainingMinutes >= 60) {
-                                        val extraHours = remainingMinutes / 60
-                                        val finalMinutes = remainingMinutes % 60
-                                        val finalHours = totalHours + extraHours
-
-                                       categoryRef.update("cathours",   "$finalHours.$finalMinutes")
-                                    } else {
-
-                                       categoryRef.update("cathours",   "$totalHours.$remainingMinutes")
-                                    } // "7.60"
-
-
+                                    val newTotalMinutes = HoursValue * 60 + MinutesValue + diffMinutes
+                                    val newHoursValue = newTotalMinutes / 60
+                                    val newRemainingMinutesValue = newTotalMinutes % 60
+                                    categoryRef.update(
+                                        "cathours",
+                                        "%02d:%02d".format(newHoursValue, newRemainingMinutesValue)
+                                    )
                                 }
 
                             val symbol = "-"
-                            val outputs = result.toString().removePrefix(symbol)
+                           // val outputs = result.toString().removePrefix(symbol)
 
-                            val middleIndex = outputs.length / 2
-                            val parsed =
-                                outputs.substring(0, middleIndex) + ":" + outputs.substring(
-                                    middleIndex
-                                )
-                            result.toString().substring(middleIndex)
+                          //  val middleIndex = outputs.length / 2
+                            //val parsed = outputs.substring(0, middleIndex) + ":" + outputs.substring( middleIndex )
+                          //  result.toString().substring(middleIndex)
 
 
-                            val hours = parsed
+                            val hours = "%02d:%02d".format(diffHours, diffRemainingMinutes)
 
 
+if(picture.isNullOrEmpty()){
+    val message = "ERROR NO IMAGE CHOSEN"
+    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()}
+                            else {
+    val tasksadd = taskstore(
+        taskname,
+        catergorytask,
+        description,
+        startime,
+        endtime,
+        hours,
+        mingoal,
+        maxgoal,
+        date,
+        picture,
+        userid.toString().trim()
+    )
+
+    val docRef = itemsadd.document(taskname)
+    docRef.set(tasksadd)
 
 
-                            val tasksadd = taskstore(
-                                taskname,
-                                catergorytask,
-                                description,
-                                startime,
-                                endtime,
-                                hours,
-                                mingoal,
-                                maxgoal,
-                                date,
-                                picture,
-                                userid.toString().trim()
-                            )
+    val message = "TASK ${task.text} ADDED "
+    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-                            val docRef = itemsadd.document(taskname)
-                            docRef.set(tasksadd)
 
-                            val message = "TASK ${task.text} ADDED "
+}
+
+                        }.addOnFailureListener(){
+                            val message = "ERROR NO IMAGE CHOSEN"
                             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-
-
-
-
                         }
 
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
                 }
 
             }
 
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 }

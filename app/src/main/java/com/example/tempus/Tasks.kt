@@ -42,10 +42,10 @@ class Tasks : AppCompatActivity() {
         date.setOnClickListener {
             val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
             recyclerview.layoutManager = LinearLayoutManager(this)
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-            val startDate = DateClass.startDate
-            val endDate = DateClass.endDate
-            val message = DateClass.startDate.toString()
+            SimpleDateFormat("yyyy-MM-dd")
+            DateClass.startDate
+            DateClass.endDate
+            val message = DateClass.startDate
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
         }
