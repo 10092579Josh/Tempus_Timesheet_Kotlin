@@ -105,4 +105,5 @@ added filtering by user selectable period
 added filtering by task name no more index position
 elements on recycler view tied to task names instead 
 created work schedule 
-solidified positions 
+solidified positions
+ended at 22:16 16/06/2023
