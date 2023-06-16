@@ -24,26 +24,31 @@ class UserDetails : AppCompatActivity() {
 
 
         homebtn.setOnClickListener {
-            val homepage = Intent(this, Home::class.java)
-            startActivity(homepage)
-            finish();
+            val intent = Intent(this, Home::class.java)
+            intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
         }
 
         breaksbtn.setOnClickListener {
             val breakspage = Intent(this, Breaks::class.java)
             startActivity(breakspage)
+            overridePendingTransition(0, 0)
             finish();
         }
 
         statsbtn.setOnClickListener {
             val statspage = Intent(this, Statistics::class.java)
             startActivity(statspage)
+            overridePendingTransition(0, 0)
             finish();
         }
 
         settingsbtn.setOnClickListener {
             val settingspage = Intent(this, AppSettings::class.java)
             startActivity(settingspage)
+            overridePendingTransition(0, 0)
             finish();
         }
 
@@ -51,6 +56,7 @@ class UserDetails : AppCompatActivity() {
         {
             val tform = Intent(this, CatergoryForm::class.java)
             startActivity(tform)
+            overridePendingTransition(0, 0)
             finish()
 
         }
