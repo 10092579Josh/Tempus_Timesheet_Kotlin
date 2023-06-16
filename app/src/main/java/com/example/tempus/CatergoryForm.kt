@@ -29,9 +29,11 @@ class CatergoryForm: AppCompatActivity() {
 
 
             homebtn.setOnClickListener {
-                val intent = Intent(this, Login::class.java)
-                intent.putExtra("login", R.layout.login)
+                val intent = Intent(this, Home::class.java)
+                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
                 startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
 
 
             }
@@ -39,6 +41,7 @@ class CatergoryForm: AppCompatActivity() {
             breaksbtn.setOnClickListener {
                 val breakspage = Intent(this, Breaks::class.java)
                 startActivity(breakspage)
+                overridePendingTransition(0, 0)
                 finish()
 
             }
@@ -46,6 +49,7 @@ class CatergoryForm: AppCompatActivity() {
             statsbtn.setOnClickListener {
                 val statspage = Intent(this, Statistics::class.java)
                 startActivity(statspage)
+                overridePendingTransition(0, 0)
                 finish()
 
             }
@@ -53,6 +57,7 @@ class CatergoryForm: AppCompatActivity() {
             settingsbtn.setOnClickListener {
                 val settingspage = Intent(this, AppSettings::class.java)
                 startActivity(settingspage)
+                overridePendingTransition(0, 0)
                 finish()
 
             }
@@ -61,6 +66,7 @@ class CatergoryForm: AppCompatActivity() {
             {
                 val tform = Intent(this, TaskForm::class.java)
                 startActivity(tform)
+                overridePendingTransition(0, 0)
                 finish()
 
             }
