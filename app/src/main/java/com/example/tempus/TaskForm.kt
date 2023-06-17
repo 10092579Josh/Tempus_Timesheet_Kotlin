@@ -130,45 +130,42 @@ class TaskForm:AppCompatActivity() {
         }
     }
     private val GalleryContent = registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
-        // handle the result here
+
 
         if (url != null) {
             val task = findViewById<EditText>(R.id.taskNameInput)
-            // display the image in an ImageView
+
             val imageView = findViewById<ImageView>(R.id.imgGallery)
             imageView.setImageURI(url)
 
             val store =
                 Firebase.storage.reference.child(task.text.toString().trim())
 
-            // upload the image to Firebase storage
             val choice = store.putFile(url)
             choice.addOnSuccessListener {
-                // handle successful upload here
+
             }.addOnFailureListener {
-                // handle failed upload here
+
             }
         }
     }
     private val camera = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { photo: Bitmap? ->
-        // display the photo in an ImageView
+
         val task = findViewById<EditText>(R.id.taskNameInput)
 
         val imageView = findViewById<ImageView>(R.id.imgGallery)
         imageView.setImageBitmap(photo)
 
-        // create a reference to the image file in Firebase storage
 
-        val storageRef = Firebase.storage.reference.child(task.text.toString().trim())
+        val ImageRef = Firebase.storage.reference.child(task.text.toString().trim())
 
-        // convert the photo to a byte array
-        val stream = ByteArrayOutputStream()
-        photo?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        val data = stream.toByteArray()
 
-        // upload the photo to Firebase storage
-        val uploadTask = storageRef.putBytes(data)
-        uploadTask.addOnSuccessListener {
+        val Imagestream = ByteArrayOutputStream()
+        photo?.compress(Bitmap.CompressFormat.JPEG, 100, Imagestream)
+        val data = Imagestream.toByteArray()
+
+        val UploadDP = ImageRef.putBytes(data)
+        UploadDP.addOnSuccessListener {
             val message = "IMAGE UPLOADED "
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
@@ -178,11 +175,6 @@ class TaskForm:AppCompatActivity() {
     }
 
 
-
-    // MODEL FOR THE IMAGE
-
-
-    // MODEL FOR THE DATES
     fun selectDate(view: View) {
         try {
             val calendar = Calendar.getInstance()
@@ -190,11 +182,10 @@ class TaskForm:AppCompatActivity() {
             val month = calendar.get(Calendar.MONTH)
             val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
 
-            // Create date picker dialog
             val datePickerDialog = DatePickerDialog(
                 this,
                 { _, year, month, dayOfMonth ->
-                    // Set selected date to the TextView
+
                     selectedDateText.text = "$dayOfMonth/${month + 1}/$year"
                 },
                 year,
@@ -209,7 +200,6 @@ class TaskForm:AppCompatActivity() {
 
     }
 
-    // MODEL FOR THE TIMES
     fun selectTime(view: View) {
         try {
             val calendar = Calendar.getInstance()
@@ -242,7 +232,6 @@ class TaskForm:AppCompatActivity() {
 
     }
 
-    // MODEL FOR THE END TIMES
     fun selectEndTime(view: View) {
         try {
 
@@ -381,6 +370,7 @@ class TaskForm:AppCompatActivity() {
 
                             val taskname = task.text.toString().trim()
                             val catergorytask = selectedItem.trim()
+                            val tabname = "$catergorytask$taskname"
                             val description = description.text.toString().trim()
                             val startime = start.text.toString().trim()
                             val endtime = end.text.toString().trim()
@@ -458,6 +448,7 @@ if(picture.isNullOrEmpty()){
         maxgoal,
         date,
         picture,
+        tabname,
         userid.toString().trim()
     )
 

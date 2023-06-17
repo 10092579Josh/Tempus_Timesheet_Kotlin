@@ -40,15 +40,14 @@ try {
     Log.d("MyApp", "$currentUser")
     if (currentUser != null) {
         updateBar(progressBar, progressText, 50)
-        // User is signed in, redirect to main activity
+
         Log.d("MyApp", "Method X started")
 
-        // Preload the layout for the Home activity
         populatefields()
         updateBar(progressBar, progressText, 75)
         val splashImageView = findViewById<ImageView>(R.id.splashImageView)
-        splashImageView.setImageResource(R.drawable.splash_screen_logo) // Replace with your image resource
-// Bring the ImageView to the front
+        splashImageView.setImageResource(R.drawable.splash_screen_logo)
+
         splashImageView.bringToFront()
         splashImageView.invalidate()
         updateBar(progressBar, progressText, 100)
@@ -63,8 +62,8 @@ try {
     } else {
         updateBar(progressBar, progressText, 50)
         val splashImageView = findViewById<ImageView>(R.id.splashImageView)
-        splashImageView.setImageResource(R.drawable.splash_screen_logo) // Replace with your image resource
-// Bring the ImageView to the front
+        splashImageView.setImageResource(R.drawable.splash_screen_logo)
+
         splashImageView.bringToFront()
         splashImageView.invalidate()
         updateBar(progressBar, progressText, 75)

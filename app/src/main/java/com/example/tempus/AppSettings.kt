@@ -28,7 +28,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 
@@ -337,6 +339,51 @@ class AppSettings : AppCompatActivity() {
                 // Handle error
             }
         })
+
+    }
+    fun ToDelete()
+    {
+        val db = FirebaseFirestore.getInstance()
+        val userId = "USER_ID"
+
+        val storage = Firebase.storage
+
+// Delete images where the name matches the taskname field for the given user ID
+        db.collection("Tasks")
+            .whereEqualTo("userid", userId)
+            .get()
+            .addOnSuccessListener { tasks ->
+                for (task in tasks) {
+                    val taskName = task.getString("taskname") ?: ""
+                    val imageRef = storage.reference.child(taskName)
+                    imageRef.delete()
+                }
+            }
+
+
+
+
+        db.collection("Tasks")
+            .whereEqualTo("userid", userId)
+            .get()
+            .addOnSuccessListener { tasks ->
+                for (task in tasks) {
+                    db.collection("Tasks").document(task.id).delete()
+                }
+            }
+
+
+        db.collection("Categories")
+            .whereEqualTo("userid", userId)
+            .get()
+            .addOnSuccessListener { categories ->
+                for (category in categories) {
+                    db.collection("categories").document(category.id).delete()
+                }
+            }
+
+
+
 
     }
 }

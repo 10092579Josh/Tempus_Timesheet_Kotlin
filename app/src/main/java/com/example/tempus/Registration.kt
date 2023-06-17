@@ -38,9 +38,12 @@ fun notifications()
     var back:ImageButton = findViewById(R.id.back_btn)
     back.setOnClickListener(){
 
-        val intent = Intent(this, Login::class.java)
-        startActivity(intent)
-        finish();
+        val loginpage = Intent(this, Login::class.java)
+        loginpage.putExtra("login", R.layout.login)
+
+
+        startActivity(loginpage)
+        finish()
 
     }
     val layoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

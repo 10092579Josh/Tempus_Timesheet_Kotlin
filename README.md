@@ -1,4 +1,5 @@
 # Tempus_Timesheet_Kotlin
+VERSION: 1.0.0
 added firebase code for tasks 
 added image code to upload
 added new code to get download url 
@@ -24,6 +25,7 @@ added dialogue boxes
 added unfinished forgot password method
 stopped at 21:17 11/06/2023
 
+VERSION 2.0.0
 started at 8:30 12/6/2023
 added an error data class for handling errors 
 tested ai 30-34 android 11-14
@@ -48,6 +50,7 @@ lots of bugs fixed
 added notify permissions
 ended at 21:00 12/6/2023
 
+VERSION:2.0.1
 started t 9:30 13/6/2023
 ran into gradle issues
 upgraded to flamingo 
@@ -56,6 +59,7 @@ fixed again user loop issue
 fixed user notifications
 ended 00:36 14/6/2023
 
+VERSION 2.0.2:
 started at 9:30 14/06/2023
 added colour to buttons 
 found a button solution for dialog's 
@@ -75,6 +79,7 @@ need to implement error handling and comments
 app is ready for beta 2
 ended at 17:45 14/06/2023
 
+VERSION 2.0.3:
 started at 8:55 15/06/2023
 added KH UI for settings
 added logout code for logout button
@@ -92,6 +97,7 @@ removed animation from stats and half of home
 
 ended 23:10 15/06/2023
 
+VERSION 2.0.4:
 started 9:00 16/06/2023
 add new code to places left out 
 added override transition 
@@ -107,3 +113,18 @@ elements on recycler view tied to task names instead
 created work schedule 
 solidified positions
 ended at 22:16 16/06/2023
+
+VERSION: 2.0.5:
+added collapsable categories 
+added clickable tasks under categories 
+linked pages to tasks 
+total hour break down can be seen
+made image in task page editable need to add download option 
+added tabs for display
+fixed back button for registration page 
+removed auto comments
+added sub task layout
+josh has partially worked the graph
+londa has got caching working partially 
+biometrics planned for implementation 
+Beta 2 Patch 3 released 

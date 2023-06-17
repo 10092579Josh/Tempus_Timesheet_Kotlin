@@ -18,6 +18,7 @@ data class taskstore(
       val maxgoal:String,
       val date:String,
       val image:String,
+      val tabname:String,
       val userid:String
 
 )

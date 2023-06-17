@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +19,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
-// THIS DEALS WITH THE TASK AND CONTAINS THE RECYCLER VIEW
-// THIS HAS ALL NEEDED MODELS FOR THE VIEW
+
 class Tasks : AppCompatActivity() {
     object DateClass {
         //ASSIGNING TASKS
@@ -45,25 +43,20 @@ class Tasks : AppCompatActivity() {
                 val db = FirebaseFirestore.getInstance()
                 val itemsRef = db.collection("Tasks")
 
-// Get the user ID (this will depend on how you are authenticating users)
                 val userid = FirebaseAuth.getInstance().currentUser?.uid
 
-// Create a query that only returns documents where the userId field matches the current user's ID
                 val datequery = itemsRef.whereEqualTo("userid",userid.toString().trim())
                     .whereGreaterThanOrEqualTo("date", DateClass.startDate)
                     .whereLessThanOrEqualTo("date", DateClass.endDate)
 
-// Execute the query and get the results as a Task
                 val task = datequery.get()
 
-// Add an OnSuccessListener to the Task to get the results
                 task.addOnSuccessListener { documents ->
-                    // Create an empty list to hold the items
+
                     val items = mutableListOf<ItemsViewModel>()
                     if (documents.size() > 0) {
 
                         for (document in documents) {
-                            // Get the data for each document
                             val name = document.getString("taskname") ?: ""
                             val description = document.getString("hours") ?: ""
                             val sub = document.getString("catergorytask") ?: ""
@@ -73,8 +66,7 @@ class Tasks : AppCompatActivity() {
                             items.add(item)
                         }
 
-                        // Update the RecyclerView with the new data
-                        // ...
+
                         val sortedItems = items.sortedBy { it.date }
                         try {
 
@@ -120,17 +112,16 @@ class Tasks : AppCompatActivity() {
     }
 
     fun selectstartDate(view: View) {
-        // Get current date
+
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
 
-        // Create date picker dialog
         val datePickerDialog = DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                // Set selected date to the TextView
+
                 DateClass.startDate = "$dayOfMonth/${month + 1}/$year"
             },
             year,
@@ -141,22 +132,20 @@ class Tasks : AppCompatActivity() {
     }
 
     fun selectendDate(view: View) {
-        // Get current date
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
 
-        // Create date picker dialog
+        val taskcalendar = Calendar.getInstance()
+        val taskyear = taskcalendar.get(Calendar.YEAR)
+        val taskmonth = taskcalendar.get(Calendar.MONTH)
+        val taskdayOfMonth = taskcalendar.get(Calendar.DAY_OF_MONTH)
+
         val datePickerDialog = DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                // Set selected date to the TextView
                 DateClass.endDate = "$dayOfMonth/${month + 1}/$year"
             },
-            year,
-            month,
-            dayOfMonth
+            taskyear,
+            taskmonth,
+            taskdayOfMonth
         )
         datePickerDialog.show()
     }
@@ -168,22 +157,21 @@ class Tasks : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         val itemsRef = db.collection("Tasks")
 
-// Get the user ID (this will depend on how you are authenticating users)
+
         val userid = FirebaseAuth.getInstance().currentUser?.uid
 
-// Create a query that only returns documents where the userId field matches the current user's ID
+
         val query = itemsRef.whereEqualTo("userid",userid.toString().trim())
 
-// Execute the query and get the results as a Task
+
         val task = query.get()
 
-// Add an OnSuccessListener to the Task to get the results
         task.addOnSuccessListener { documents ->
-            // Create an empty list to hold the items
+
             val items = mutableListOf<ItemsViewModel>()
 
             for (document in documents) {
-                // Get the data for each document
+
                 val name = document.getString("taskname") ?: ""
                 val description = document.getString("hours") ?: ""
                 val sub = document.getString("catergorytask") ?: ""
@@ -193,8 +181,7 @@ class Tasks : AppCompatActivity() {
                 items.add(item)
             }
 
-            // Update the RecyclerView with the new data
-            // ...
+
             val sortedItems = items.sortedBy { it.text }
             try {
 
@@ -262,4 +249,6 @@ class Tasks : AppCompatActivity() {
             val imageView :ImageView = itemView.findViewById(R.id.task_item_image)
           }
       }
+
+
 }
