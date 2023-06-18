@@ -16,11 +16,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import com.google.firebase.auth.FirebaseAuth
 
 import com.google.firebase.auth.FirebaseAuthException
@@ -102,8 +99,8 @@ class Registration : AppCompatActivity() {
     }
 
     object SourceClass {
-        val rows = 5
-        val columns = 7
+        const val rows = 5
+        const val columns = 7
 
         val datas = Array(rows) { arrayOfNulls<String>(columns) }
     }
@@ -116,25 +113,25 @@ class Registration : AppCompatActivity() {
     fun input() { //variables
 
 
-        var submitting: Button = findViewById(R.id.sub)
-        var name1: com.google.android.material.textfield.TextInputLayout =
+        val submitting: Button = findViewById(R.id.sub)
+        val name1: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.firstName)
-        var names = name1.editText
+        val names = name1.editText
 
-        var surname1: com.google.android.material.textfield.TextInputLayout =
+        val surname1: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.surname)
-        var surnames = surname1.editText
-        var username1: com.google.android.material.textfield.TextInputLayout =
+        val surnames = surname1.editText
+        val username1: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.usernames)
-        var user2 = username1.editText
-        var password1: com.google.android.material.textfield.TextInputLayout =
+        val user2 = username1.editText
+        val password1: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.enterPassword)
-        var pass = password1.editText
-        var confirmpassword: com.google.android.material.textfield.TextInputLayout =
+        val pass = password1.editText
+        val confirmpassword: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.confirm_password)
-        var pass2 = confirmpassword.editText
-        var email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
-        var emails = email1.editText
+        val pass2 = confirmpassword.editText
+        val email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
+        val emails = email1.editText
 
 
 
@@ -146,27 +143,27 @@ class Registration : AppCompatActivity() {
 
             //action statements tp check fields if empty
             if (pass?.text.toString() != pass2?.text.toString()) {
-                var message = " passwords do not match"
+                val message = " passwords do not match"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
             } else if (names?.text.toString().isEmpty()) {
-                var message = " no firstname entered "
+                val message = " no firstname entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             } else if (surnames?.text.toString().isEmpty()) {
-                var message = " no surname entered "
+                val message = " no surname entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             } else if (user2?.text.toString().isEmpty()) {
-                var message = " no username entered "
+                val message = " no username entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             } else if (pass?.text.toString().length < 7) {
-                var message = " enter password is too short"
+                val message = " enter password is too short"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             } else if (pass2?.text.toString().length < 7) {
-                var message = " confirmkey password is too short "
+                val message = " confirmkey password is too short "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
             } else if (emails?.text.toString().isEmpty()) {
-                var message = " no emailaddress entered "
+                val message = " no emailaddress entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             } else { // move to the next screen if filled
 
@@ -182,7 +179,7 @@ class Registration : AppCompatActivity() {
                 val email = emails?.text.toString().replace("\\s".toRegex(), "")
                 val password = pass?.text.toString().replace("\\s".toRegex(), "")
                 val confirm = pass2?.text.toString().replace("\\s".toRegex(), "")
-                val UserId = ""
+                val userId = ""
 
 
                 auth.createUserWithEmailAndPassword(email, password)
@@ -193,7 +190,7 @@ class Registration : AppCompatActivity() {
                         val exception = task.exception
                         if (task.isSuccessful && currentUser != null) {
 
-                            val user = auth.currentUser
+                            auth.currentUser
 
                             val users = User(
                                 name,
@@ -202,7 +199,7 @@ class Registration : AppCompatActivity() {
                                 email,
                                 password,
                                 confirm,
-                                UserId.toString()
+                                userId.toString()
                             )
                             myRef.child(usersname + password).setValue(users)
                             var message = "USER ${user2?.text} HAS REGISTERED "

@@ -105,7 +105,7 @@ class AppSettings : AppCompatActivity() {
             FirebaseAuth.getInstance().signOut()
 
 
-            var message = " ${preloads.usersname} HAS LOGGED OUT!"
+            val message = " ${preloads.usersname} HAS LOGGED OUT!"
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
