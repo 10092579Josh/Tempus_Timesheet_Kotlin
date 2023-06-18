@@ -30,12 +30,13 @@ import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 
 class Login : AppCompatActivity() {
+    private val e = Errors()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val loginLayoutId = intent.getIntExtra("login", 0)
         val loginLayout = layoutInflater.inflate(loginLayoutId, null)
         setContentView(loginLayout)
-        persistlogin()
+
         permissions()
         signup()
         notifications()
@@ -128,7 +129,8 @@ class Login : AppCompatActivity() {
         {
             if (pass2?.text.isNullOrEmpty()) {
 
-                passwerror(Errors())
+                val crouton = Crouton.makeText(this,e.NoNullsPassWord , Style.ALERT)
+                crouton.show()
 
             } else {
 
@@ -155,8 +157,8 @@ class Login : AppCompatActivity() {
                             overridePendingTransition(0, 0)
                             finish()
                         } else {
-
-                            incorrect(Errors())
+                            val crouton = Crouton.makeText(this,e.LoginError , Style.ALERT)
+                            crouton.show()
                         }
                     }
 
@@ -222,19 +224,9 @@ class Login : AppCompatActivity() {
         }
     }
 
-    fun persistlogin() {
 
 
-    }
 
-    fun passwerror(errors: Errors) {
-        val crouton = Crouton.makeText(this, errors.NoNullsPassWord, Style.ALERT)
-        crouton.show()
-    }
 
-    fun incorrect(errors: Errors) {
-        val crouton = Crouton.makeText(this, errors.LoginError, Style.ALERT)
-        crouton.show()
-    }
 
 }

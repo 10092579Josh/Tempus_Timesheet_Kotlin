@@ -73,17 +73,16 @@
                             android:textSize="20dp"
                             android:textAlignment="center"/>
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="300dp"
-                            android:layout_below="@+id/graph_title"
-                            android:src="@drawable/graph_example"/>
+  <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/statsChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:foregroundGravity="center"
-                            android:src="@drawable/coming_soon"/>
+
+
+
+
+
 
                     </RelativeLayout>
 
