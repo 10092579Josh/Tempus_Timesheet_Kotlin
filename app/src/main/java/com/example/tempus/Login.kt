@@ -1,17 +1,9 @@
 package com.example.tempus
-//login file is the registration page cause i needed that first
-//luca forget to add a go back to sign in if someone accidentally clicked sign up , please fix advise?
-//opengl error but doesn't seem to affect anything
-//forgot password can only be complete when database is done as it requires updating the database
-// need a screen for forgot password as it will require username to find the user on the database, new password confirmkey password
-// alternative would be to grab password from login screen but runs the risk of repeated data and mistaken pressing
-// no delete user ? please advise
-// no remember me ? please advise
-// sign up colour needs to be changed due to can not see if it works
 import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupWindow
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,6 +24,7 @@ import de.keyboardsurfer.android.widget.crouton.Style
 
 class Login : AppCompatActivity() {
     private val e = Errors()
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val loginLayoutId = intent.getIntExtra("login", 0)
@@ -46,9 +40,9 @@ class Login : AppCompatActivity() {
     }
 
     fun notifications() {
-        var pass: com.google.android.material.textfield.TextInputLayout =
+        val pass: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.passwords)
-        var usernames1: com.google.android.material.textfield.TextInputLayout =
+        val usernames1: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.usernames)
         val layoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val emailpopup = layoutInflater.inflate(R.layout.popup_window, null)
@@ -59,39 +53,54 @@ class Login : AppCompatActivity() {
 
         )
 
-
+        val crouton = Crouton.makeText(this, e.IllegalCharacterHash, Style.ALERT)
         usernames1.editText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val email = s.toString()
                 if (isValidString(email) && pass.editText.toString() != null) {
 
 
-                    signin()
+                    login()
                     emailWindow.dismiss()
 
 
                 } else {
-                    // emailaddress is not valid
+
                     if (!emailWindow.isShowing) {
                         emailWindow.showAsDropDown(usernames1.editText, 0, 0)
                     }
                     if (email.contains("#")) {
-                        // emailaddress contains invalid character '#'
+
+                        crouton.show()
+
+
                     }
 
 
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {// YET TO REUSED
+            }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {//NO IDEA
+            }
 
         })
 
         usernames1.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                // emailaddress EditText field lost focus
+
                 emailWindow.dismiss()
             }
         }
@@ -105,7 +114,7 @@ class Login : AppCompatActivity() {
 
 
     fun signup() {
-        var signup: Button = findViewById(R.id.signup)
+        val signup: Button = findViewById(R.id.signup)
         signup.setOnClickListener()
         {
             val intent = Intent(this, Registration::class.java)
@@ -116,39 +125,35 @@ class Login : AppCompatActivity() {
 
     }
 
-    fun signin() {
-        var usernames1: com.google.android.material.textfield.TextInputLayout =
+    private fun login() {
+        val usernames1: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.usernames)
-        var usernames = usernames1.editText
-        var pass: com.google.android.material.textfield.TextInputLayout =
+        val usernames = usernames1.editText
+        val pass: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.passwords)
-        var pass2 = pass.editText
+        val pass2 = pass.editText
 
-        var signin: Button = findViewById(R.id.insign)
-        signin.setOnClickListener()
+        val signButton: Button = findViewById(R.id.insign)
+        signButton.setOnClickListener()
         {
             if (pass2?.text.isNullOrEmpty()) {
 
-                val crouton = Crouton.makeText(this,e.NoNullsPassWord , Style.ALERT)
+                val crouton = Crouton.makeText(this, e.NoNullsPassWord, Style.ALERT)
                 crouton.show()
 
             } else {
 
                 val security = Firebase.auth
 
-// Sign in with emailaddress and password
+
                 security.signInWithEmailAndPassword(
                     usernames?.text.toString().trim(),
                     pass2?.text.toString().trim()
                 )
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            // Sign in success
-                            //user id if you wanna use it for cyber security
-                            val appuser = security.currentUser
-                            // shows the logged in user
 
-                            val homepage = Intent(this@Login, Home::class.java)
+                            val homepage = Intent(this, Home::class.java)
                             homepage.putExtra(
                                 "home",
                                 getIntent().getIntExtra("home", R.layout.home)
@@ -157,7 +162,7 @@ class Login : AppCompatActivity() {
                             overridePendingTransition(0, 0)
                             finish()
                         } else {
-                            val crouton = Crouton.makeText(this,e.LoginError , Style.ALERT)
+                            val crouton = Crouton.makeText(this, e.LoginError, Style.ALERT)
                             crouton.show()
                         }
                     }
@@ -169,12 +174,13 @@ class Login : AppCompatActivity() {
     }
 
     fun forgotpassword() {
-
+// need front end UI
     }
 
 
-    fun permissions() {
-        val MY_PERMISSIONS_REQUEST_CODE = 0
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun permissions() {
+        val code = 0
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -219,14 +225,10 @@ class Login : AppCompatActivity() {
                     Manifest.permission.READ_MEDIA_AUDIO,
                     Manifest.permission.READ_MEDIA_VIDEO,
                     Manifest.permission.POST_NOTIFICATIONS
-                ), MY_PERMISSIONS_REQUEST_CODE
+                ), code
             )
         }
     }
-
-
-
-
 
 
 }

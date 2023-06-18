@@ -1,5 +1,6 @@
 package com.example.tempus
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -18,18 +19,19 @@ import com.bumptech.glide.Glide
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
 
 // THIS PAGE HANDLES THE DISPLAY OF THE TASKS WHEN A SPECIFIC TASK IS CLICKED
-class TaskPage: AppCompatActivity() {
+class TaskPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.task_page)
-// CALLING THE METHOD
+            Security()
             FirebaseApp.initializeApp(this)
             taskpopulation()
 
@@ -42,7 +44,7 @@ class TaskPage: AppCompatActivity() {
 
             taskimage.isEnabled = true
             taskimage.isClickable = true
-            taskimage.setOnClickListener(){
+            taskimage.setOnClickListener() {
                 Log.d("MyApp", "ImageView clicked")
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Choose an option")
@@ -70,7 +72,7 @@ class TaskPage: AppCompatActivity() {
 
             homebtn.setOnClickListener {
                 val intent = Intent(this, Home::class.java)
-                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 finish()
@@ -101,12 +103,53 @@ class TaskPage: AppCompatActivity() {
                 finish()
 
             }
-        }catch (e:Exception)
-        {  Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();}
+        } catch (e: Exception) {
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+        }
 
     }
 
-// THIS METHOD CALLS WHERE THE DATA IS STORED AND LETS THE USER VIEW INPUTTED DATA FOR EACH TASK
+    fun Security() {
+
+        val auth = FirebaseAuth.getInstance()
+        auth.addAuthStateListener { firebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user == null) {
+
+                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                AppSettings.preloads.usersname = null
+                val intent = Intent(this@TaskPage, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                overridePendingTransition(0, 0)
+                startActivity(intent)
+
+            }
+        }
+
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.reload()?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+
+            } else {
+                val exception = task.exception
+                if (exception is FirebaseAuthInvalidUserException) {
+                    val errorCode = exception.errorCode
+                    if (errorCode == "ERROR_USER_NOT_FOUND") {
+                        val sharedPreferences =
+                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                        AppSettings.preloads.usersname = null
+                        val intent = Intent(this@TaskPage, Login::class.java)
+                        intent.putExtra("login", R.layout.login)
+                        overridePendingTransition(0, 0)
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
+
+    }
 
     fun taskpopulation() {
 //THIS INSTANTIATES THE FIELDS AND CREATES VARIABLES
@@ -137,7 +180,7 @@ class TaskPage: AppCompatActivity() {
             val userid = FirebaseAuth.getInstance().currentUser?.uid
 // Query Firestore to get the data for the clicked item
             db.collection("TaskStorage")
-                .whereEqualTo("userIdTask",userid.toString().trim())
+                .whereEqualTo("userIdTask", userid.toString().trim())
                 .whereEqualTo("taskName", itemId)
                 .get()
                 .addOnSuccessListener { documents ->
@@ -147,16 +190,16 @@ class TaskPage: AppCompatActivity() {
                         // Get the data for the clicked item from the document
 
 
-                            // Use the data from Firestore to populate the fields in your form
-                            tname.text = document.getString("taskName")
-                            catname.text = document.getString("categoryName")
-                            desc.text = document.getString("description")
-                            sdate.text = document.getString("starTime")
-                            edate.text = document.getString("endTime")
-                            hours2.text = document.getString("duration")
-                            min.text = document.getString("minGoal")
-                            max.text = document.getString("maxGoal")
-                            date.text = document.getString("dateAdded")
+                        // Use the data from Firestore to populate the fields in your form
+                        tname.text = document.getString("taskName")
+                        catname.text = document.getString("categoryName")
+                        desc.text = document.getString("description")
+                        sdate.text = document.getString("starTime")
+                        edate.text = document.getString("endTime")
+                        hours2.text = document.getString("duration")
+                        min.text = document.getString("minGoal")
+                        max.text = document.getString("maxGoal")
+                        date.text = document.getString("dateAdded")
                         val url = document.getString("imageURL")
 
 
@@ -165,64 +208,61 @@ class TaskPage: AppCompatActivity() {
                             .into(taskimage)
 
 
-
-
-
-
                     }
                 }
 
 
+        } catch (e: Exception) {
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
         }
-        catch (e:Exception)
-        {  Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();}
 
     }
-    private val GalleryContent = registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
+
+    private val GalleryContent =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
 
 
-        if (url != null) {
+            if (url != null) {
+                val task = findViewById<EditText>(R.id.taskNameInput)
+
+                val imageView = findViewById<ImageView>(R.id.imgGallery)
+                imageView.setImageURI(url)
+
+                val store = Firebase.storage.reference.child(task.text.toString().trim())
+
+
+                val choice = store.putFile(url)
+                choice.addOnSuccessListener {
+
+                }.addOnFailureListener {
+
+                }
+            }
+        }
+    private val camera =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { photo: Bitmap? ->
+
             val task = findViewById<EditText>(R.id.taskNameInput)
 
             val imageView = findViewById<ImageView>(R.id.imgGallery)
-            imageView.setImageURI(url)
-
-            val store = Firebase.storage.reference.child(task.text.toString().trim())
+            imageView.setImageBitmap(photo)
 
 
-            val choice = store.putFile(url)
-            choice.addOnSuccessListener {
+            val ImageRef = Firebase.storage.reference.child(task.text.toString().trim())
 
+            val stream = ByteArrayOutputStream()
+            photo?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            val data = stream.toByteArray()
+
+            val uploadDP = ImageRef.putBytes(data)
+            uploadDP.addOnSuccessListener {
+                val message = "IMAGE UPLOADED "
+                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
-
+                val message = "INVALID IMAGE!"
+                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             }
         }
-    }
-    private val camera = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { photo: Bitmap? ->
-
-        val task = findViewById<EditText>(R.id.taskNameInput)
-
-        val imageView = findViewById<ImageView>(R.id.imgGallery)
-        imageView.setImageBitmap(photo)
-
-
-
-        val ImageRef = Firebase.storage.reference.child(task.text.toString().trim())
-
-        val stream = ByteArrayOutputStream()
-        photo?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        val data = stream.toByteArray()
-
-        val uploadDP = ImageRef.putBytes(data)
-        uploadDP.addOnSuccessListener {
-            val message = "IMAGE UPLOADED "
-            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            val message = "INVALID IMAGE!"
-            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-        }
-    }
-
 
 
 }

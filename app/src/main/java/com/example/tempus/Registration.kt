@@ -64,20 +64,20 @@ class Registration : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 val email = s.toString()
                 if (check(email)) {
-                    // emailaddress is valid
+
                     newpopupWindow.dismiss()
                     input()
 
 
                 } else {
-                    // emailaddress is not valid
+
                     if (!newpopupWindow.isShowing) {
                         newpopupWindow.showAsDropDown(email1.editText, 0, 0)
                     }
                     if (email.contains("#")) {
-                        // emailaddress contains invalid character '#'
+
                     }
-                    // add additional checks for other invalid characters here
+
                 }
             }
 
@@ -89,7 +89,7 @@ class Registration : AppCompatActivity() {
 
         email1.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                // emailaddress EditText field lost focus
+
                 newpopupWindow.dismiss()
             }
         }
@@ -185,7 +185,6 @@ class Registration : AppCompatActivity() {
                 val UserId = ""
 
 
-// Create a new user with emailaddress and password
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         val auth = FirebaseAuth.getInstance()
@@ -232,12 +231,11 @@ class Registration : AppCompatActivity() {
                             regerror(Errors())
 
                         } else {
-                            // Show other error messages
+
                         }
                     }
 
 
-// Create a User object to hold the captured data
 
 
             }

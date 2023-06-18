@@ -16,73 +16,73 @@
             android:id="@+id/logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/logo" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SETTINGS"
-            android:textSize="45sp"
-            android:fontFamily="sans-serif-condensed-light"
+            android:layout_marginLeft="50dp"
             android:layout_toRightOf="@id/logo"
-            android:layout_marginLeft="50dp"/>
+            android:fontFamily="sans-serif-condensed-light"
+            android:text="SETTINGS"
+            android:textSize="45sp" />
 
     </RelativeLayout>
 
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/top_menu"
         android:layout_above="@id/bottom_menu"
+        android:layout_below="@id/top_menu"
+        android:background="#D6D6D6"
         android:columnCount="2"
-        android:rowCount="3"
-        android:background="#D6D6D6">
+        android:rowCount="3">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/account_setting"
-            android:layout_height="120dp"
             android:layout_width="170dp"
-            android:layout_margin="15dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginLeft="22dp"
-            android:layout_column="0"
+            android:layout_height="120dp"
             android:layout_row="0"
+            android:layout_column="0"
+            android:layout_margin="15dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="70dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="50dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/account_setting_img"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:layout_marginTop="10dp"
-                        android:src="@drawable/settings_icon"
-                        android:layout_centerHorizontal="true"/>
+                <ImageView
+                    android:id="@+id/account_setting_img"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/settings_icon" />
 
-                    <TextView
-                        android:id="@+id/account_setting_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Account Settings"
-                        android:textSize="18sp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@+id/account_setting_img"/>
+                <TextView
+                    android:id="@+id/account_setting_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/account_setting_img"
+                    android:layout_centerHorizontal="true"
+                    android:text="Account Settings"
+                    android:textSize="18sp" />
 
-                </RelativeLayout>
+            </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/delete_user"
-            android:layout_height="120dp"
             android:layout_width="170dp"
+            android:layout_height="120dp"
+            android:layout_row="0"
+            android:layout_column="1"
             android:layout_margin="15dp"
             android:layout_marginTop="70dp"
-            android:layout_column="1"
-            android:layout_row="0"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp">
 
@@ -94,18 +94,18 @@
                     android:id="@+id/delete_data_img"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/dd"
-                    android:layout_centerHorizontal="true"/>
+                    android:src="@drawable/dd" />
 
                 <TextView
                     android:id="@+id/delete_data_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delete Account"
-                    android:textSize="18sp"
+                    android:layout_below="@+id/delete_data_img"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/delete_data_img"/>
+                    android:text="Delete Account"
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
@@ -113,12 +113,12 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/delete_data"
-            android:layout_height="120dp"
             android:layout_width="170dp"
+            android:layout_height="120dp"
+            android:layout_row="01"
+            android:layout_column="0"
             android:layout_margin="15dp"
             android:layout_marginLeft="22dp"
-            android:layout_column="0"
-            android:layout_row="01"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp">
 
@@ -130,29 +130,30 @@
                     android:id="@+id/delete_user_img"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/da"
-                    android:layout_centerHorizontal="true"/>
+                    android:src="@drawable/da" />
 
                 <TextView
                     android:id="@+id/delete_user_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delete Data"
-                    android:textSize="18sp"
+                    android:layout_below="@+id/delete_user_img"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/delete_user_img"/>
+                    android:text="Delete Data"
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/delete_cache"
-            android:layout_height="120dp"
             android:layout_width="170dp"
-            android:layout_margin="15dp"
-            android:layout_column="1"
+            android:layout_height="120dp"
             android:layout_row="1"
+            android:layout_column="1"
+            android:layout_margin="15dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp">
 
@@ -164,30 +165,31 @@
                     android:id="@+id/delete_cache_img"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/cc"
-                    android:layout_centerHorizontal="true"/>
+                    android:src="@drawable/cc" />
 
                 <TextView
                     android:id="@+id/delete_cache_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Clear Cache"
-                    android:textSize="18sp"
+                    android:layout_below="@+id/delete_cache_img"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/delete_cache_img"/>
+                    android:text="Clear Cache"
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/privacy"
-            android:layout_height="120dp"
             android:layout_width="170dp"
+            android:layout_height="120dp"
+            android:layout_row="2"
+            android:layout_column="0"
             android:layout_margin="15dp"
             android:layout_marginLeft="22dp"
-            android:layout_column="0"
-            android:layout_row="2"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp">
 
@@ -199,29 +201,30 @@
                     android:id="@+id/privacy_img"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/pp"
-                    android:layout_centerHorizontal="true"/>
+                    android:src="@drawable/pp" />
 
                 <TextView
                     android:id="@+id/privacy_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Privacy Policy"
-                    android:textSize="18sp"
+                    android:layout_below="@+id/privacy_img"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/privacy_img"/>
+                    android:text="Privacy Policy"
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/logout"
-            android:layout_height="120dp"
             android:layout_width="170dp"
-            android:layout_margin="15dp"
-            android:layout_column="1"
+            android:layout_height="120dp"
             android:layout_row="2"
+            android:layout_column="1"
+            android:layout_margin="15dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp">
 
@@ -233,23 +236,22 @@
                     android:id="@+id/logout_img"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/lo"
-                    android:layout_centerHorizontal="true"/>
+                    android:src="@drawable/lo" />
 
                 <TextView
                     android:id="@+id/logout_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Log Out"
-                    android:textSize="18sp"
+                    android:layout_below="@+id/logout_img"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/logout_img"/>
+                    android:text="Log Out"
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
-
 
 
     </GridLayout>
@@ -264,55 +266,55 @@
             android:id="@+id/hometbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding= "5dp"
             android:layout_centerVertical="true"
+            android:background="@drawable/rectangle"
             android:contentDescription="Home"
-            android:src="@drawable/home_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/home_icon" />
 
         <ImageButton
             android:id="@+id/breakstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/hometbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Breaks"
-            android:src="@drawable/break_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/break_icon" />
 
         <ImageButton
             android:id="@+id/addbtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/breakstbtn"
+            android:background="@drawable/gradient_add"
             android:contentDescription="Add"
-            android:src="@drawable/add_icon"
-            android:background="@drawable/gradient_add"/>
+            android:padding="5dp"
+            android:src="@drawable/add_icon" />
 
         <ImageButton
             android:id="@+id/statstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/addbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Stats"
-            android:src="@drawable/stats_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/stats_icon" />
 
         <ImageButton
             android:id="@+id/settingstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/statstbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Setting"
-            android:src="@drawable/settings_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/settings_icon" />
 
     </RelativeLayout>
 

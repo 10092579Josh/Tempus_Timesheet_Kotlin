@@ -1,31 +1,40 @@
 package com.example.tempus
 
-import android.app.TimePickerDialog
 import android.app.DatePickerDialog
-import java.util.Calendar
-import android.view.View
+import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.widget.*
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.TimePicker
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
+import java.util.Calendar
 import kotlin.math.absoluteValue
 
 // THIS IS FOR THE CREATION OF THE TASK
 // THIS HAS THE VARIABLE ASSIGNMENT
-class TaskForm:AppCompatActivity() {
+class TaskForm : AppCompatActivity() {
     private lateinit var selectedDateText: TextView
     private lateinit var selectedStartTimeText: TextView
     private lateinit var selectedEndTimeText: TextView
@@ -35,11 +44,10 @@ class TaskForm:AppCompatActivity() {
     private val customAdapter = Tasks.CustomAdapter(myDataList)
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             FirebaseApp.initializeApp(this)
-
+            Security()
             super.onCreate(savedInstanceState)
             setContentView(R.layout.task_form)
             selectedDateText = findViewById(R.id.selectedDateText)
@@ -58,16 +66,14 @@ class TaskForm:AppCompatActivity() {
 
             uploadPictureBtn.setOnClickListener {
                 val task = findViewById<EditText>(R.id.taskNameInput)
-                if(task.text.toString().isNullOrEmpty())
-                {
+                if (task.text.toString().isNullOrEmpty()) {
 
 
                     val message = "TASK MUST BE ENTERED FIRST! "
                     Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
 
-                }
-                else if (task.text.toString() != null) {
+                } else if (task.text.toString() != null) {
                     val builder = AlertDialog.Builder(this)
                     builder.setTitle("Choose an option")
                     builder.setItems(arrayOf("Take a photo", "Pick from gallery")) { _, which ->
@@ -95,7 +101,7 @@ class TaskForm:AppCompatActivity() {
 
             homebtn.setOnClickListener {
                 val intent = Intent(this, Home::class.java)
-                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 finish()
@@ -126,50 +132,95 @@ class TaskForm:AppCompatActivity() {
             Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
-    private val GalleryContent = registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
 
+    fun Security() {
 
-        if (url != null) {
-            val task = findViewById<EditText>(R.id.taskNameInput)
+        val auth = FirebaseAuth.getInstance()
+        auth.addAuthStateListener { firebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user == null) {
 
-            val imageView = findViewById<ImageView>(R.id.imgGallery)
-            imageView.setImageURI(url)
-
-            val store =
-                Firebase.storage.reference.child(task.text.toString().trim())
-
-            val choice = store.putFile(url)
-            choice.addOnSuccessListener {
-
-            }.addOnFailureListener {
+                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                AppSettings.preloads.usersname = null
+                val intent = Intent(this@TaskForm, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                overridePendingTransition(0, 0)
+                startActivity(intent)
 
             }
         }
-    }
-    private val camera = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { photo: Bitmap? ->
 
-        val task = findViewById<EditText>(R.id.taskNameInput)
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.reload()?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
 
-        val imageView = findViewById<ImageView>(R.id.imgGallery)
-        imageView.setImageBitmap(photo)
-
-
-        val ImageRef = Firebase.storage.reference.child(task.text.toString().trim())
-
-
-        val Imagestream = ByteArrayOutputStream()
-        photo?.compress(Bitmap.CompressFormat.JPEG, 100, Imagestream)
-        val data = Imagestream.toByteArray()
-
-        val UploadDP = ImageRef.putBytes(data)
-        UploadDP.addOnSuccessListener {
-            val message = "IMAGE UPLOADED "
-            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            val message = "INVALID IMAGE!"
-            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+            } else {
+                val exception = task.exception
+                if (exception is FirebaseAuthInvalidUserException) {
+                    val errorCode = exception.errorCode
+                    if (errorCode == "ERROR_USER_NOT_FOUND") {
+                        val sharedPreferences =
+                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                        AppSettings.preloads.usersname = null
+                        val intent = Intent(this@TaskForm, Login::class.java)
+                        intent.putExtra("login", R.layout.login)
+                        overridePendingTransition(0, 0)
+                        startActivity(intent)
+                    }
+                }
+            }
         }
+
     }
+
+    private val GalleryContent =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
+
+
+            if (url != null) {
+                val task = findViewById<EditText>(R.id.taskNameInput)
+
+                val imageView = findViewById<ImageView>(R.id.imgGallery)
+                imageView.setImageURI(url)
+
+                val store =
+                    Firebase.storage.reference.child(task.text.toString().trim())
+
+                val choice = store.putFile(url)
+                choice.addOnSuccessListener {
+
+                }.addOnFailureListener {
+
+                }
+            }
+        }
+    private val camera =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { photo: Bitmap? ->
+
+            val task = findViewById<EditText>(R.id.taskNameInput)
+
+            val imageView = findViewById<ImageView>(R.id.imgGallery)
+            imageView.setImageBitmap(photo)
+
+
+            val ImageRef = Firebase.storage.reference.child(task.text.toString().trim())
+
+
+            val Imagestream = ByteArrayOutputStream()
+            photo?.compress(Bitmap.CompressFormat.JPEG, 100, Imagestream)
+            val data = Imagestream.toByteArray()
+
+            val UploadDP = ImageRef.putBytes(data)
+            UploadDP.addOnSuccessListener {
+                val message = "IMAGE UPLOADED "
+                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener {
+                val message = "INVALID IMAGE!"
+                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+            }
+        }
 
 
     fun selectDate(view: View) {
@@ -308,7 +359,6 @@ class TaskForm:AppCompatActivity() {
             val minimum = findViewById<Spinner>(R.id.minimumGoalSpinner)
 
 
-
 // get the download URL of the uploaded imageURL
 
             val maximumGoalSpinner = findViewById<Spinner>(R.id.maximumGoalSpinner)
@@ -338,28 +388,36 @@ class TaskForm:AppCompatActivity() {
                     } else if (description.text.toString().isEmpty()) {
                         val message = "ERROR: DESCRIPTION CAN NOT BE EMPTY "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                    } else if (start.text.toString().isEmpty()) {
+                        val message = "ERROR: No Time selected  "
+                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                    } else if (end.text.toString().isEmpty()) {
+                        val message = "ERROR: No EndTime selected  "
+                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+
 
                     } else if (dates.text.toString().isEmpty()) {
                         val message = "ERROR: START DATE CAN NOT BE EMPTY "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
                     } else if (selectedItem.isEmpty()) {
-                        val message = "ERROR: START DATE CAN NOT BE EMPTY "
+                        val message = "ERROR: Category CAN NOT BE EMPTY "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
                     } else if (max.isEmpty()) {
-                        val message = "ERROR: START DATE CAN NOT BE EMPTY "
+                        val message = "ERROR: No Max goal selected "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
                     } else if (min.isEmpty()) {
-                        val message = "ERROR: START DATE CAN NOT BE EMPTY "
+                        val message = "ERROR: No Min goal selected "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                     } else {
                         var picture: String
 
-                        // Get the current user's unique ID
+
                         val firestore = Firebase.firestore
-                        val storageRef = Firebase.storage.reference.child(task.text.toString().trim())
+                        val storageRef =
+                            Firebase.storage.reference.child(task.text.toString().trim())
                         storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
                             picture = downloadUrl.toString()
 
@@ -388,21 +446,20 @@ class TaskForm:AppCompatActivity() {
                             val endHours = endTimeParts[0].toInt()
                             val endMinutes = endTimeParts[1].toInt()
 
-// convert start and end times to minutes
                             val startTotalMinutes = sHours * 60 + sMinutes
                             val endTotalMinutes = endHours * 60 + endMinutes
 
-// calculate difference in minutes
+
                             val diffMinutes = (endTotalMinutes - startTotalMinutes).absoluteValue
 
-// convert difference back to duration and minutes
                             val diffHours = diffMinutes / 60
                             val diffRemainingMinutes = diffMinutes % 60
 
                             val categoryName = selectedItem.trim()
 
                             val db = Firebase.firestore
-                            val categoryRef = db.collection("CategoryStorage").document(categoryName)
+                            val categoryRef =
+                                db.collection("CategoryStorage").document(categoryName)
                             categoryRef.get()
                                 .addOnSuccessListener { document ->
                                     val CategoryHours = document.get("totalHours")
@@ -410,7 +467,8 @@ class TaskForm:AppCompatActivity() {
                                     val HoursValue = currentsplit[0].toInt()
                                     val MinutesValue = currentsplit[1].toInt()
 
-                                    val newTotalMinutes = HoursValue * 60 + MinutesValue + diffMinutes
+                                    val newTotalMinutes =
+                                        HoursValue * 60 + MinutesValue + diffMinutes
                                     val newHoursValue = newTotalMinutes / 60
                                     val newRemainingMinutesValue = newTotalMinutes % 60
                                     categoryRef.update(
@@ -419,47 +477,42 @@ class TaskForm:AppCompatActivity() {
                                     )
                                 }
 
-                            val symbol = "-"
-                           // val outputs = result.toString().removePrefix(symbol)
-
-                          //  val middleIndex = outputs.length / 2
-                            //val parsed = outputs.substring(0, middleIndex) + ":" + outputs.substring( middleIndex )
-                          //  result.toString().substring(middleIndex)
-
 
                             val hours = "%02d:%02d".format(diffHours, diffRemainingMinutes)
 
 
-if(picture.isNullOrEmpty()){
-    val message = "ERROR NO IMAGE CHOSEN"
-    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()}
-                            else {
-    val tasksadd = TaskStorage(
-        taskname,
-        catergorytask,
-        description,
-        startime,
-        endtime,
-        hours,
-        mingoal,
-        maxgoal,
-        date,
-        picture,
-        tabname,
-        userid.toString().trim()
-    )
+                            if (picture.isNullOrEmpty()) {
+                                val message = "ERROR NO IMAGE CHOSEN"
+                                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
+                                val tasksadd = TaskStorage(
+                                    taskname,
+                                    catergorytask,
+                                    description,
+                                    startime,
+                                    endtime,
+                                    hours,
+                                    mingoal,
+                                    maxgoal,
+                                    date,
+                                    picture,
+                                    tabname,
+                                    userid.toString().trim()
+                                )
 
-    val docRef = itemsadd.document(taskname)
-    docRef.set(tasksadd)
-
-
-    val message = "TASK ${task.text} ADDED "
-    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                                val docRef = itemsadd.document(taskname)
+                                docRef.set(tasksadd)
 
 
-}
+                                val message = "TASK ${task.text} ADDED "
+                                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                    .show()
 
-                        }.addOnFailureListener(){
+
+                            }
+
+                        }.addOnFailureListener() {
                             val message = "ERROR NO IMAGE CHOSEN"
                             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                         }

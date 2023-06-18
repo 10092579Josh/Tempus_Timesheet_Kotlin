@@ -8,15 +8,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +18,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -36,10 +31,11 @@ import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 
 class AppSettings : AppCompatActivity() {
-
+    private val M = messages()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.app_settings)
+        Security()
         populatefields()
         FirebaseApp.initializeApp(this)
         val homebtn = findViewById<ImageButton>(R.id.hometbtn)
@@ -49,8 +45,27 @@ class AppSettings : AppCompatActivity() {
         val accsetting = findViewById<CardView>(R.id.account_setting)
         val addbtn = findViewById<ImageButton>(R.id.addbtn)
         val logout = findViewById<CardView>(R.id.logout)
-        val DeleteAppData = findViewById<CardView>(R.id.delete_data)
+        val deleteappdata = findViewById<CardView>(R.id.delete_data)
+        val deleteuser = findViewById<CardView>(R.id.delete_user)
 
+        deleteuser.setOnClickListener()
+        {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Are you sure?")
+            builder.setItems(arrayOf("Yes", "Cancel")) { _, which ->
+                when (which) {
+
+                    0 -> Dialog.BUTTON_NEGATIVE
+                    1 -> DeleteUser()
+                }
+
+            }
+
+            val dialog = builder.create()
+            dialog.show()
+
+
+        }
         homebtn.setOnClickListener {
             val intent = Intent(this, Home::class.java)
             intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
@@ -88,10 +103,7 @@ class AppSettings : AppCompatActivity() {
         }
         logout.setOnClickListener() {
             FirebaseAuth.getInstance().signOut()
-            val Logout = Intent(this, Login::class.java)
-            startActivity(Logout)
-            overridePendingTransition(0, 0)
-            finish()
+
 
             var message = " ${preloads.usersname} HAS LOGGED OUT!"
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
@@ -105,7 +117,7 @@ class AppSettings : AppCompatActivity() {
         }
         accsetting.setOnClickListener() {
             if (preloads.usersname == null) {
-                accountverify()
+                AccountVerify()
             } else {
                 val accsettings = Intent(this, UserDetails::class.java)
                 startActivity(accsettings)
@@ -115,12 +127,13 @@ class AppSettings : AppCompatActivity() {
 
             }
         }
-        DeleteAppData.setOnClickListener() {
+        deleteappdata.setOnClickListener() {
 
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Choose an option")
             builder.setItems(
-                arrayOf("Delete all Images", "Delete Tasks and Images", "Wipe Application DATA")) { _, which ->
+                arrayOf("Delete all Images", "Delete Tasks and Images", "Wipe Application DATA")
+            ) { _, which ->
                 when (which) {
 
                     0 -> ImageDelete()
@@ -136,9 +149,51 @@ class AppSettings : AppCompatActivity() {
         }
     }
 
+    fun Security() {
+
+        val auth = FirebaseAuth.getInstance()
+        auth.addAuthStateListener { firebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user == null) {
+
+                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                preloads.usersname = null
+                val intent = Intent(this@AppSettings, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                overridePendingTransition(0, 0)
+                startActivity(intent)
+
+            }
+        }
+
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.reload()?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+
+            } else {
+                val exception = task.exception
+                if (exception is FirebaseAuthInvalidUserException) {
+                    val errorCode = exception.errorCode
+                    if (errorCode == "ERROR_USER_NOT_FOUND") {
+                        val sharedPreferences =
+                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                        preloads.usersname = null
+                        val intent = Intent(this@AppSettings, Login::class.java)
+                        intent.putExtra("login", R.layout.login)
+                        overridePendingTransition(0, 0)
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
+
+    }
+
     private var isDialogOpen = false
 
-    fun accountverify() {
+    private fun AccountVerify() {
         if (!isDialogOpen) {
             isDialogOpen = true
             val builder = AlertDialog.Builder(this)
@@ -387,5 +442,56 @@ class AppSettings : AppCompatActivity() {
             }
 
 
+    }
+
+    fun DeleteUser() {
+        val db = FirebaseFirestore.getInstance()
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+
+        val storage = Firebase.storage
+
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
+            .addOnSuccessListener { tasks ->
+                for (task in tasks) {
+                    val taskName = task.getString("taskName") ?: ""
+                    val imageRef = storage.reference.child(taskName)
+                    imageRef.delete()
+                }
+            }
+
+
+
+
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
+            .addOnSuccessListener { tasks ->
+                for (task in tasks) {
+                    db.collection("TaskStorage").document(task.id).delete()
+                }
+            }
+
+
+        db.collection("CategoryStorage").whereEqualTo("userIdCat", userid).get()
+            .addOnSuccessListener { categories ->
+                for (category in categories) {
+                    db.collection("CategoryStorage").document(category.id).delete()
+                }
+            }
+        val TempusUser = FirebaseAuth.getInstance().currentUser
+        TempusUser?.delete()?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+
+                val sharedPreferences =
+                    getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                preloads.usersname = null
+                val intent = Intent(this@AppSettings, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                overridePendingTransition(0, 0)
+                Toast.makeText(this, M.DeleteConfirmation, Toast.LENGTH_SHORT).show()
+                startActivity(intent)
+
+
+            }
+        }
     }
 }

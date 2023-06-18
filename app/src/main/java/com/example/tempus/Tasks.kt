@@ -1,8 +1,9 @@
 package com.example.tempus
 
+
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,16 +13,16 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-
-
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
-import java.util.*
+import java.util.Calendar
 
 class Tasks : AppCompatActivity() {
     object DateClass {
@@ -34,6 +35,7 @@ class Tasks : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tasks_display)
+        Security()
         print()
         val cat = findViewById<Button>(R.id.category_selected)
         val addbtn = findViewById<ImageButton>(R.id.addbtn)
@@ -68,7 +70,7 @@ class Tasks : AppCompatActivity() {
                         val item = ItemsViewModel(name, description, sub, date, imageUrl)
                         items.add(item)
                     }
-                    Log.d("taskcheck",items.toString())
+                    Log.d("taskcheck", items.toString())
 
                     val sortedItems = items.sortedBy { it.date }
                     try {
@@ -82,13 +84,18 @@ class Tasks : AppCompatActivity() {
 
                     }
                 } else {
-                    val crouton = Crouton.makeText(this, "NO TASKS WITHIN THIS RANGE FOUND", Style.INFO)
+                    val crouton =
+                        Crouton.makeText(this, "NO TASKS WITHIN THIS RANGE FOUND", Style.INFO)
                     crouton.show()
                 }
 
             }.addOnFailureListener()
             {
-                val crouton = Crouton.makeText(this, "DATA ERROR:PLEASE CHECK CONNECTION OR CONTACT CUSTOMER SERVICES", Style.ALERT)
+                val crouton = Crouton.makeText(
+                    this,
+                    "DATA ERROR:PLEASE CHECK CONNECTION OR CONTACT CUSTOMER SERVICES",
+                    Style.ALERT
+                )
                 crouton.show()
             }
         }
@@ -118,6 +125,48 @@ class Tasks : AppCompatActivity() {
             startActivity(tform)
             finish()
         }
+    }
+
+    fun Security() {
+
+        val auth = FirebaseAuth.getInstance()
+        auth.addAuthStateListener { firebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user == null) {
+
+                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                AppSettings.preloads.usersname = null
+                val intent = Intent(this@Tasks, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                overridePendingTransition(0, 0)
+                startActivity(intent)
+
+            }
+        }
+
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.reload()?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+
+            } else {
+                val exception = task.exception
+                if (exception is FirebaseAuthInvalidUserException) {
+                    val errorCode = exception.errorCode
+                    if (errorCode == "ERROR_USER_NOT_FOUND") {
+                        val sharedPreferences =
+                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                        AppSettings.preloads.usersname = null
+                        val intent = Intent(this@Tasks, Login::class.java)
+                        intent.putExtra("login", R.layout.login)
+                        overridePendingTransition(0, 0)
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
+
     }
 
     fun selectstartDate(view: View) {

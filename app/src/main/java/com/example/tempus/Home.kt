@@ -11,7 +11,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -32,10 +37,10 @@ import com.google.firebase.ktx.Firebase
 class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val homeID = intent.getIntExtra("home", 0)
         val homelayout = layoutInflater.inflate(homeID, null)
         setContentView(homelayout)
+        SecurGuard()
         populatefields()
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
         if (sharedPreferences.getBoolean("isFirstLogin", true)) {
@@ -45,9 +50,6 @@ class Home : AppCompatActivity() {
 
         try {
             FirebaseApp.initializeApp(this)
-
-
-
             print()
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
             val homebtn = findViewById<ImageButton>(R.id.hometbtn)
@@ -57,7 +59,6 @@ class Home : AppCompatActivity() {
 
             val cat = findViewById<Button>(R.id.category_selected)
             val task = findViewById<Button>(R.id.task_selected)
-// THIS ALLOWS FOR SWITCHING BETWEEN THE PAGES
             task.setOnClickListener()
             {
                 val intent = Intent(this, Home::class.java)
@@ -125,16 +126,56 @@ class Home : AppCompatActivity() {
         }
     }
 
+    private fun SecurGuard() {
+
+        val TempusSecurity = FirebaseAuth.getInstance()
+        TempusSecurity.addAuthStateListener { firebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user == null) {
+
+                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                AppSettings.preloads.usersname = null
+                val intent = Intent(this@Home, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                overridePendingTransition(0, 0)
+                startActivity(intent)
+
+            }
+        }
+
+        val TempusUsers = FirebaseAuth.getInstance().currentUser
+        TempusUsers?.reload()?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+
+            } else {
+                val exception = task.exception
+                if (exception is FirebaseAuthInvalidUserException) {
+                    val errorCode = exception.errorCode
+                    if (errorCode == "ERROR_USER_NOT_FOUND") {
+                        val sharedPreferences =
+                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                        AppSettings.preloads.usersname = null
+                        val intent = Intent(this@Home, Login::class.java)
+                        intent.putExtra("login", R.layout.login)
+                        overridePendingTransition(0, 0)
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
+
+    }
+
     companion object {
         private const val TAG = "Home"
     }
 
     object TaskClass {
-        //ASSIGNING TASKS
         val rows = 10
         val columns = 12
 
-        //ARRAYS FOR THE TASK DATA
         val tasks = Array(rows) { arrayOfNulls<String>(columns) }
         val hours = Array(rows) { arrayOfNulls<String>(columns) }
         var check: Int? = null
@@ -147,31 +188,21 @@ class Home : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         val itemsRef = db.collection("CategoryStorage")
 
-// Get the user ID (this will depend on how you are authenticating users)
         val userid = FirebaseAuth.getInstance().currentUser?.uid
-
-// Create a query that only returns documents where the userid field matches the current user's ID
         val catergoryquery = itemsRef.whereEqualTo("userIdCat", userid.toString().trim())
-
-// Execute the query and get the results as a Task
         val task = catergoryquery.get()
 
-// Add an OnSuccessListener to the Task to get the results
         task.addOnSuccessListener { documents ->
-            // Create an empty list to hold the items
+
             val items = mutableListOf<ItemsViewModel>()
 
             for (document in documents) {
-                // Get the data for each document
                 val name = document.getString("categoryID") ?: ""
                 val description = document.getString("totalHours") ?: ""
                 val item = ItemsViewModel(name, description)
                 items.add(item)
             }
 
-
-            // Update the RecyclerView with the new data
-            // ...
             val sortedItems = items.sortedBy { it.text }
             try {
                 val adapter = CustomAdapter(sortedItems as MutableList<ItemsViewModel>)
@@ -187,7 +218,7 @@ class Home : AppCompatActivity() {
 
     }
 
-    // PROMPT THE USER FOR PERMISSIONS
+
     data class Task(val name: String, val hours2: String)
 
     fun fix() {
@@ -447,7 +478,7 @@ class Home : AppCompatActivity() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Handle error
+
             }
         })
 

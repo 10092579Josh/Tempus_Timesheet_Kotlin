@@ -1,10 +1,11 @@
 package com.example.tempus
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
@@ -16,6 +17,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -38,9 +40,9 @@ class Statistics : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.statistics)
-
-
+        Security()
         FirebaseApp.initializeApp(this)
+
 
         //Initialzation of bottom navigation buttons
         val homebtn = findViewById<ImageButton>(R.id.hometbtn)
@@ -49,12 +51,9 @@ class Statistics : AppCompatActivity() {
         val settingsbtn = findViewById<ImageButton>(R.id.settingstbtn)
         val addbtn = findViewById<ImageButton>(R.id.addbtn)
         lineChart = findViewById(R.id.statsChart)
-        //Calls
-        // GetGraphData()
-        setupLineChart()
-        //generateData()
 
-        // Onclick listnerner
+        setupLineChart()
+
         addbtn.setOnClickListener() {
             val tform = Intent(this, TaskForm::class.java)
             startActivity(tform)
@@ -93,7 +92,47 @@ class Statistics : AppCompatActivity() {
         }
 
 
+    }
 
+    fun Security() {
+
+        val auth = FirebaseAuth.getInstance()
+        auth.addAuthStateListener { firebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user == null) {
+
+                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                AppSettings.preloads.usersname = null
+                val intent = Intent(this@Statistics, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                overridePendingTransition(0, 0)
+                startActivity(intent)
+
+            }
+        }
+
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.reload()?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+
+            } else {
+                val exception = task.exception
+                if (exception is FirebaseAuthInvalidUserException) {
+                    val errorCode = exception.errorCode
+                    if (errorCode == "ERROR_USER_NOT_FOUND") {
+                        val sharedPreferences =
+                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                        AppSettings.preloads.usersname = null
+                        val intent = Intent(this@Statistics, Login::class.java)
+                        intent.putExtra("login", R.layout.login)
+                        overridePendingTransition(0, 0)
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
 
     }
 
@@ -123,7 +162,8 @@ class Statistics : AppCompatActivity() {
 
         val currentDate = startDate.clone() as Calendar
         while (currentDate <= endDate) {
-            val daysSinceStart = currentDate.get(Calendar.DAY_OF_MONTH) - startDate.get(Calendar.DAY_OF_MONTH)
+            val daysSinceStart =
+                currentDate.get(Calendar.DAY_OF_MONTH) - startDate.get(Calendar.DAY_OF_MONTH)
             val yValue = Math.random().toFloat() * 100f // Replace with your actual data
             //entries.add(Entry(daysSinceStart.toFloat(), yValue))
             currentDate.add(Calendar.DAY_OF_MONTH, 1)
@@ -164,7 +204,6 @@ class Statistics : AppCompatActivity() {
             }
             Log.d("Tag", "HoursFromTasks: $hoursList")
         }
-
 
 
     }

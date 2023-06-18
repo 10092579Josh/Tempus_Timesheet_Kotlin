@@ -16,7 +16,7 @@
             android:id="@+id/logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/logo" />
 
         <ImageView
             android:id="@+id/tempus"
@@ -24,7 +24,7 @@
             android:layout_height="100dp"
             android:layout_toRightOf="@id/logo"
 
-            android:src="@drawable/tempus_title"/>
+            android:src="@drawable/tempus_title" />
 
         <ImageButton
             android:id="@+id/back_btn"
@@ -32,18 +32,18 @@
             android:layout_height="70dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:paddingRight="100dp"
-            android:text="hi"
             android:background="@drawable/search_icon"
-            android:contentDescription="Search"/>
+            android:contentDescription="Search"
+            android:paddingRight="100dp"
+            android:text="hi" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/top_menu"
-        android:layout_above="@id/bottom_menu">
+        android:layout_above="@id/bottom_menu"
+        android:layout_below="@id/top_menu">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -67,8 +67,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Date goes here "
-                        android:textSize="15sp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
                     <ImageView
                         android:id="@+id/task_image"
@@ -83,61 +83,61 @@
                         android:id="@+id/task_name"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:text="Task Name"
-                        android:textSize="30sp"
                         android:layout_below="@id/task_image"
                         android:layout_centerHorizontal="true"
-                        android:textColor="@color/black"/>
+                        android:text="Task Name"
+                        android:textColor="@color/black"
+                        android:textSize="30sp" />
 
                     <TextView
                         android:id="@+id/category_name"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:text="category name"
-                        android:textSize="15sp"
-                        android:layout_centerHorizontal="true"
                         android:layout_below="@id/task_name"
-                        android:textColor="#949494"/>
+                        android:layout_centerHorizontal="true"
+                        android:text="category name"
+                        android:textColor="#949494"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/description_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Description:"
-                        android:textSize="17sp"
                         android:layout_below="@id/category_name"
-                        android:textColor="@color/black"/>
+                        android:text="Description:"
+                        android:textColor="@color/black"
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/description_text"
                         android:layout_width="350dp"
                         android:layout_height="100dp"
-                        android:textSize="15sp"
+                        android:layout_below="@+id/description_title"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/description_rectangle"
                         android:text="The description goes here... "
                         android:textColor="#949494"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@+id/description_title"
-                        android:background="@drawable/description_rectangle"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/start_date"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
-                        android:text="Start Time:"
-                        android:textSize="15sp"
                         android:layout_below="@id/description_text"
-                        android:textColor="@color/black"/>
+                        android:text="Start Time:"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/start_date_display"
                         android:layout_width="100dp"
                         android:layout_height="30dp"
                         android:layout_below="@id/description_text"
+                        android:layout_marginTop="2dp"
                         android:layout_toRightOf="@id/start_date"
                         android:background="@drawable/description_rectangle"
                         android:gravity="center"
                         android:text="2002/07/16"
-                        android:layout_marginTop="2dp"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -145,82 +145,82 @@
                         android:id="@+id/end_date"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
-                        android:text="End Time:"
-                        android:textSize="15sp"
                         android:layout_below="@id/start_date"
-                        android:textColor="@color/black" />
+                        android:text="End Time:"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/end_date_display"
                         android:layout_width="100dp"
                         android:layout_height="30dp"
-                        android:text="2002/07/20"
-                        android:textSize="15sp"
-                        android:layout_marginTop="2dp"
-                        android:textColor="@color/black"
-                        android:gravity="center"
                         android:layout_below="@id/start_date"
+                        android:layout_marginTop="2dp"
                         android:layout_toRightOf="@id/end_date"
-                        android:background="@drawable/description_rectangle"/>
+                        android:background="@drawable/description_rectangle"
+                        android:gravity="center"
+                        android:text="2002/07/20"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/max_title"
-                        android:text="Max Daily Goal:"
-                        android:textColor="@color/black"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
                         android:layout_below="@id/end_date"
-                        android:paddingTop="4dp"/>
+                        android:paddingTop="4dp"
+                        android:text="Max Daily Goal:"
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/max_text"
                         android:layout_width="100dp"
-                        android:layout_below="@id/end_date"
                         android:layout_height="30dp"
+                        android:layout_below="@id/end_date"
                         android:layout_marginTop="2dp"
-                        android:gravity="center"
                         android:layout_toRightOf="@id/max_title"
-                        android:background="@drawable/description_rectangle"/>
+                        android:background="@drawable/description_rectangle"
+                        android:gravity="center" />
 
                     <TextView
                         android:id="@+id/min_title"
-                        android:text="Min Daily Goal:"
-                        android:textColor="@color/black"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
                         android:layout_below="@id/max_title"
-                        android:paddingTop="4dp"/>
+                        android:paddingTop="4dp"
+                        android:text="Min Daily Goal:"
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/min_text"
                         android:layout_width="100dp"
-                        android:layout_below="@id/max_title"
                         android:layout_height="30dp"
+                        android:layout_below="@id/max_title"
                         android:layout_marginTop="2dp"
-                        android:gravity="center"
                         android:layout_toRightOf="@id/min_title"
-                        android:background="@drawable/description_rectangle"/>
+                        android:background="@drawable/description_rectangle"
+                        android:gravity="center" />
 
 
                     <TextView
                         android:id="@+id/hour_title"
-                        android:text="Total Hours:"
-                        android:textColor="@color/black"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
-                        android:gravity="center_vertical"
                         android:layout_below="@id/min_text"
-                        android:paddingTop="4dp"/>
+                        android:gravity="center_vertical"
+                        android:paddingTop="4dp"
+                        android:text="Total Hours:"
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/hour_text"
                         android:layout_width="100dp"
-                        android:layout_below="@id/min_title"
                         android:layout_height="30dp"
+                        android:layout_below="@id/min_title"
                         android:layout_marginTop="2dp"
-                        android:gravity="center"
                         android:layout_toEndOf="@id/hour_title"
-                        android:background="@drawable/description_rectangle"/>
+                        android:background="@drawable/description_rectangle"
+                        android:gravity="center" />
 
                 </RelativeLayout>
 
@@ -240,55 +240,55 @@
             android:id="@+id/hometbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding= "5dp"
             android:layout_centerVertical="true"
+            android:background="@drawable/rectangle"
             android:contentDescription="Home"
-            android:src="@drawable/home_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/home_icon" />
 
         <ImageButton
             android:id="@+id/breakstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/hometbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Breaks"
-            android:src="@drawable/break_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/break_icon" />
 
         <ImageButton
             android:id="@+id/addbtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/breakstbtn"
+            android:background="@drawable/gradient_add"
             android:contentDescription="Add"
-            android:src="@drawable/add_icon"
-            android:background="@drawable/gradient_add"/>
+            android:padding="5dp"
+            android:src="@drawable/add_icon" />
 
         <ImageButton
             android:id="@+id/statstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/addbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Stats"
-            android:src="@drawable/stats_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/stats_icon" />
 
         <ImageButton
             android:id="@+id/settingstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/statstbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Setting"
-            android:src="@drawable/settings_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/settings_icon" />
 
     </RelativeLayout>
 

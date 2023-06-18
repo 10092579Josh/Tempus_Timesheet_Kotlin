@@ -128,3 +128,20 @@ josh has partially worked the graph
 londa has got caching working partially 
 biometrics planned for implementation 
 Beta 2 Patch 3 released 
+
+Patch 4:
+
+added ability to delete user data under settings 
+added ability to delete user account 
+added ability for the server to remove deleted accounts without needing to close the app
+added ability to change email and password in security authentication 
+added security checks for changed details and deleted accounts or outdated tokens 
+added front end graph
+added formatting tool for code
+fixed error class for errors 
+fixed crashing on null time
+code has been formatted
+redesigned database names
+moved persistent login to registration as well to speed up loading 
+users can no longer remain in app after devalidation 
+details captured type messages will not show except on success 

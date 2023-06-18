@@ -1,11 +1,16 @@
 package com.example.tempus
 
+
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
-
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -13,12 +18,12 @@ import com.google.firebase.ktx.Firebase
 // THIS ALLOWS THE USER TO CREATE A CATEGORY
 // THIS HOLDS THE DATA ASSIGNMENT
 //ASSIGNS TO THE ARRAY
-class CatergoryForm: AppCompatActivity() {
+class CatergoryForm : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.catergory_form)
         try {
-
+            Security()
 
             val create = findViewById<Button>(R.id.createCategory)
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
@@ -30,7 +35,7 @@ class CatergoryForm: AppCompatActivity() {
 
             homebtn.setOnClickListener {
                 val intent = Intent(this, Home::class.java)
-                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 finish()
@@ -89,8 +94,7 @@ class CatergoryForm: AppCompatActivity() {
                         val TotalHours = "00:00"
 
 
-// Add as many items
-                        val cat = CategoryStorage(catname,TotalHours,userid.toString().trim())
+                        val cat = CategoryStorage(catname, TotalHours, userid.toString().trim())
 
                         val docRef = itemsadd.document(catname)
                         docRef.set(cat)
@@ -98,10 +102,8 @@ class CatergoryForm: AppCompatActivity() {
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                     }
 
-// Add all the items in
 
                 }
-
 
 
             } catch (e: Exception) {
@@ -111,6 +113,48 @@ class CatergoryForm: AppCompatActivity() {
         } catch (e: Exception) {
             Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    fun Security() {
+
+        val auth = FirebaseAuth.getInstance()
+        auth.addAuthStateListener { firebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user == null) {
+
+                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                AppSettings.preloads.usersname = null
+                val intent = Intent(this@CatergoryForm, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                overridePendingTransition(0, 0)
+                startActivity(intent)
+
+            }
+        }
+
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.reload()?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+
+            } else {
+                val exception = task.exception
+                if (exception is FirebaseAuthInvalidUserException) {
+                    val errorCode = exception.errorCode
+                    if (errorCode == "ERROR_USER_NOT_FOUND") {
+                        val sharedPreferences =
+                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                        AppSettings.preloads.usersname = null
+                        val intent = Intent(this@CatergoryForm, Login::class.java)
+                        intent.putExtra("login", R.layout.login)
+                        overridePendingTransition(0, 0)
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
+
     }
 }
 

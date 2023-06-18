@@ -15,14 +15,14 @@
             android:id="@+id/logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/logo" />
 
         <ImageView
             android:id="@+id/tempus"
             android:layout_width="300dp"
             android:layout_height="100dp"
             android:layout_toRightOf="@id/logo"
-            android:src="@drawable/tempus_title"/>
+            android:src="@drawable/tempus_title" />
 
     </RelativeLayout>
 
@@ -30,33 +30,33 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/top_menu"
-        android:layout_above="@id/bottom_menu">
+        android:layout_above="@id/bottom_menu"
+        android:layout_below="@id/top_menu">
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            tools:context=".StatsFragment"
             android:background="#D6D6D6"
-            android:padding="10dp">
+            android:padding="10dp"
+            tools:context=".StatsFragment">
 
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:background="#D6D6D6"
                 android:columnCount="1"
+                android:orientation="vertical"
                 android:rowCount="2">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_column="0"
-                    android:layout_row="0"
-                    android:layout_margin="10dp"
-
                     android:layout_width="match_parent"
                     android:layout_height="370dp"
+                    android:layout_row="0"
+
+                    android:layout_column="0"
+                    android:layout_margin="10dp"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="10dp">
 
@@ -70,18 +70,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="GRAPH"
-                            android:textSize="20dp"
-                            android:textAlignment="center"/>
+                            android:textAlignment="center"
+                            android:textSize="20dp" />
 
-  <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/statsChart"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-
-
-
-
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/statsChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
 
 
                     </RelativeLayout>
@@ -89,11 +84,11 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_column="0"
-                    android:layout_row="1"
-                    android:layout_margin="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_margin="10dp"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="10dp">
 
@@ -106,103 +101,101 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="OVERVIEW"
-                            android:textSize="20dp"
-                            android:textAlignment="center"/>
+                            android:textAlignment="center"
+                            android:textSize="20dp" />
 
                         <TextView
                             android:id="@+id/total"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:text="Total Hours:"
-                            android:textSize="18dp"
-                            android:textAlignment="center"
                             android:layout_below="@+id/overview"
+                            android:paddingLeft="20dp"
                             android:paddingTop="10dp"
-                            android:paddingLeft="20dp"/>
+                            android:text="Total Hours:"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
 
                         <TextView
                             android:id="@+id/max"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:text="Maximum:"
-                            android:textSize="18dp"
-                            android:textAlignment="center"
                             android:layout_below="@+id/total"
+                            android:paddingLeft="20dp"
                             android:paddingTop="10dp"
-                            android:paddingLeft="20dp"/>
+                            android:text="Maximum:"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
 
                         <TextView
                             android:id="@+id/min"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:text="Minimum:"
-                            android:textSize="18dp"
-                            android:textAlignment="center"
                             android:layout_below="@+id/max"
+                            android:paddingLeft="20dp"
                             android:paddingTop="10dp"
-                            android:paddingLeft="20dp"/>
+                            android:text="Minimum:"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
 
                         <TextView
                             android:id="@+id/stats_breaks"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:text="Breaks:"
-                            android:textSize="18dp"
-                            android:textAlignment="center"
                             android:layout_below="@+id/min"
+                            android:paddingLeft="20dp"
                             android:paddingTop="10dp"
-                            android:paddingLeft="20dp"/>
+                            android:text="Breaks:"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
 
                         <TextView
                             android:id="@+id/total_display"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:textSize="18dp"
-                            android:textAlignment="center"
-                            android:layout_toRightOf="@+id/total"
                             android:layout_below="@+id/overview"
                             android:layout_alignParentEnd="true"
+                            android:layout_toRightOf="@+id/total"
+                            android:paddingLeft="20dp"
                             android:paddingTop="10dp"
-                            android:paddingLeft="20dp"/>
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
 
                         <TextView
                             android:id="@+id/max_display"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:textSize="18dp"
-                            android:textAlignment="center"
-                            android:layout_toRightOf="@+id/max"
                             android:layout_below="@+id/total"
                             android:layout_alignParentEnd="true"
+                            android:layout_toRightOf="@+id/max"
+                            android:paddingLeft="20dp"
                             android:paddingTop="10dp"
-                            android:paddingLeft="20dp"/>
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
 
                         <TextView
                             android:id="@+id/min_display"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:textSize="18dp"
-                            android:textAlignment="center"
-                            android:layout_toRightOf="@+id/min"
                             android:layout_below="@+id/max"
                             android:layout_alignParentEnd="true"
+                            android:layout_toRightOf="@+id/min"
+                            android:paddingLeft="20dp"
                             android:paddingTop="10dp"
-                            android:paddingLeft="20dp"/>
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
 
 
                         <TextView
                             android:id="@+id/breaks_display"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:textSize="18dp"
-                            android:textAlignment="center"
-                            android:layout_toRightOf="@+id/stats_breaks"
                             android:layout_below="@+id/min_display"
                             android:layout_alignParentEnd="true"
+                            android:layout_toRightOf="@+id/stats_breaks"
+                            android:paddingLeft="20dp"
                             android:paddingTop="10dp"
-                            android:paddingLeft="20dp"/>
-
-
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
 
 
                     </RelativeLayout>
@@ -227,55 +220,55 @@
             android:id="@+id/hometbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding= "5dp"
             android:layout_centerVertical="true"
+            android:background="@drawable/rectangle"
             android:contentDescription="Home"
-            android:src="@drawable/home_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/home_icon" />
 
         <ImageButton
             android:id="@+id/breakstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/hometbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Breaks"
-            android:src="@drawable/break_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/break_icon" />
 
         <ImageButton
             android:id="@+id/addbtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/breakstbtn"
+            android:background="@drawable/gradient_add"
             android:contentDescription="Add"
-            android:src="@drawable/add_icon"
-            android:background="@drawable/gradient_add"/>
+            android:padding="5dp"
+            android:src="@drawable/add_icon" />
 
         <ImageButton
             android:id="@+id/statstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/addbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Stats"
-            android:src="@drawable/stats_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/stats_icon" />
 
         <ImageButton
             android:id="@+id/settingstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/statstbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Setting"
-            android:src="@drawable/settings_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/settings_icon" />
 
     </RelativeLayout>
 

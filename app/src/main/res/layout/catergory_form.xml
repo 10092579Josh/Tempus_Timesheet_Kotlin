@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,14 +15,14 @@
             android:id="@+id/logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/logo" />
 
         <ImageView
             android:id="@+id/tempus"
             android:layout_width="300dp"
             android:layout_height="100dp"
             android:layout_toRightOf="@id/logo"
-            android:src="@drawable/tempus_title"/>
+            android:src="@drawable/tempus_title" />
 
 
     </RelativeLayout>
@@ -32,14 +31,15 @@
         android:id="@+id/create_category_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/top_menu"
+        android:background="@drawable/sharp_square_background"
+
+        android:padding="16dp"
         android:text="Create Category"
         android:textColor="@color/purple_700"
-
         android:textSize="28sp"
-        android:textStyle="bold"
-        android:padding="16dp"
-        android:background="@drawable/sharp_square_background"
-        android:layout_below="@id/top_menu" />
+        android:textStyle="bold" />
+
     <LinearLayout
         android:id="@+id/categoryNameLayout"
         android:layout_width="match_parent"
@@ -60,12 +60,13 @@
             android:id="@+id/categoryNameInput"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="Enter Category Name"
-            android:textSize="16sp"
             android:background="@android:drawable/editbox_background"
+            android:hint="Enter Category Name"
+            android:imeOptions="actionNext"
             android:singleLine="true"
-            android:imeOptions="actionNext"/>
+            android:textSize="16sp" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/tagsLayout"
         android:layout_width="match_parent"
@@ -97,55 +98,55 @@
             android:id="@+id/hometbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding= "5dp"
             android:layout_centerVertical="true"
+            android:background="@drawable/rectangle"
             android:contentDescription="Home"
-            android:src="@drawable/home_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/home_icon" />
 
         <ImageButton
             android:id="@+id/breakstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/hometbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Breaks"
-            android:src="@drawable/break_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/break_icon" />
 
         <ImageButton
             android:id="@+id/addbtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/breakstbtn"
+            android:background="@drawable/gradient_add"
             android:contentDescription="Add"
-            android:src="@drawable/add_icon"
-            android:background="@drawable/gradient_add"/>
+            android:padding="5dp"
+            android:src="@drawable/add_icon" />
 
         <ImageButton
             android:id="@+id/statstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/addbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Stats"
-            android:src="@drawable/stats_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/stats_icon" />
 
         <ImageButton
             android:id="@+id/settingstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
-            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/statstbtn"
+            android:background="@drawable/rectangle"
             android:contentDescription="Setting"
-            android:src="@drawable/settings_icon"
-            android:background="@drawable/rectangle"/>
+            android:padding="5dp"
+            android:src="@drawable/settings_icon" />
 
     </RelativeLayout>
 </RelativeLayout>
