@@ -36,7 +36,7 @@ class Home : AppCompatActivity() {
         val homeID = intent.getIntExtra("home", 0)
         val homelayout = layoutInflater.inflate(homeID, null)
         setContentView(homelayout)
-
+        populatefields()
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
         if (sharedPreferences.getBoolean("isFirstLogin", true)) {
             loggedonnotification()
@@ -61,7 +61,7 @@ class Home : AppCompatActivity() {
             task.setOnClickListener()
             {
                 val intent = Intent(this, Home::class.java)
-                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 finish()
@@ -79,7 +79,7 @@ class Home : AppCompatActivity() {
             homebtn.setOnClickListener {
 
                 val intent = Intent(this, Home::class.java)
-                intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 finish()
@@ -119,15 +119,16 @@ class Home : AppCompatActivity() {
                 finish()
 
 
-
             }
         } catch (e: Exception) {
             Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
+
     companion object {
         private const val TAG = "Home"
     }
+
     object TaskClass {
         //ASSIGNING TASKS
         val rows = 10
@@ -136,7 +137,7 @@ class Home : AppCompatActivity() {
         //ARRAYS FOR THE TASK DATA
         val tasks = Array(rows) { arrayOfNulls<String>(columns) }
         val hours = Array(rows) { arrayOfNulls<String>(columns) }
-        var check:Int? = null
+        var check: Int? = null
 
     }
 
@@ -144,13 +145,13 @@ class Home : AppCompatActivity() {
         val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_category)
         recyclerview.layoutManager = LinearLayoutManager(this)
         val db = FirebaseFirestore.getInstance()
-        val itemsRef = db.collection("Categories")
+        val itemsRef = db.collection("CategoryStorage")
 
 // Get the user ID (this will depend on how you are authenticating users)
         val userid = FirebaseAuth.getInstance().currentUser?.uid
 
-// Create a query that only returns documents where the userId field matches the current user's ID
-        val catergoryquery = itemsRef.whereEqualTo("userid",userid.toString().trim())
+// Create a query that only returns documents where the userid field matches the current user's ID
+        val catergoryquery = itemsRef.whereEqualTo("userIdCat", userid.toString().trim())
 
 // Execute the query and get the results as a Task
         val task = catergoryquery.get()
@@ -162,8 +163,8 @@ class Home : AppCompatActivity() {
 
             for (document in documents) {
                 // Get the data for each document
-                val name = document.getString("catname") ?: ""
-                val description = document.getString("cathours") ?: ""
+                val name = document.getString("categoryID") ?: ""
+                val description = document.getString("totalHours") ?: ""
                 val item = ItemsViewModel(name, description)
                 items.add(item)
             }
@@ -174,7 +175,7 @@ class Home : AppCompatActivity() {
             val sortedItems = items.sortedBy { it.text }
             try {
                 val adapter = CustomAdapter(sortedItems as MutableList<ItemsViewModel>)
-                adapter.onTaskClickListener = { task ->
+                adapter.onTaskClickListener = { _ ->
 
 
                 }
@@ -184,14 +185,13 @@ class Home : AppCompatActivity() {
         }
 
 
-
-
     }
 
     // PROMPT THE USER FOR PERMISSIONS
-    data class Task(val name: String,val hours2: String)
-    fun fix()
-    {  val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+    data class Task(val name: String, val hours2: String)
+
+    fun fix() {
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         val layoutParams = tabLayout.layoutParams
         layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
         layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -204,7 +204,6 @@ class Home : AppCompatActivity() {
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
         var onTaskClickListener: ((Task) -> Unit)? = null
-
 
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -240,29 +239,31 @@ class Home : AppCompatActivity() {
             val textView2: TextView = itemView.findViewById(R.id.mHours_category)
             val tasksLayout: LinearLayout = itemView.findViewById(R.id.tasksLayout)
         }
+
         private fun populateTasks(holder: ViewHolder, CategoryTask: String) {
 
             val db = FirebaseFirestore.getInstance()
-            val tasksRef = db.collection("Tasks")
+            val tasksRef = db.collection("TaskStorage")
             val userid = FirebaseAuth.getInstance().currentUser?.uid
 
 
-            val CatQuery = tasksRef.whereEqualTo("userid", userid).whereEqualTo("catergorytask", CategoryTask)
+            val CatQuery = tasksRef.whereEqualTo("userIdTask", userid)
+                .whereEqualTo("categoryName", CategoryTask)
 
             val task = CatQuery.get()
-            Log.d("catname", "$CategoryTask")
-            Log.d("userid", "$userid")
+            Log.d("categoryID", "$CategoryTask")
+            Log.d("userIdTask", "$userid")
 
             task.addOnSuccessListener { documents ->
                 val tasksByTab = mutableMapOf<String, MutableList<Task>>()
                 for (document in documents) {
                     // Get the data for each document
-                    val name = document.getString("taskname") ?: ""
-                    val hours = document.getString("hours") ?: ""
+                    val name = document.getString("taskName") ?: ""
+                    val hours = document.getString("duration") ?: ""
                     Log.d("Taskname", "$name")
-                    val tabName = document.getString("tabname") ?: ""
-                    Log.d("tabname", "$tabName")
-                    val task = Task(name,hours)
+                    val tabName = document.getString("tabID") ?: ""
+                    Log.d("tabID", "$tabName")
+                    val task = Task(name, hours)
                     if (tasksByTab.containsKey(tabName)) {
                         tasksByTab[tabName]?.add(task)
                         Log.d("tabname2", "$tabName")
@@ -293,9 +294,10 @@ class Home : AppCompatActivity() {
         }
 
 
-
     }
-    class SubTasksAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<SubTasksAdapter.ViewHolder>() {
+
+    class SubTasksAdapter(private val tasks: List<Task>) :
+        RecyclerView.Adapter<SubTasksAdapter.ViewHolder>() {
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val textView: TextView = itemView.findViewById(R.id.mTitle3)
@@ -320,7 +322,7 @@ class Home : AppCompatActivity() {
                 val context = holder.itemView.context
                 val HomeIntent = Intent(context, TaskPage::class.java)
                 HomeIntent.putExtra("task", clickedData.name)
-                HomeIntent.putExtra("hours", clickedData.hours2)
+                HomeIntent.putExtra("duration", clickedData.hours2)
                 val bundle = Bundle()
                 val bundle2 = Bundle()
                 bundle.putSerializable("myDataList", Home.TaskClass.tasks)
@@ -341,12 +343,12 @@ class Home : AppCompatActivity() {
     }
 
 
-    fun loggedonnotification()
-    {
+    fun loggedonnotification() {
         val LogIntent = Intent(this, AppSettings::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val settingsIntent = PendingIntent.getActivity(this, 0, LogIntent, PendingIntent.FLAG_MUTABLE)
+        val settingsIntent =
+            PendingIntent.getActivity(this, 0, LogIntent, PendingIntent.FLAG_MUTABLE)
 
         val user = FirebaseAuth.getInstance().currentUser?.email
         val channelId = "login"
@@ -367,7 +369,6 @@ class Home : AppCompatActivity() {
             .setAutoCancel(true)
 
 
-
         val unverifiedbuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.imageuser)
             .setContentTitle("$user logged in")
@@ -380,7 +381,7 @@ class Home : AppCompatActivity() {
 
         val userid = FirebaseAuth.getInstance().currentUser?.uid
         val database = Firebase.database
-        val myRef = database.getReference("users")
+        val myRef = database.getReference("UserDetails")
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var matchFound = false
@@ -388,19 +389,18 @@ class Home : AppCompatActivity() {
                     val documentName = ds.key
                     Log.d("MyTag", "${AppSettings.preloads.usersname}")
                     Log.d("MyTag", "documentName: $documentName")
-                    if (documentName == userid.toString().trim() ) {
+                    if (documentName == userid.toString().trim()) {
                         TempusManager.notify(0, builder.build())
 
                         Log.d("MyTag", "Condition 2 met")
-                        break
+
                         matchFound = true
 
-                    }
-
-                    else if ( AppSettings.preloads.usersname.isNullOrEmpty()) {
+                    } else if (AppSettings.preloads.usersname.isNullOrEmpty()) {
                         Log.d("MyTag", "${AppSettings.preloads.usersname}")
-                            Log.d("MyTag", "Condition 3 met")
-                            TempusManager.notify(1, unverifiedbuilder.build()) }
+                        Log.d("MyTag", "Condition 3 met")
+                        TempusManager.notify(1, unverifiedbuilder.build())
+                    }
 
                 }
             }
@@ -411,8 +411,47 @@ class Home : AppCompatActivity() {
         })
 
     }
- 
 
+    fun populatefields() {
+
+
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+        val database = Firebase.database
+        val myRef = database.getReference("UserDetails")
+
+        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (data in dataSnapshot.children) {
+                    val userId = data.child("userid").getValue(String::class.java)
+                    Log.d("check2", "${userId.toString()}")
+                    if (userId.toString().trim() == userid.toString().trim()) {
+                        AppSettings.preloads.names =
+                            data.child("firstname").getValue(String::class.java).toString()
+                        AppSettings.preloads.emails =
+                            data.child("emailaddress").getValue(String::class.java).toString()
+                        AppSettings.preloads.surname =
+                            data.child("surname").getValue(String::class.java).toString()
+                        AppSettings.preloads.usersname =
+                            data.child("displayname").getValue(String::class.java).toString()
+                        AppSettings.preloads.conpass =
+                            data.child("confirmkey").getValue(String::class.java).toString()
+                        AppSettings.preloads.pass =
+                            data.child("password").getValue(String::class.java).toString()
+                        Log.d("check1", "${AppSettings.preloads.names}")
+                        Log.d("check3", "${userid.toString()}")
+
+                    }
+
+
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle error
+            }
+        })
+
+    }
 }
 
 

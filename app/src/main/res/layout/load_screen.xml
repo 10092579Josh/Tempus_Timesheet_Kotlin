@@ -9,7 +9,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerInParent="true"
-        android:src="@mipmap/new_icon_round" /> <!-- Replace with your image resource -->
+        android:src="@mipmap/new_icon_round" /> <!-- Replace with your imageURL resource -->
 
     <View
         android:layout_width="match_parent"

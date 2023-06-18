@@ -16,7 +16,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import com.google.firebase.auth.FirebaseAuth
 
 import com.google.firebase.auth.FirebaseAuthException
 import de.keyboardsurfer.android.widget.crouton.Crouton
@@ -29,72 +34,70 @@ class Registration : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration)
-notifications()
+        notifications()
         FirebaseApp.initializeApp(this)
 
     }
-fun notifications()
-{
-    var back:ImageButton = findViewById(R.id.back_btn)
-    back.setOnClickListener(){
 
-        val loginpage = Intent(this, Login::class.java)
-        loginpage.putExtra("login", R.layout.login)
+    fun notifications() {
+        var back: ImageButton = findViewById(R.id.back_btn)
+        back.setOnClickListener() {
+
+            val loginpage = Intent(this, Login::class.java)
+            loginpage.putExtra("login", R.layout.login)
 
 
-        startActivity(loginpage)
-        finish()
+            startActivity(loginpage)
+            finish()
 
-    }
-    val layoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    val regpopupView = layoutInflater.inflate(R.layout.popup_window, null)
-    val newpopupWindow = PopupWindow(
-        regpopupView,
-        ViewGroup.LayoutParams.WRAP_CONTENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT
-    )
+        }
+        val layoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val regpopupView = layoutInflater.inflate(R.layout.popup_window, null)
+        val newpopupWindow = PopupWindow(
+            regpopupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
 
-    var email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
-    email1.editText?.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            val email = s.toString()
-            if (check(email)) {
-                // email is valid
+        var email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
+        email1.editText?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val email = s.toString()
+                if (check(email)) {
+                    // emailaddress is valid
+                    newpopupWindow.dismiss()
+                    input()
+
+
+                } else {
+                    // emailaddress is not valid
+                    if (!newpopupWindow.isShowing) {
+                        newpopupWindow.showAsDropDown(email1.editText, 0, 0)
+                    }
+                    if (email.contains("#")) {
+                        // emailaddress contains invalid character '#'
+                    }
+                    // add additional checks for other invalid characters here
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        })
+
+        email1.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                // emailaddress EditText field lost focus
                 newpopupWindow.dismiss()
-                input()
-
-
-
-
-
-
-            } else {
-                // email is not valid
-                if (!newpopupWindow.isShowing) {
-                    newpopupWindow.showAsDropDown(email1.editText, 0, 0)
-                }
-                if (email.contains("#")) {
-                    // email contains invalid character '#'
-                }
-                // add additional checks for other invalid characters here
             }
         }
 
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    }
 
-    })
-
-    email1.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-        if (!hasFocus) {
-            // email EditText field lost focus
-            newpopupWindow.dismiss()
-        } }
-
-
-}
-    fun check(str: String): Boolean{
+    fun check(str: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(str).matches()
     }
 
@@ -104,18 +107,18 @@ fun notifications()
 
         val datas = Array(rows) { arrayOfNulls<String>(columns) }
     }
+
     fun regerror(errors: Errors) {
         val crouton = Crouton.makeText(this, errors.RegEmailError, Style.ALERT)
         crouton.show()
     }
 
-    fun input ()
-    { //variables
-
+    fun input() { //variables
 
 
         var submitting: Button = findViewById(R.id.sub)
-        var name1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.firstName)
+        var name1: com.google.android.material.textfield.TextInputLayout =
+            findViewById(R.id.firstName)
         var names = name1.editText
 
         var surname1: com.google.android.material.textfield.TextInputLayout =
@@ -142,46 +145,33 @@ fun notifications()
         {
 
             //action statements tp check fields if empty
-            if (pass?.text.toString() != pass2?.text.toString())
-            { var message  = " passwords do not match"
+            if (pass?.text.toString() != pass2?.text.toString()) {
+                var message = " passwords do not match"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-            }
-            else if(names?.text.toString().isEmpty())
-            {
-                var message  = " no name entered "
+            } else if (names?.text.toString().isEmpty()) {
+                var message = " no firstname entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-            }
-            else if(surnames?.text.toString().isEmpty())
-            {
-                var message  = " no surname entered "
+            } else if (surnames?.text.toString().isEmpty()) {
+                var message = " no surname entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-            }
-            else if(user2?.text.toString().isEmpty())
-            {
-                var message  = " no username entered "
+            } else if (user2?.text.toString().isEmpty()) {
+                var message = " no username entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-            }
-            else if(pass?.text.toString().length <7)
-            {
-                var message  = " enter password is too short"
+            } else if (pass?.text.toString().length < 7) {
+                var message = " enter password is too short"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-            }
-            else if(pass2?.text.toString().length <7)
-            { var message  = " confirm password is too short "
+            } else if (pass2?.text.toString().length < 7) {
+                var message = " confirmkey password is too short "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-            }
-            else if(emails?.text.toString().isEmpty())
-            {
-                var message  = " no email entered "
+            } else if (emails?.text.toString().isEmpty()) {
+                var message = " no emailaddress entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-            }
-            else
-            { // move to the next screen if filled
+            } else { // move to the next screen if filled
 
                 val database = FirebaseDatabase.getInstance()
-                val myRef = database.getReference("users")
+                val myRef = database.getReference("UserDetails")
 //stuff
 
                 val auth = Firebase.auth
@@ -192,29 +182,54 @@ fun notifications()
                 val email = emails?.text.toString().replace("\\s".toRegex(), "")
                 val password = pass?.text.toString().replace("\\s".toRegex(), "")
                 val confirm = pass2?.text.toString().replace("\\s".toRegex(), "")
-                val userid = auth.currentUser?.uid.toString()
+                val UserId = ""
 
 
-// Create a new user with email and password
+// Create a new user with emailaddress and password
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
+                        val auth = FirebaseAuth.getInstance()
+                        val currentUser = auth.currentUser
+                        Log.d("MyApp", "$currentUser")
                         val exception = task.exception
-                        if (task.isSuccessful) {
-                            // User account created
-                            val loginpage = Intent(this@Registration, Login::class.java)
+                        if (task.isSuccessful && currentUser != null) {
+
+                            val user = auth.currentUser
+
+                            val users = User(
+                                name,
+                                surname,
+                                usersname,
+                                email,
+                                password,
+                                confirm,
+                                UserId.toString()
+                            )
+                            myRef.child(usersname + password).setValue(users)
+                            var message = "USER ${user2?.text} HAS REGISTERED "
+                            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+
+
+                            val homepage = Intent(this, Home::class.java)
+                            homepage.putExtra("home", R.layout.home)
+                            startActivity(homepage)
+
+                            finish()
+
+
+                        } else if (task.isSuccessful && currentUser == null) {
+
+
+                            val loginpage = Intent(this, Login::class.java)
                             loginpage.putExtra("login", R.layout.login)
+
+
                             startActivity(loginpage)
                             finish()
 
-                            val user = auth.currentUser
-                            val users = User(name,surname,usersname, email, password, confirm,userid)
-                            myRef.child(usersname+password).setValue(users)
-                            var message  = "USER ${user2?.text} HAS REGISTERED "
-                            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-
                         } else if (exception is FirebaseAuthException && exception.errorCode == "ERROR_EMAIL_ALREADY_IN_USE") {
 
-                                 regerror( Errors())
+                            regerror(Errors())
 
                         } else {
                             // Show other error messages
@@ -222,16 +237,10 @@ fun notifications()
                     }
 
 
-
 // Create a User object to hold the captured data
 
 
-
-
-
-
             }
-
 
 
         }

@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -39,10 +40,8 @@ class AppSettings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.app_settings)
-
         populatefields()
-
-
+        FirebaseApp.initializeApp(this)
         val homebtn = findViewById<ImageButton>(R.id.hometbtn)
         val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
         val statsbtn = findViewById<ImageButton>(R.id.statstbtn)
@@ -50,9 +49,11 @@ class AppSettings : AppCompatActivity() {
         val accsetting = findViewById<CardView>(R.id.account_setting)
         val addbtn = findViewById<ImageButton>(R.id.addbtn)
         val logout = findViewById<CardView>(R.id.logout)
+        val DeleteAppData = findViewById<CardView>(R.id.delete_data)
+
         homebtn.setOnClickListener {
             val intent = Intent(this, Home::class.java)
-            intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+            intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
             startActivity(intent)
             overridePendingTransition(0, 0)
             finish()
@@ -78,18 +79,14 @@ class AppSettings : AppCompatActivity() {
             overridePendingTransition(0, 0)
             finish()
         }
-
-
-        addbtn.setOnClickListener()
-        {
+        addbtn.setOnClickListener() {
             val tform = Intent(this, TaskForm::class.java)
             startActivity(tform)
             overridePendingTransition(0, 0)
             finish()
 
         }
-        logout.setOnClickListener()
-        {
+        logout.setOnClickListener() {
             FirebaseAuth.getInstance().signOut()
             val Logout = Intent(this, Login::class.java)
             startActivity(Logout)
@@ -105,11 +102,8 @@ class AppSettings : AppCompatActivity() {
             intent.putExtra("login", R.layout.login)
             overridePendingTransition(0, 0)
             startActivity(intent)
-
-
         }
-        accsetting.setOnClickListener()
-        {
+        accsetting.setOnClickListener() {
             if (preloads.usersname == null) {
                 accountverify()
             } else {
@@ -121,18 +115,26 @@ class AppSettings : AppCompatActivity() {
 
             }
         }
+        DeleteAppData.setOnClickListener() {
+
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Choose an option")
+            builder.setItems(
+                arrayOf("Delete all Images", "Delete Tasks and Images", "Wipe Application DATA")) { _, which ->
+                when (which) {
+
+                    0 -> ImageDelete()
+                    1 -> TasksImageDelete()
+                    2 -> AllDelete()
+
+                }
+
+
+            }
+            val dialog = builder.create()
+            dialog.show()
+        }
     }
-    object preloads
-    { var names:String = ""
-        var surname:String = ""
-        var emails:String = ""
-            var usersname: String? = null
-        var conpass:String =""
-        var pass:String = ""
-
-
-    }
-
 
     private var isDialogOpen = false
 
@@ -154,50 +156,47 @@ class AppSettings : AppCompatActivity() {
 
             // Set up the password input
             val passwordInput = EditText(this)
-            passwordInput.hint = "Password"
+            passwordInput.hint = "password"
             passwordInput.inputType =
                 InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             layout.addView(passwordInput)
 
             builder.setView(layout)
 
-            with(builder){
-
-                                                     setNegativeButtonIcon(ContextCompat.getDrawable(context, R.drawable.baseline_cancel_presentation_24))
-                                                         .setNegativeButton("CLOSE") { _, _ ->
-                                                             Log.d("MyTag", "closing")
-                                                             val alertDialog = builder.create()
-                                                             alertDialog.dismiss()
-                                                             Log.d("MyTag", "closed")
-                                                             isDialogOpen = false
-                                                             Log.d("MyTag", "$isDialogOpen")
-
-
-                                                         }
-                setPositiveButtonIcon(ContextCompat.getDrawable(context, R.drawable.baseline_check_box_24))
-                .setPositiveButton("SUBMIT",) { _, _ ->
-
-
+            with(builder) {
+                setNegativeButtonIcon(
+                    ContextCompat.getDrawable(
+                        context, R.drawable.baseline_cancel_presentation_24
+                    )
+                ).setNegativeButton("CLOSE") { _, _ ->
+                    Log.d("MyTag", "closing")
+                    val alertDialog = builder.create()
+                    alertDialog.dismiss()
+                    Log.d("MyTag", "closed")
+                    isDialogOpen = false
+                    Log.d("MyTag", "$isDialogOpen")
+                }
+                setPositiveButtonIcon(
+                    ContextCompat.getDrawable(
+                        context, R.drawable.baseline_check_box_24
+                    )
+                ).setPositiveButton("SUBMIT") { _, _ ->
                     val username = usernameInput.text.toString().trim()
                     val password = passwordInput.text.toString().trim()
                     val verify = username + password
-
                     val database = Firebase.database
                     val userid = FirebaseAuth.getInstance().currentUser?.uid
-                    val myRef = database.getReference("users")
+                    val myRef = database.getReference("UserDetails")
+                    val oldRef = FirebaseDatabase.getInstance().getReference("UserDetails/$verify")
+                    val newRef = FirebaseDatabase.getInstance()
+                        .getReference("UserDetails/${userid.toString()}")
 
-
-                    val oldRef =
-                        FirebaseDatabase.getInstance().getReference("users/$verify")
-                    val newRef =
-                        FirebaseDatabase.getInstance().getReference("users/${userid.toString()}")
                     if (usernameInput.text.isNullOrEmpty()) {
 
                     } else if (passwordInput.text.isNullOrEmpty()) {
-
                     } else if (usernameInput.text.isNullOrEmpty() && passwordInput.text.isNullOrEmpty()) {
-
                     } else {
+
                         oldRef.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 val data = dataSnapshot.value as? Map<*, *>
@@ -211,8 +210,6 @@ class AppSettings : AppCompatActivity() {
                                             }
                                         }
                                     } else {
-                                        // The document does not exist
-
                                         validerror(Errors())
                                     }
                                 }
@@ -221,140 +218,105 @@ class AppSettings : AppCompatActivity() {
                             override fun onCancelled(databaseError: DatabaseError) {
                                 // Handle error
                             }
-                        }
-                        )
+                        })
                     }
-
-
-
-
                     isDialogOpen = false
-
                 }
+            }.create()
 
-
-                       }.create()
             val alertDialog = builder.create()
-
-
-
-            // Set up the buttons
-
             alertDialog.show()
             val button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            val layoutParams = button.layoutParams as LinearLayout.LayoutParams
             with(button) {
 
                 setPadding(0, 0, 20, 0)
                 setTextColor(Color.WHITE)
                 setBackgroundColor(Color.WHITE)
 
-
-                val layoutParams = button.layoutParams as LinearLayout.LayoutParams
                 layoutParams.weight = 10f
                 button.layoutParams = layoutParams
             }
-
             alertDialog.show()
             val buttons = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            val layoutParams2 = buttons.layoutParams as LinearLayout.LayoutParams
             with(buttons) {
                 setPadding(250, 0, 20, 0)
                 setTextColor(Color.WHITE)
-
-
-
-                val layoutParams = buttons.layoutParams as LinearLayout.LayoutParams
-                layoutParams.weight = 10f
-                buttons.layoutParams = layoutParams}
-
-
-
-
-
-
-            builder.setOnCancelListener {
-                    isDialogOpen = false
-
-               }
-
-
+                layoutParams2.weight = 10f
+                buttons.layoutParams = layoutParams2
             }
 
+            builder.setOnCancelListener { isDialogOpen = false }
+        }
+
     }
-
-
 
 
     fun validerror(errors: Errors) {
         val crouton = Crouton.makeText(this, errors.ValidationError, Style.ALERT)
         crouton.show()
-
     }
 
-    fun populatefields()
-    {
+    object preloads {
+        var names: String = ""
+        var surname: String = ""
+        var emails: String = ""
+        var usersname: String? = null
+        var conpass: String = ""
+        var pass: String = ""
+    }
 
-
+    fun populatefields() {
         val userid = FirebaseAuth.getInstance().currentUser?.uid
         val database = Firebase.database
-        val myRef = database.getReference("users")
+        val myRef = database.getReference("UserDetails")
 
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (data in dataSnapshot.children) {
+
                     val userId = data.child("userid").getValue(String::class.java)
-
                     if (userId.toString().trim() == userid.toString().trim()) {
-
-                        if(preloads.names.isNullOrEmpty()) {
+                        Log.d("datas", preloads.names)
+                        if (preloads.names.isNullOrEmpty()) {
                             preloads.names =
-                                data.child("name").getValue(String::class.java).toString()
+                                data.child("firstname").getValue(String::class.java).toString()
                             preloads.emails =
-                                data.child("email").getValue(String::class.java).toString()
+                                data.child("emailaddress").getValue(String::class.java).toString()
                             preloads.surname =
                                 data.child("surname").getValue(String::class.java).toString()
                             preloads.usersname =
-                                data.child("usersname").getValue(String::class.java).toString()
+                                data.child("displayname").getValue(String::class.java).toString()
                             preloads.conpass =
-                                data.child("confirm").getValue(String::class.java).toString()
+                                data.child("confirmkey").getValue(String::class.java).toString()
                             preloads.pass =
                                 data.child("password").getValue(String::class.java).toString()
 
 
                         }
                     }
-                    else if (preloads.usersname == null)
-                    {
-                        accountverify()
-                    }
-
-
-
-
 
 
                 }
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle error
-            }
+            override fun onCancelled(databaseError: DatabaseError) {}
         })
 
     }
-    fun ToDelete()
-    {
+
+    fun AllDelete() {
+
         val db = FirebaseFirestore.getInstance()
-        val userId = "USER_ID"
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
 
         val storage = Firebase.storage
 
-// Delete images where the name matches the taskname field for the given user ID
-        db.collection("Tasks")
-            .whereEqualTo("userid", userId)
-            .get()
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
             .addOnSuccessListener { tasks ->
                 for (task in tasks) {
-                    val taskName = task.getString("taskname") ?: ""
+                    val taskName = task.getString("taskName") ?: ""
                     val imageRef = storage.reference.child(taskName)
                     imageRef.delete()
                 }
@@ -363,26 +325,66 @@ class AppSettings : AppCompatActivity() {
 
 
 
-        db.collection("Tasks")
-            .whereEqualTo("userid", userId)
-            .get()
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
             .addOnSuccessListener { tasks ->
                 for (task in tasks) {
-                    db.collection("Tasks").document(task.id).delete()
+                    db.collection("TaskStorage").document(task.id).delete()
                 }
             }
 
 
-        db.collection("Categories")
-            .whereEqualTo("userid", userId)
-            .get()
+        db.collection("CategoryStorage").whereEqualTo("userIdCat", userid).get()
             .addOnSuccessListener { categories ->
                 for (category in categories) {
-                    db.collection("categories").document(category.id).delete()
+                    db.collection("CategoryStorage").document(category.id).delete()
+                }
+            }
+    }
+
+    fun TasksImageDelete() {
+        val db = FirebaseFirestore.getInstance()
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+
+        val storage = Firebase.storage
+
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
+            .addOnSuccessListener { tasks ->
+                for (task in tasks) {
+                    val taskName = task.getString("taskName") ?: ""
+                    val imageRef = storage.reference.child(taskName)
+                    imageRef.delete()
                 }
             }
 
 
+
+
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
+            .addOnSuccessListener { tasks ->
+                for (task in tasks) {
+                    db.collection("TaskStorage").document(task.id).delete()
+                }
+            }
+
+
+    }
+
+    fun ImageDelete() {
+
+
+        val db = FirebaseFirestore.getInstance()
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+
+        val storage = Firebase.storage
+
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
+            .addOnSuccessListener { tasks ->
+                for (task in tasks) {
+                    val taskName = task.getString("taskName") ?: ""
+                    val imageRef = storage.reference.child(taskName)
+                    imageRef.delete()
+                }
+            }
 
 
     }

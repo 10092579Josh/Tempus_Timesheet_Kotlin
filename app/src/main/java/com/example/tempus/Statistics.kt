@@ -25,7 +25,7 @@ class Statistics : AppCompatActivity() {
         }
         homebtn.setOnClickListener {
             val intent = Intent(this, Home::class.java)
-            intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+            intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
             startActivity(intent)
             overridePendingTransition(0, 0)
             finish()

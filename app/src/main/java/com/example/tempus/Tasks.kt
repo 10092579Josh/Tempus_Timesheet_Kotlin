@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,8 @@ import com.bumptech.glide.Glide
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import de.keyboardsurfer.android.widget.crouton.Crouton
+import de.keyboardsurfer.android.widget.crouton.Style
 import java.util.*
 
 class Tasks : AppCompatActivity() {
@@ -38,56 +41,62 @@ class Tasks : AppCompatActivity() {
         val date = findViewById<Button>(R.id.filterDates_btn)
 
         date.setOnClickListener {
-                val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
-                recyclerview.layoutManager = LinearLayoutManager(this)
-                val db = FirebaseFirestore.getInstance()
-                val itemsRef = db.collection("Tasks")
+            val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
+            recyclerview.layoutManager = LinearLayoutManager(this)
+            val db = FirebaseFirestore.getInstance()
+            val itemsRef = db.collection("TaskStorage")
 
-                val userid = FirebaseAuth.getInstance().currentUser?.uid
+            val userid = FirebaseAuth.getInstance().currentUser?.uid
 
-                val datequery = itemsRef.whereEqualTo("userid",userid.toString().trim())
-                    .whereGreaterThanOrEqualTo("date", DateClass.startDate)
-                    .whereLessThanOrEqualTo("date", DateClass.endDate)
+            val datequery = itemsRef.whereEqualTo("userIdTask", userid.toString().trim())
+                .whereGreaterThanOrEqualTo("dateAdded", DateClass.startDate)
+                .whereLessThanOrEqualTo("dateAdded", DateClass.endDate)
 
-                val task = datequery.get()
+            val task = datequery.get()
 
-                task.addOnSuccessListener { documents ->
+            task.addOnSuccessListener { documents ->
 
-                    val items = mutableListOf<ItemsViewModel>()
-                    if (documents.size() > 0) {
+                val items = mutableListOf<ItemsViewModel>()
+                if (documents.size() > 0) {
 
-                        for (document in documents) {
-                            val name = document.getString("taskname") ?: ""
-                            val description = document.getString("hours") ?: ""
-                            val sub = document.getString("catergorytask") ?: ""
-                            val date = document.getString("date") ?: ""
-                            val imageUrl = document.getString("image") ?: ""
-                            val item = ItemsViewModel(name, description,sub,date,imageUrl)
-                            items.add(item)
-                        }
-
-
-                        val sortedItems = items.sortedBy { it.date }
-                        try {
-
-                            val adapter = CustomAdapter(sortedItems.toMutableList())
-                            recyclerview.adapter = adapter
-                            adapter.notifyDataSetChanged()
-
-                        } catch (e: Exception) {
-
-
-                        }
-                    } else {
+                    for (document in documents) {
+                        val name = document.getString("taskName") ?: ""
+                        val description = document.getString("duration") ?: ""
+                        val sub = document.getString("categoryName") ?: ""
+                        val date = document.getString("dateAdded") ?: ""
+                        val imageUrl = document.getString("imageURL") ?: ""
+                        val item = ItemsViewModel(name, description, sub, date, imageUrl)
+                        items.add(item)
                     }
+                    Log.d("taskcheck",items.toString())
 
+                    val sortedItems = items.sortedBy { it.date }
+                    try {
+
+                        val adapter = CustomAdapter(sortedItems.toMutableList())
+                        recyclerview.adapter = adapter
+                        adapter.notifyDataSetChanged()
+
+                    } catch (e: Exception) {
+
+
+                    }
+                } else {
+                    val crouton = Crouton.makeText(this, "NO TASKS WITHIN THIS RANGE FOUND", Style.INFO)
+                    crouton.show()
                 }
+
+            }.addOnFailureListener()
+            {
+                val crouton = Crouton.makeText(this, "DATA ERROR:PLEASE CHECK CONNECTION OR CONTACT CUSTOMER SERVICES", Style.ALERT)
+                crouton.show()
             }
+        }
 
 
         cat.setOnClickListener {
             val intent = Intent(this, Home::class.java)
-            intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+            intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
             startActivity(intent)
             overridePendingTransition(0, 0)
             finish()
@@ -96,7 +105,7 @@ class Tasks : AppCompatActivity() {
 
         cats.setOnClickListener {
             val intent = Intent(this, Home::class.java)
-            intent.putExtra("home", getIntent().getIntExtra("home",R.layout.home))
+            intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
             startActivity(intent)
             overridePendingTransition(0, 0)
             finish()
@@ -119,14 +128,10 @@ class Tasks : AppCompatActivity() {
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(
-            this,
-            { _, year, month, dayOfMonth ->
+            this, { _, year, month, dayOfMonth ->
 
                 DateClass.startDate = "$dayOfMonth/${month + 1}/$year"
-            },
-            year,
-            month,
-            dayOfMonth
+            }, year, month, dayOfMonth
         )
         datePickerDialog.show()
     }
@@ -139,13 +144,9 @@ class Tasks : AppCompatActivity() {
         val taskdayOfMonth = taskcalendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(
-            this,
-            { _, year, month, dayOfMonth ->
+            this, { _, year, month, dayOfMonth ->
                 DateClass.endDate = "$dayOfMonth/${month + 1}/$year"
-            },
-            taskyear,
-            taskmonth,
-            taskdayOfMonth
+            }, taskyear, taskmonth, taskdayOfMonth
         )
         datePickerDialog.show()
     }
@@ -155,13 +156,13 @@ class Tasks : AppCompatActivity() {
         val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
         recyclerview.layoutManager = LinearLayoutManager(this)
         val db = FirebaseFirestore.getInstance()
-        val itemsRef = db.collection("Tasks")
+        val itemsRef = db.collection("TaskStorage")
 
 
         val userid = FirebaseAuth.getInstance().currentUser?.uid
 
 
-        val query = itemsRef.whereEqualTo("userid",userid.toString().trim())
+        val query = itemsRef.whereEqualTo("userIdTask", userid.toString().trim())
 
 
         val task = query.get()
@@ -172,12 +173,12 @@ class Tasks : AppCompatActivity() {
 
             for (document in documents) {
 
-                val name = document.getString("taskname") ?: ""
-                val description = document.getString("hours") ?: ""
-                val sub = document.getString("catergorytask") ?: ""
-                val date = document.getString("date") ?: ""
-                val imageUrl = document.getString("image") ?: ""
-                val item = ItemsViewModel(name, description,sub,date,imageUrl)
+                val name = document.getString("taskName") ?: ""
+                val description = document.getString("duration") ?: ""
+                val sub = document.getString("categoryName") ?: ""
+                val date = document.getString("dateAdded") ?: ""
+                val imageUrl = document.getString("imageURL") ?: ""
+                val item = ItemsViewModel(name, description, sub, date, imageUrl)
                 items.add(item)
             }
 
@@ -196,22 +197,22 @@ class Tasks : AppCompatActivity() {
     }
 
 
-    data class ItemsViewModel(val text: String, val hours: String, val sub: String, var date: String, val imageUrl: String)
+    data class ItemsViewModel(
+        val text: String, val hours: String, val sub: String, var date: String, val imageUrl: String
+    )
 
     class CustomAdapter(var myDataList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.tastk_tab, parent, false)
+            val view =
+                LayoutInflater.from(parent.context).inflate(R.layout.tastk_tab, parent, false)
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val itemsViewModel = myDataList[position]
-            Glide.with(holder.itemView)
-                .load(itemsViewModel.imageUrl)
-                .circleCrop()
+            Glide.with(holder.itemView).load(itemsViewModel.imageUrl).circleCrop()
                 .into(holder.imageView)
 
             holder.textView.text = itemsViewModel.text
@@ -222,8 +223,8 @@ class Tasks : AppCompatActivity() {
                 val clickedData = myDataList[position]
                 val context = holder.itemView.context
                 val intent = Intent(context, TaskPage::class.java)
-                intent.putExtra("task", clickedData.text)
-                intent.putExtra("hours", clickedData.hours)
+                intent.putExtra("taskName", clickedData.text)
+                intent.putExtra("duration", clickedData.hours)
                 val bundle = Bundle()
                 val bundle2 = Bundle()
 
@@ -246,9 +247,9 @@ class Tasks : AppCompatActivity() {
             val textView: TextView = itemView.findViewById(R.id.mTitle2)
             val textView2: TextView = itemView.findViewById(R.id.mHpurs)
             val textView3: TextView = itemView.findViewById(R.id.mSubtitle)
-            val imageView :ImageView = itemView.findViewById(R.id.task_item_image)
-          }
-      }
+            val imageView: ImageView = itemView.findViewById(R.id.task_item_image)
+        }
+    }
 
 
 }

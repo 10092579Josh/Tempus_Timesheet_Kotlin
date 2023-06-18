@@ -29,61 +29,61 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.load_screen)
-try {
-    progressBar = findViewById(R.id.progressBar)
-    percentageText = findViewById(R.id.percentageText)
-    progressText = findViewById(R.id.progressText2)
-    updateBar(progressBar, progressText, 25)
+        try {
+            progressBar = findViewById(R.id.progressBar)
+            percentageText = findViewById(R.id.percentageText)
+            progressText = findViewById(R.id.progressText2)
+            updateBar(progressBar, progressText, 25)
 
-    val auth = FirebaseAuth.getInstance()
-    val currentUser = auth.currentUser
-    Log.d("MyApp", "$currentUser")
-    if (currentUser != null) {
-        updateBar(progressBar, progressText, 50)
+            val auth = FirebaseAuth.getInstance()
+            val currentUser = auth.currentUser
+            Log.d("MyApp", "$currentUser")
+            if (currentUser != null) {
+                updateBar(progressBar, progressText, 50)
 
-        Log.d("MyApp", "Method X started")
-
-        populatefields()
-        updateBar(progressBar, progressText, 75)
-        val splashImageView = findViewById<ImageView>(R.id.splashImageView)
-        splashImageView.setImageResource(R.drawable.splash_screen_logo)
-
-        splashImageView.bringToFront()
-        splashImageView.invalidate()
-        updateBar(progressBar, progressText, 100)
-        Handler(Looper.getMainLooper()).postDelayed({
-            val homepage = Intent(this@SplashScreen, Home::class.java)
-            homepage.putExtra("home", R.layout.home)
-            startActivity(homepage)
-
-            finish()
-
-        }, SPLASH_DELAY)
-    } else {
-        updateBar(progressBar, progressText, 50)
-        val splashImageView = findViewById<ImageView>(R.id.splashImageView)
-        splashImageView.setImageResource(R.drawable.splash_screen_logo)
-
-        splashImageView.bringToFront()
-        splashImageView.invalidate()
-        updateBar(progressBar, progressText, 75)
-
-        Handler(Looper.getMainLooper()).postDelayed({
-
-            val loginpage = Intent(this@SplashScreen, Login::class.java)
-            loginpage.putExtra("login", R.layout.login)
+                Log.d("MyApp", "Method X started")
 
 
-            startActivity(loginpage)
-            finish()
+                updateBar(progressBar, progressText, 75)
+                val splashImageView = findViewById<ImageView>(R.id.splashImageView)
+                splashImageView.setImageResource(R.drawable.splash_screen_logo)
 
-        }, SPLASH_DELAY)
-        updateBar(progressBar, progressText, 100)
-    }
-}catch (E:Exception)
-{ val mesage = Exception()
-    Log.d("myapp","${mesage}")
-}
+                splashImageView.bringToFront()
+                splashImageView.invalidate()
+                updateBar(progressBar, progressText, 100)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val homepage = Intent(this@SplashScreen, Home::class.java)
+                    homepage.putExtra("home", R.layout.home)
+                    startActivity(homepage)
+
+                    finish()
+
+                }, SPLASH_DELAY)
+            } else {
+                updateBar(progressBar, progressText, 50)
+                val splashImageView = findViewById<ImageView>(R.id.splashImageView)
+                splashImageView.setImageResource(R.drawable.splash_screen_logo)
+
+                splashImageView.bringToFront()
+                splashImageView.invalidate()
+                updateBar(progressBar, progressText, 75)
+
+                Handler(Looper.getMainLooper()).postDelayed({
+
+                    val loginpage = Intent(this@SplashScreen, Login::class.java)
+                    loginpage.putExtra("login", R.layout.login)
+
+
+                    startActivity(loginpage)
+                    finish()
+
+                }, SPLASH_DELAY)
+                updateBar(progressBar, progressText, 100)
+            }
+        } catch (E: Exception) {
+            val mesage = Exception()
+            Log.d("myapp", "${mesage}")
+        }
     }
 
     private fun updateBar(progressBar: ProgressBar, progressText: TextView, progress: Int) {
@@ -96,46 +96,11 @@ try {
             when (currentProgress) {
                 in 0..25 -> progressText.text = "Downloading data..."
                 in 26..50 -> progressText.text = "Optimizing layouts..."
-                in 51..75 -> progressText.text = "Installing porn..."
-                in 76..100 -> progressText.text = "Done!"
+                in 51..75 -> progressText.text = "Organising Your Life ;)..."
+                in 76..100 -> progressText.text = "And Here we GO!"
             }
         }
         Animator.start()
     }
-    fun populatefields()
-    {
 
-
-        val userid = FirebaseAuth.getInstance().currentUser?.uid
-        val database = Firebase.database
-        val myRef = database.getReference("users")
-
-
-
-        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (data in dataSnapshot.children) {
-                    val userId = data.child("userid").getValue(String::class.java)
-
-                    if (userId.toString().trim() == userid.toString().trim()) {
-
-                        AppSettings.preloads.names = data.child("name").getValue(String::class.java).toString()
-                        AppSettings.preloads.emails = data.child("email").getValue(String::class.java).toString()
-                        AppSettings.preloads.surname = data.child("surname").getValue(String::class.java).toString()
-                        AppSettings.preloads.usersname = data.child("usersname").getValue(String::class.java).toString()
-                        AppSettings.preloads.conpass = data.child("confirm").getValue(String::class.java).toString()
-                        AppSettings.preloads.pass = data.child("password").getValue(String::class.java).toString()
-
-                    }
-
-
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle error
-            }
-        })
-
-    }
 }

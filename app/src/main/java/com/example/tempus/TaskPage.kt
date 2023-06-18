@@ -50,7 +50,7 @@ class TaskPage: AppCompatActivity() {
                     when (which) {
 
                         0 -> camera.launch(null)
-                        1 -> GalleryContent.launch("image/*")
+                        1 -> GalleryContent.launch("imageURL/*")
                     }
 
                 }
@@ -124,7 +124,7 @@ class TaskPage: AppCompatActivity() {
             val date = findViewById<TextView>(R.id.date_display)
             val taskimage = findViewById<ImageView>(R.id.task_image)
             val position = intent.getIntExtra("position1", 0)
-            val hours = intent.getStringExtra("hours")
+            val hours = intent.getStringExtra("duration")
             val task = intent.getStringExtra("task")
             val rowIndex = position
             val itemId = intent.getStringExtra("itemId")
@@ -136,9 +136,9 @@ class TaskPage: AppCompatActivity() {
 
             val userid = FirebaseAuth.getInstance().currentUser?.uid
 // Query Firestore to get the data for the clicked item
-            db.collection("Tasks")
-                .whereEqualTo("userid",userid.toString().trim())
-                .whereEqualTo("taskname", itemId)
+            db.collection("TaskStorage")
+                .whereEqualTo("userIdTask",userid.toString().trim())
+                .whereEqualTo("taskName", itemId)
                 .get()
                 .addOnSuccessListener { documents ->
                     // Get the last document in the result, which corresponds to the clicked item
@@ -148,16 +148,16 @@ class TaskPage: AppCompatActivity() {
 
 
                             // Use the data from Firestore to populate the fields in your form
-                            tname.text = document.getString("taskname")
-                            catname.text = document.getString("categorytask")
+                            tname.text = document.getString("taskName")
+                            catname.text = document.getString("categoryName")
                             desc.text = document.getString("description")
-                            sdate.text = document.getString("startime")
-                            edate.text = document.getString("endtime")
-                            hours2.text = document.getString("hours")
-                            min.text = document.getString("mingoal")
-                            max.text = document.getString("maxgoal")
-                            date.text = document.getString("date")
-                        val url = document.getString("image")
+                            sdate.text = document.getString("starTime")
+                            edate.text = document.getString("endTime")
+                            hours2.text = document.getString("duration")
+                            min.text = document.getString("minGoal")
+                            max.text = document.getString("maxGoal")
+                            date.text = document.getString("dateAdded")
+                        val url = document.getString("imageURL")
 
 
                         Glide.with(this)

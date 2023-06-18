@@ -68,19 +68,16 @@ class TaskForm:AppCompatActivity() {
 
                 }
                 else if (task.text.toString() != null) {
-                    // create an AlertDialog to let the user choose between the camera and the gallery
                     val builder = AlertDialog.Builder(this)
                     builder.setTitle("Choose an option")
                     builder.setItems(arrayOf("Take a photo", "Pick from gallery")) { _, which ->
                         when (which) {
 
                             0 -> camera.launch(null)
-                            1 -> GalleryContent.launch("image/*")
+                            1 -> GalleryContent.launch("imageURL/*")
                         }
                     }
                     val dialog = builder.create()
-
-// show the dialog
                     dialog.show()
                 }
 
@@ -280,14 +277,14 @@ class TaskForm:AppCompatActivity() {
             val spinnerList = mutableListOf<String>()
 
 
-            db.collection("Categories") // Replace with the name of your collection
-                .whereEqualTo("userid", userid)
+            db.collection("CategoryStorage")
+                .whereEqualTo("userIdCat", userid)
                 .get()
 
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
                         val value =
-                            document.getString("catname") // Replace with the name of the field you want to add to the spinner
+                            document.getString("categoryID")
                         if (value != null) {
                             spinnerList.add(value)
                         }
@@ -312,7 +309,7 @@ class TaskForm:AppCompatActivity() {
 
 
 
-// get the download URL of the uploaded image
+// get the download URL of the uploaded imageURL
 
             val maximumGoalSpinner = findViewById<Spinner>(R.id.maximumGoalSpinner)
             val spinnerArray = (1..24).toList()
@@ -366,7 +363,7 @@ class TaskForm:AppCompatActivity() {
                         storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
                             picture = downloadUrl.toString()
 
-                            val itemsadd = firestore.collection("Tasks")
+                            val itemsadd = firestore.collection("TaskStorage")
 
                             val taskname = task.text.toString().trim()
                             val catergorytask = selectedItem.trim()
@@ -398,17 +395,17 @@ class TaskForm:AppCompatActivity() {
 // calculate difference in minutes
                             val diffMinutes = (endTotalMinutes - startTotalMinutes).absoluteValue
 
-// convert difference back to hours and minutes
+// convert difference back to duration and minutes
                             val diffHours = diffMinutes / 60
                             val diffRemainingMinutes = diffMinutes % 60
 
                             val categoryName = selectedItem.trim()
 
                             val db = Firebase.firestore
-                            val categoryRef = db.collection("Categories").document(categoryName)
+                            val categoryRef = db.collection("CategoryStorage").document(categoryName)
                             categoryRef.get()
                                 .addOnSuccessListener { document ->
-                                    val CategoryHours = document.get("cathours")
+                                    val CategoryHours = document.get("totalHours")
                                     val currentsplit = CategoryHours.toString().split(":")
                                     val HoursValue = currentsplit[0].toInt()
                                     val MinutesValue = currentsplit[1].toInt()
@@ -417,7 +414,7 @@ class TaskForm:AppCompatActivity() {
                                     val newHoursValue = newTotalMinutes / 60
                                     val newRemainingMinutesValue = newTotalMinutes % 60
                                     categoryRef.update(
-                                        "cathours",
+                                        "totalHours",
                                         "%02d:%02d".format(newHoursValue, newRemainingMinutesValue)
                                     )
                                 }
@@ -437,7 +434,7 @@ if(picture.isNullOrEmpty()){
     val message = "ERROR NO IMAGE CHOSEN"
     Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()}
                             else {
-    val tasksadd = taskstore(
+    val tasksadd = TaskStorage(
         taskname,
         catergorytask,
         description,

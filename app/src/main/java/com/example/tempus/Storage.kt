@@ -3,40 +3,41 @@ package com.example.tempus
 
 data class Storage(
 
-    val stuff:String
+    val stuff: String
 
 
 )
-data class taskstore(
-      val taskname:String,
-      val catergorytask:String,
-      val description:String,
-      val startime:String,
-      val endtime:String,
-      val hours:String,
-      val mingoal:String,
-      val maxgoal:String,
-      val date:String,
-      val image:String,
-      val tabname:String,
-      val userid:String
+
+data class TaskStorage(
+    val taskName: String,
+    val categoryName: String,
+    val description: String,
+    val starTime: String,
+    val endTime: String,
+    val duration: String,
+    val minGoal: String,
+    val maxGoal: String,
+    val dateAdded: String,
+    val imageURL: String,
+    val tabID: String,
+    val userIdTask: String
 
 )
 
-data class catergories
+data class CategoryStorage
     (
-    val catname:String,
-    val cathours : String,
-    val userid:String
+    val categoryID: String,
+    val totalHours: String,
+    val userIdCat: String
 )
+
 data class User(
-    val name: String,
+    val firstname: String,
     val surname: String,
-    val usersname: String,
-    val email: String,
+    val displayname: String,
+    val emailaddress: String,
     val password: String,
-    val confirm: String,
+    val confirmkey: String,
     val userid: String
 
-
-    )
+)

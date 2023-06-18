@@ -82,15 +82,15 @@ class CatergoryForm: AppCompatActivity() {
                         // Get the current user's unique ID
                         val firestore = Firebase.firestore
                         val userid = Firebase.auth.currentUser?.uid
-                        val itemsadd = firestore.collection("Categories")
+                        val itemsadd = firestore.collection("CategoryStorage")
 
 
                         val catname = catnames.text.toString().trim()
-                        val cathours = "00:00"
+                        val TotalHours = "00:00"
 
 
 // Add as many items
-                        val cat = catergories(catname,cathours,userid.toString().trim())
+                        val cat = CategoryStorage(catname,TotalHours,userid.toString().trim())
 
                         val docRef = itemsadd.document(catname)
                         docRef.set(cat)
