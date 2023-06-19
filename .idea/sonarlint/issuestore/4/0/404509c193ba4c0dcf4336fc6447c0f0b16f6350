@@ -1,0 +1,20 @@
+
+rkotlin:S117Ğ"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(­‘Ğ¢8µ€öøŒ1
+wkotlin:S117Ó"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(©Ğ½şÿÿÿÿ8µ€öøŒ1
+rkotlin:S117×"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(˜ìÛ 8µ€öøŒ1
+wkotlin:S117Ñ"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(íÒì¼ùÿÿÿÿ8µ€öøŒ1
+wkotlin:S117Ó"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ØŠ¦ıÿÿÿÿ8¶€öøŒ1
+rkotlin:S117Ô"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ç¼Ú¶8¶€öøŒ1
+Mkotlin:S108œ")Either remove or fill this block of code.(ŸÈ–±üÿÿÿÿ8¼€öøŒ1
+Lkotlin:S1481Ä",Remove this unused "myArray" local variable.(´¹Óå8Â€öøŒ1
+okotlin:S1192„"JDefine a constant instead of duplicating this literal "%02d:%02d" 4 times.(°ç÷“üÿÿÿÿ8Æ€öøŒ1
+wkotlin:S3776À"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(ó£×»ùÿÿÿÿ8È€öøŒ1
+bkotlin:S6511€"=Merge chained "if" statements into a single "when" statement.(ğÇá¢úÿÿÿÿ8Ì€öøŒ1
+Qkotlin:S6518å",Replace function call with indexed accessor.(áğÔûÿÿÿÿ8Ì€öøŒ1
+Qkotlin:S6518æ",Replace function call with indexed accessor.(€íÙóüÿÿÿÿ8Ì€öøŒ1
+Qkotlin:S6518ç",Replace function call with indexed accessor.(†–ÔÕşÿÿÿÿ8Ì€öøŒ1
+Qkotlin:S6518ş",Replace function call with indexed accessor.(ÁÅ‚Éıÿÿÿÿ8Ì€öøŒ1
+Qkotlin:S6518ÿ",Replace function call with indexed accessor.(ä€‘Ãûÿÿÿÿ8Ì€öøŒ1
+Qkotlin:S6518 ",Replace function call with indexed accessor.(ÁÅ‚Éıÿÿÿÿ8Ì€öøŒ1
+Qkotlin:S6518¡",Replace function call with indexed accessor.(ä€‘Ãûÿÿÿÿ8Ì€öøŒ1
+Qkotlin:S6518Ñ",Replace function call with indexed accessor.(íÒì¼ùÿÿÿÿ8Ì€öøŒ1
