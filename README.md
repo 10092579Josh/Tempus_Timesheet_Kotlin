@@ -138,10 +138,16 @@ added ability to change email and password in security authentication
 added security checks for changed details and deleted accounts or outdated tokens 
 added front end graph
 added formatting tool for code
+added bottom up shortcut
+add new stark code
+tested tablayout as an option
+kiolin updated front end
 fixed error class for errors 
 fixed crashing on null time
 code has been formatted
 redesigned database names
+redesigned code names to be clearer
 moved persistent login to registration as well to speed up loading 
 users can no longer remain in app after devalidation 
 details captured type messages will not show except on success 
+removed unused files
