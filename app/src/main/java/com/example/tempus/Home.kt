@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +36,7 @@ import com.google.firebase.ktx.Firebase
 // THIS PAGE DEALS WITH THE CATEGORY
 // THIS POPULATES THE RECYCLER VIEW
 class Home : AppCompatActivity() {
+    private var selectedTabIndex = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val homeID = intent.getIntExtra("home", 0)
@@ -42,6 +44,8 @@ class Home : AppCompatActivity() {
         setContentView(homelayout)
         SecurGuard()
         populatefields()
+// Set up the ViewPager and the TabLayout
+
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
         if (sharedPreferences.getBoolean("isFirstLogin", true)) {
             loggedonnotification()
@@ -76,7 +80,6 @@ class Home : AppCompatActivity() {
                 finish()
 
             }
-
             homebtn.setOnClickListener {
 
                 val intent = Intent(this, Home::class.java)
@@ -114,16 +117,56 @@ class Home : AppCompatActivity() {
 
             addbtn.setOnClickListener()
             {
-                val cform = Intent(this, CatergoryForm::class.java)
-                startActivity(cform)
-                overridePendingTransition(0, 0)
-                finish()
+
+
+                val Shortcut = BottomSheetDialog(this)
+                val ShortcutView = layoutInflater.inflate(R.layout.shortcut, null)
+
+                Shortcut.setContentView(ShortcutView)
+
+                Shortcut.show()
+
+                val CreateNewCat = ShortcutView.findViewById<Button>(R.id.add_category)
+
+                CreateNewCat.setOnClickListener {
+                    val Newform = Intent(this, CatergoryForm::class.java)
+                    startActivity(Newform)
+                    overridePendingTransition(0, 0)
+                    finish()
+
+                    Shortcut.dismiss()
+                }
+
+                val CreateNewTask = ShortcutView.findViewById<Button>(R.id.add_task)
+                CreateNewTask.setOnClickListener {
+
+                    val NewTask = Intent(this, TaskForm::class.java)
+                    startActivity(NewTask)
+                    overridePendingTransition(0, 0)
+                    finish()
+
+                    Shortcut.dismiss()
+                }
+
+                val AddNewGoals = ShortcutView.findViewById<Button>(R.id.add_goals)
+                AddNewGoals.setOnClickListener {
+             // to be implemented
+
+                    Shortcut.dismiss()
+                }
 
 
             }
         } catch (e: Exception) {
             Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
         }
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Save the selected tab index
+        outState.putInt("selectedTabIndex", selectedTabIndex)
     }
 
     private fun SecurGuard() {
@@ -338,7 +381,7 @@ class Home : AppCompatActivity() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.rr, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.subtask, parent, false)
             return ViewHolder(view)
         }
 
@@ -483,7 +526,6 @@ class Home : AppCompatActivity() {
         })
 
     }
+
+
 }
-
-
-

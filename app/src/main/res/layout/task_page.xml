@@ -18,24 +18,16 @@
             android:layout_height="70dp"
             android:src="@drawable/logo" />
 
-        <ImageView
+        <TextView
             android:id="@+id/tempus"
             android:layout_width="300dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_toRightOf="@id/logo"
-
-            android:src="@drawable/tempus_title" />
-
-        <ImageButton
-            android:id="@+id/back_btn"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/search_icon"
-            android:contentDescription="Search"
-            android:paddingRight="100dp"
-            android:text="hi" />
+            android:fontFamily="serif"
+            android:text="TASK PAGE"
+            android:textColor="@color/black"
+            android:textSize="50sp" />
 
     </RelativeLayout>
 

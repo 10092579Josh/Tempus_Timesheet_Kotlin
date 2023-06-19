@@ -50,9 +50,9 @@ class AppSettings : AppCompatActivity() {
 
         deleteuser.setOnClickListener()
         {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Are you sure?")
-            builder.setItems(arrayOf("Yes", "Cancel")) { _, which ->
+            val userdeletion = AlertDialog.Builder(this)
+            userdeletion.setTitle("Are you sure?")
+            userdeletion.setItems(arrayOf("Yes", "Cancel")) { _, which ->
                 when (which) {
 
                     0 -> Dialog.BUTTON_NEGATIVE
@@ -61,15 +61,15 @@ class AppSettings : AppCompatActivity() {
 
             }
 
-            val dialog = builder.create()
+            val dialog = userdeletion.create()
             dialog.show()
 
 
         }
         homebtn.setOnClickListener {
-            val intent = Intent(this, Home::class.java)
-            intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
-            startActivity(intent)
+            val homepage = Intent(this, Home::class.java)
+            homepage.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+            startActivity(homepage)
             overridePendingTransition(0, 0)
             finish()
         }
@@ -95,8 +95,8 @@ class AppSettings : AppCompatActivity() {
             finish()
         }
         addbtn.setOnClickListener() {
-            val tform = Intent(this, TaskForm::class.java)
-            startActivity(tform)
+            val taskform = Intent(this, TaskForm::class.java)
+            startActivity(taskform)
             overridePendingTransition(0, 0)
             finish()
 
@@ -110,10 +110,10 @@ class AppSettings : AppCompatActivity() {
             val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
             preloads.usersname = null
-            val intent = Intent(this@AppSettings, Login::class.java)
-            intent.putExtra("login", R.layout.login)
+            val loginpage = Intent(this@AppSettings, Login::class.java)
+            loginpage.putExtra("login", R.layout.login)
             overridePendingTransition(0, 0)
-            startActivity(intent)
+            startActivity(loginpage)
         }
         accsetting.setOnClickListener() {
             if (preloads.usersname == null) {
@@ -129,9 +129,9 @@ class AppSettings : AppCompatActivity() {
         }
         deleteappdata.setOnClickListener() {
 
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Choose an option")
-            builder.setItems(
+            val deleteoptions = AlertDialog.Builder(this)
+            deleteoptions.setTitle("Choose an option")
+            deleteoptions.setItems(
                 arrayOf("Delete all Images", "Delete Tasks and Images", "Wipe Application DATA")
             ) { _, which ->
                 when (which) {
@@ -144,12 +144,12 @@ class AppSettings : AppCompatActivity() {
 
 
             }
-            val dialog = builder.create()
+            val dialog = deleteoptions.create()
             dialog.show()
         }
     }
 
-    fun Security() {
+    private fun Security() {
 
         val auth = FirebaseAuth.getInstance()
         auth.addAuthStateListener { firebaseAuth ->
@@ -180,10 +180,10 @@ class AppSettings : AppCompatActivity() {
                             getSharedPreferences("preferences", Context.MODE_PRIVATE)
                         sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
                         preloads.usersname = null
-                        val intent = Intent(this@AppSettings, Login::class.java)
-                        intent.putExtra("login", R.layout.login)
+                        val loginpage = Intent(this@AppSettings, Login::class.java)
+                        loginpage.putExtra("login", R.layout.login)
                         overridePendingTransition(0, 0)
-                        startActivity(intent)
+                        startActivity(loginpage)
                     }
                 }
             }

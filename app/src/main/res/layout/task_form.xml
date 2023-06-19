@@ -17,24 +17,20 @@
             android:layout_height="70dp"
             android:src="@drawable/logo" />
 
-        <ImageView
+        <TextView
             android:id="@+id/tempus"
             android:layout_width="300dp"
             android:layout_height="70dp"
+            android:text="TEMPUS"
+            android:fontFamily="serif"
             android:layout_toLeftOf="@id/search_btn"
             android:layout_toRightOf="@id/logo"
+            android:textSize="40sp"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
             android:src="@drawable/tempus_title" />
 
-        <ImageButton
-            android:id="@+id/search_btn"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/search_icon"
-            android:contentDescription="Search"
-            android:paddingRight="100dp"
-            android:text="hi" />
+
 
 
     </RelativeLayout>
@@ -44,13 +40,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/top_menu"
-        android:background="@drawable/sharp_square_background"
-
         android:padding="16dp"
         android:text="Create Task"
-        android:textColor="@color/purple_700"
+        android:textColor="@color/black"
         android:textSize="28sp"
+        android:fontFamily="serif"
         android:textStyle="bold" />
+
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

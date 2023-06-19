@@ -14,9 +14,15 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,14 +37,17 @@ class Tasks : AppCompatActivity() {
         var endDate = "dd/MM/yyyy"
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tasks_display)
         Security()
         print()
-        val cat = findViewById<Button>(R.id.category_selected)
+
         val addbtn = findViewById<ImageButton>(R.id.addbtn)
+
+
+        val cat = findViewById<Button>(R.id.category_selected)
+
         val cats = findViewById<Button>(R.id.task_selected)
         val date = findViewById<Button>(R.id.filterDates_btn)
 
@@ -99,6 +108,7 @@ class Tasks : AppCompatActivity() {
                 crouton.show()
             }
         }
+
 
 
         cat.setOnClickListener {
