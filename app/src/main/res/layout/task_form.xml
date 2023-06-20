@@ -23,7 +23,6 @@
             android:layout_height="70dp"
             android:text="TEMPUS"
             android:fontFamily="serif"
-            android:layout_toLeftOf="@id/search_btn"
             android:layout_toRightOf="@id/logo"
             android:textSize="40sp"
             android:textColor="@color/black"

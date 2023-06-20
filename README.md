@@ -151,3 +151,11 @@ moved persistent login to registration as well to speed up loading
 users can no longer remain in app after devalidation 
 details captured type messages will not show except on success 
 removed unused files
+
+Patch 5:
+completed graph 
+added graph colours
+added fonts
+added size
+added data 
+added customisation

@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#D6D6D6"
-            android:padding="10dp"
+
             tools:context=".StatsFragment">
 
             <GridLayout
@@ -52,15 +52,15 @@
                 android:background="#D6D6D6"
                 android:columnCount="1"
                 android:orientation="vertical"
-                android:rowCount="2">
+                android:rowCount="1">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="370dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="500dp"
                     android:layout_row="0"
 
                     android:layout_column="0"
-                    android:layout_margin="10dp"
+
                     app:cardCornerRadius="10dp"
                     app:cardElevation="10dp">
 
@@ -69,15 +69,8 @@
                         android:layout_height="match_parent">
 
 
-                        <TextView
-                            android:id="@+id/graph_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="GRAPH"
-                            android:textAlignment="center"
-                            android:textSize="20dp" />
 
-                        <com.github.mikephil.charting.charts.LineChart
+                        <com.github.mikephil.charting.charts.CombinedChart
                             android:id="@+id/statsChart"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -87,125 +80,6 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_row="1"
-                    android:layout_column="0"
-                    android:layout_margin="10dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="10dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/overview"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="OVERVIEW"
-                            android:textAlignment="center"
-                            android:textSize="20dp" />
-
-                        <TextView
-                            android:id="@+id/total"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_below="@+id/overview"
-                            android:paddingLeft="20dp"
-                            android:paddingTop="10dp"
-                            android:text="Total Hours:"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-
-                        <TextView
-                            android:id="@+id/max"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_below="@+id/total"
-                            android:paddingLeft="20dp"
-                            android:paddingTop="10dp"
-                            android:text="Maximum:"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-
-                        <TextView
-                            android:id="@+id/min"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_below="@+id/max"
-                            android:paddingLeft="20dp"
-                            android:paddingTop="10dp"
-                            android:text="Minimum:"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-
-                        <TextView
-                            android:id="@+id/stats_breaks"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_below="@+id/min"
-                            android:paddingLeft="20dp"
-                            android:paddingTop="10dp"
-                            android:text="Breaks:"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-
-                        <TextView
-                            android:id="@+id/total_display"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_below="@+id/overview"
-                            android:layout_alignParentEnd="true"
-                            android:layout_toRightOf="@+id/total"
-                            android:paddingLeft="20dp"
-                            android:paddingTop="10dp"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-
-                        <TextView
-                            android:id="@+id/max_display"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_below="@+id/total"
-                            android:layout_alignParentEnd="true"
-                            android:layout_toRightOf="@+id/max"
-                            android:paddingLeft="20dp"
-                            android:paddingTop="10dp"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-
-                        <TextView
-                            android:id="@+id/min_display"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_below="@+id/max"
-                            android:layout_alignParentEnd="true"
-                            android:layout_toRightOf="@+id/min"
-                            android:paddingLeft="20dp"
-                            android:paddingTop="10dp"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-
-
-                        <TextView
-                            android:id="@+id/breaks_display"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_below="@+id/min_display"
-                            android:layout_alignParentEnd="true"
-                            android:layout_toRightOf="@+id/stats_breaks"
-                            android:paddingLeft="20dp"
-                            android:paddingTop="10dp"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-
-
-                    </RelativeLayout>
-
-
-                </androidx.cardview.widget.CardView>
 
             </GridLayout>
 
