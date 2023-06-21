@@ -1,6 +1,8 @@
 package com.example.tempus
 
 import android.app.NotificationChannel
+import android.graphics.Canvas
+import androidx.recyclerview.widget.ItemTouchHelper
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -18,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -150,7 +153,7 @@ class Home : AppCompatActivity() {
 
                 val AddNewGoals = ShortcutView.findViewById<Button>(R.id.add_goals)
                 AddNewGoals.setOnClickListener {
-             // to be implemented
+                    // to be implemented
 
                     Shortcut.dismiss()
                 }
@@ -251,26 +254,95 @@ class Home : AppCompatActivity() {
                 val adapter = CustomAdapter(sortedItems as MutableList<ItemsViewModel>)
                 adapter.onTaskClickListener = { _ ->
 
-
                 }
                 recyclerview.adapter = adapter
+
+                val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                        return false
+                    }
+
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                        val position = viewHolder.adapterPosition
+                        val item = sortedItems[position]
+
+                        // Remove the item from the RecyclerView
+                        sortedItems.removeAt(position)
+                        adapter.notifyItemRemoved(position)
+
+                        // Delete the item from the database
+                        val databaseRef = itemsRef.document(item.text)
+                        databaseRef.delete()
+                    }
+
+                    // Add swipe action buttons
+                    override fun onChildDraw(
+                        c: Canvas,
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        dX: Float,
+                        dY: Float,
+                        actionState: Int,
+                        isCurrentlyActive: Boolean
+                    ) {
+                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+
+                        val itemView = viewHolder.itemView
+
+                        if (dX > 0) {
+                            // Swiping to the right (edit action)
+                            val editIcon = ContextCompat.getDrawable(this@Home, R.drawable.edit_icon)
+                            val editIconMargin = (itemView.height - editIcon?.intrinsicHeight!!) / 2
+                            val editIconTop = itemView.top + editIconMargin
+                            val editIconBottom = editIconTop + editIcon.intrinsicHeight
+                            val editIconLeft = itemView.left + editIconMargin
+                            val editIconRight = itemView.left + editIconMargin + editIcon.intrinsicWidth
+
+                            editIcon?.setBounds(editIconLeft, editIconTop, editIconRight, editIconBottom)
+
+                            val editBackground = ContextCompat.getDrawable(this@Home, R.drawable.edit_button_background)
+                            editBackground?.setBounds(
+                                itemView.left,
+                                itemView.top,
+                                itemView.left + dX.toInt(),
+                                itemView.bottom
+                            )
+                            editBackground?.draw(c)
+                            editIcon?.draw(c)
+                        } else {
+                            // Swiping to the left (delete action)
+                            val deleteIcon = ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)
+                            val deleteIconMargin = (itemView.height - deleteIcon?.intrinsicHeight!!) / 2
+                            val deleteIconTop = itemView.top + deleteIconMargin
+                            val deleteIconBottom = deleteIconTop + deleteIcon.intrinsicHeight
+                            val deleteIconLeft = itemView.right - deleteIconMargin - deleteIcon.intrinsicWidth
+                            val deleteIconRight = itemView.right - deleteIconMargin
+
+                            deleteIcon?.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
+
+                            val deleteBackground = ContextCompat.getDrawable(this@Home, R.drawable.delete_button_background)
+                            deleteBackground?.setBounds(
+                                itemView.right + dX.toInt(),
+                                itemView.top,
+                                itemView.right,
+                                itemView.bottom
+                            )
+                            deleteBackground?.draw(c)
+                            deleteIcon?.draw(c)
+                        }
+                    }
+                }
+
+                val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+                itemTouchHelper.attachToRecyclerView(recyclerview)
             } catch (e: Exception) {
             }
         }
-
-
     }
+
 
 
     data class Task(val name: String, val hours2: String)
-
-    fun fix() {
-        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
-        val layoutParams = tabLayout.layoutParams
-        layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
-        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        tabLayout.layoutParams = layoutParams
-    }
 
     data class ItemsViewModel(val text: String, val hours: String)
 
@@ -523,9 +595,9 @@ class Home : AppCompatActivity() {
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
+
         })
 
+
     }
-
-
 }

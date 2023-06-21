@@ -2,13 +2,17 @@ package com.example.tempus
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.ColorMatrix
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.blue
 import androidx.core.graphics.red
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -123,19 +127,19 @@ class Statistics : AppCompatActivity() {
                 mags.add(TempusMaxgoal.toFloat())
                 usertks.add(task)
                 datedatabase.add(whenadded)
-                compList.add(12.0f)
+                compList.add(3.0f)
                 durationList.add(graphpoints)
                 Log.d("dateslist", "$datedatabase")
                 Log.d("datesadded", "$whenadded")
             }
-            val test = 12.0f
+            val test = 3.0f
 
             for (h in durationList.indices) {
                 val dateadded = dparse.parse(datedatabase[h])
                 val task = usertks[h]
                 val taskIndex = usertks.indexOf(task)
                 val dayrange = (dateadded.time - startDate.time) / (24 * 60 * 60 * 1000)
-                val barEntry = BarEntry(taskIndex.toFloat(), durationList[h], datedatabase[h])
+                val barEntry = BarEntry(taskIndex.toFloat(), floatArrayOf( compList[h],durationList[h]))
                 accreditedhours.add(barEntry)
                 finisedhours.add(Entry(taskIndex.toFloat(), durationList[h]))
                 mgoals.add(Entry(taskIndex.toFloat(), mings[h]))
@@ -143,18 +147,33 @@ class Statistics : AppCompatActivity() {
 
             }
             val mx = LineDataSet(axgoals,"Max goals")
-            mx.setColors(Color.RED)
+            mx.setColors(Color.GREEN)
             mx.valueTextSize = 16f
+            mx.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+            mx.lineWidth = 3f
+            mx.circleRadius = 5f
+            mx.circleHoleRadius = 5f
+            mx.setCircleColor(Color.rgb(2,69,30))
             val m = LineDataSet(mgoals,"Min goals")
-            m.color.red
+            m.setColors(Color.rgb(248,30,30))
             m.valueTextSize = 16f
+            m.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+            m.lineWidth = 3f
+            m.circleHoleRadius = 5f
+            m.circleRadius = 5f
+            m.setCircleColor((Color.rgb(189,4,4)))
+
             val hoursfinihed = LineDataSet(finisedhours, "Completed Hours")
-            hoursfinihed.color = Color.GREEN
-hoursfinihed.valueTextSize =16f
+            hoursfinihed.color = Color.rgb(98,0,234)
+            hoursfinihed.valueTextSize =16f
+            hoursfinihed.setCircleColor(Color.rgb(25,1,58))
+            hoursfinihed.circleRadius = 5f
+            hoursfinihed.circleHoleRadius = 5f
 
-            val accumolatedhours = BarDataSet(accreditedhours, "Allocated Hours")
-            accumolatedhours.color = Color.DKGRAY
+            val accumolatedhours = BarDataSet(accreditedhours, "")
 
+accumolatedhours.setColors(Color.LTGRAY,Color.DKGRAY,)
+accumolatedhours.valueTextColor = Color.CYAN
             accumolatedhours.valueTextSize = 16f
             val barData = BarData(accumolatedhours)
             barData.barWidth = 0.6f // Set the width of the bars
@@ -170,14 +189,22 @@ hoursfinihed.valueTextSize =16f
 
             combinedData.setData(lineData)
             combinedData.setData(barData)
-
+            Tempustats.legend.resetCustom()
+            val legendEntries = Tempustats.legend.entries.toMutableList()
+            legendEntries.add(LegendEntry("min goals", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, Color.rgb(248,30,30)))
+            legendEntries.add(LegendEntry("max goals", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, Color.GREEN))
+            legendEntries.add(LegendEntry("allocated hours", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, Color.DKGRAY))
+            legendEntries.add(LegendEntry("completed hours", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, Color.rgb(98,0,234)))
+            legendEntries.add(LegendEntry("breaks", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, Color.MAGENTA))
+            Tempustats.legend.setCustom(legendEntries)
+            Tempustats.legend.textSize = 10.5f
             Tempustats.data = combinedData
             Tempustats.isScaleXEnabled = true
             Tempustats.isScaleYEnabled = false
             Tempustats.isDragEnabled = true
 
             Tempustats.setVisibleXRangeMaximum(5f)
-            Tempustats.xAxis.textSize = 10f
+            Tempustats.xAxis.textSize = 9.5f
             Tempustats.xAxis.xOffset = 3f
             Tempustats.xAxis.yOffset = 0f
             Tempustats.xAxis.granularity = 1f

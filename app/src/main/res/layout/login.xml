@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="sign in"
-            android:textColor="@color/white">
+            android:textColor="#19013A">
 
         </Button>
 

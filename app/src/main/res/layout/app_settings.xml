@@ -23,8 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_toRightOf="@id/logo"
-            android:fontFamily="sans-serif-condensed-light"
+            android:fontFamily="serif"
             android:text="SETTINGS"
+            android:textColor="@color/black"
             android:textSize="45sp" />
 
     </RelativeLayout>

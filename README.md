@@ -159,3 +159,7 @@ added fonts
 added size
 added data 
 added customisation
+added swipe to delete 
+added breaks on top of allocated hours bar 
+added final customisation for graph
+added timer code

@@ -17,10 +17,15 @@
             android:layout_height="70dp"
             android:src="@drawable/logo" />
 
-        <ImageView
+        <TextView
             android:id="@+id/tempus"
             android:layout_width="290dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="TEMPUS"
+            android:fontFamily="serif"
+            android:textColor="@color/black"
+            android:textSize="50sp"
             android:layout_toRightOf="@id/logo"
             android:src="@drawable/tempus_title" />
 

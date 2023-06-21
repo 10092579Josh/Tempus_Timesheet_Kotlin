@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#D6D6D6"
-
+            android:padding="10dp"
             tools:context=".StatsFragment">
 
             <GridLayout
@@ -56,13 +56,13 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
-                    android:layout_height="500dp"
+                    android:layout_height="match_parent"
                     android:layout_row="0"
 
                     android:layout_column="0"
 
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="10dp">
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="20dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"

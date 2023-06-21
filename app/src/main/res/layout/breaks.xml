@@ -15,35 +15,31 @@
             android:id="@+id/logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/tempus"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_height="100dp"
             android:layout_toRightOf="@id/logo"
-            android:fontFamily="serif"
-            android:text="BREAKS"
-            android:textColor="@color/black"
-            android:textSize="50sp" />
+            android:src="@drawable/tempus_title"/>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottom_menu"
-        android:layout_below="@id/top_menu">
+        android:layout_below="@id/top_menu"
+        android:layout_above="@id/bottom_menu">
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            tools:context=".BreaksFragment"
             android:background="#D6D6D6"
-            android:padding="20dp"
-            tools:context=".BreaksFragment">
+            android:padding="20dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -60,25 +56,25 @@
                         android:id="@+id/break_name"
                         android:layout_width="120dp"
                         android:layout_height="50dp"
-                        android:background="@color/white"
-                        android:gravity="center_vertical"
                         android:text="Name:"
-                        android:textSize="18dp" />
+                        android:textSize="18dp"
+                        android:gravity="center_vertical"
+                        android:background="@color/white"/>
 
                     <Button
                         android:layout_width="70dp"
                         android:layout_height="50dp"
+                        android:text="ADD"
                         android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:backgroundTint="#5954F5"
-                        android:text="ADD" />
+                        android:backgroundTint="@color/black"
+                        android:layout_centerHorizontal="true"/>
 
                     <EditText
                         android:id="@+id/break_tb"
                         android:layout_width="120dp"
                         android:layout_height="50dp"
-                        android:layout_alignParentEnd="true"
                         android:layout_toRightOf="@+id/break_name"
+                        android:layout_alignParentEnd="true"
                         android:hint="Break name"
                         android:padding="5dp" />
 
@@ -87,8 +83,63 @@
                         android:layout_height="50dp"
                         android:layout_below="@id/break_name"
                         android:layout_centerHorizontal="true"
-                        android:hint="enter break duration" />
+                        android:hint="enter break duration"/>
 
+                    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
+
+                        <EditText
+                            android:id="@+id/edit_text_input"
+                            android:layout_width="120dp"
+                            android:layout_height="48dp"
+                            android:layout_above="@+id/text_view_countdown"
+                            android:layout_centerHorizontal="true"
+                            android:hint="Minutes"
+                            android:inputType="number"
+                            android:maxLength="4" />
+
+                        <Button
+                            android:id="@+id/button_set"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/edit_text_input"
+                            android:layout_toEndOf="@+id/edit_text_input"
+                            android:text="Set" />
+
+                        <TextView
+                            android:id="@+id/text_view_countdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:text="00:00"
+                            android:textColor="@android:color/black"
+                            android:textSize="60sp" />
+
+                        <Button
+                            android:id="@+id/button_start_pause"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/text_view_countdown"
+                            android:layout_centerHorizontal="true"
+                            android:text="start" />
+
+                        <Button
+                            android:id="@+id/button_reset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/text_view_countdown"
+                            android:layout_marginStart="11dp"
+                            android:layout_toEndOf="@+id/button_start_pause"
+                            android:text="reset"
+                            android:visibility="invisible"
+                            tools:visibility="visible" />
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
 
@@ -108,55 +159,55 @@
             android:id="@+id/hometbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
+            android:padding= "5dp"
             android:layout_centerVertical="true"
-            android:background="@drawable/rectangle"
             android:contentDescription="Home"
-            android:padding="5dp"
-            android:src="@drawable/home_icon" />
+            android:src="@drawable/home_icon"
+            android:background="@drawable/rectangle"/>
 
         <ImageButton
             android:id="@+id/breakstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
+            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/hometbtn"
-            android:background="@drawable/rectangle"
             android:contentDescription="Breaks"
-            android:padding="5dp"
-            android:src="@drawable/break_icon" />
+            android:src="@drawable/break_icon"
+            android:background="@drawable/rectangle"/>
 
         <ImageButton
             android:id="@+id/addbtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/breakstbtn"
-            android:background="@drawable/gradient_add"
             android:contentDescription="Add"
-            android:padding="5dp"
-            android:src="@drawable/add_icon" />
+            android:src="@drawable/add_icon"
+            android:background="@drawable/gradient_add"/>
 
         <ImageButton
             android:id="@+id/statstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
+            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/addbtn"
-            android:background="@drawable/rectangle"
             android:contentDescription="Stats"
-            android:padding="5dp"
-            android:src="@drawable/stats_icon" />
+            android:src="@drawable/stats_icon"
+            android:background="@drawable/rectangle"/>
 
         <ImageButton
             android:id="@+id/settingstbtn"
             android:layout_width="86dp"
             android:layout_height="50dp"
+            android:padding="5dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/statstbtn"
-            android:background="@drawable/rectangle"
             android:contentDescription="Setting"
-            android:padding="5dp"
-            android:src="@drawable/settings_icon" />
+            android:src="@drawable/settings_icon"
+            android:background="@drawable/rectangle"/>
 
     </RelativeLayout>
 
