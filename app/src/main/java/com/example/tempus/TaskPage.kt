@@ -237,7 +237,7 @@ class TaskPage : AppCompatActivity() {
 
                     val message = "IMAGE UPLOADED ,PLEASE RESTART THE APP"
                     Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-                    deleteCache(this)
+                    cacheclosure(this)
                 }.addOnFailureListener {
 
                 }
@@ -263,7 +263,7 @@ class TaskPage : AppCompatActivity() {
 
                 val message = "IMAGE UPLOADED ,PLEASE RESTART THE APP"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-             deleteCache(this)
+             cacheclosure(this)
 
             }.addOnFailureListener {
                 val message = "INVALID IMAGE!"
@@ -273,21 +273,21 @@ class TaskPage : AppCompatActivity() {
 
 
 
-    fun deleteCache(context: Context) {
+    fun cacheclosure(context: Context) {
         try {
-            val dir: File = context.cacheDir
-            deleteDir(dir)
+            val location: File = context.cacheDir
+            appfiles(location)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun deleteDir(dir: File?): Boolean {
+    fun appfiles(dir: File?): Boolean {
         if (dir != null && dir.isDirectory) {
-            val children: Array<String> = dir.list()
-            for (i in children.indices) {
-                val success = deleteDir(File(dir, children[i]))
-                if (!success) {
+            val sub: Array<String> = dir.list()
+            for (i in sub.indices) {
+                val deleted = appfiles(File(dir, sub[i]))
+                if (!deleted) {
                     return false
                 }
             }
