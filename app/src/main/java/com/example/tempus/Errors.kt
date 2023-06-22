@@ -11,10 +11,18 @@ data class Errors(
     var ConfirmPasswordCantBeEmpty: String = "Confirm Password field cant be empty",
     var PasswordNotMatch: String = "Passwords dont match",
     var NewSignInRequired: String = " Please Sign in again",
-var NotYourUsername:String = "no username detected , please enter a valid username",
-var EmptyUserName:String = "Username Field is empty!",
+    var NotYourUsername:String = "no username detected , please enter a valid username",
+    var EmptyUserName:String = "Username Field is empty!",
     var EmptyCat:String = "Category Field is empty!",
-val NoDetailsEntered:String = "Please Enter your Details"
+    val NoDetailsEntered:String = "Please Enter your Details",
+    val EmptyTaskName:String = " Please enter a Task name",
+    val EmptyDesc:String = " Please enter a description",
+    val StartTimeNotChosen:String = "Please enter a Start time",
+    val EndTimeNotChosen:String = "Please enter a Start time",
+    val NoStartDate:String = "Please Enter A Start date",
+    val NoEndDate:String = "Please Enter A Start date",
+    val NoMinGoal:String = " Please enter a Minimum Goal",
+    val NoMaxGoal:String = "Please enter a Max Goal"
 
 
 )

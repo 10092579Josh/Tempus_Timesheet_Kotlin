@@ -28,6 +28,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import de.keyboardsurfer.android.widget.crouton.Crouton
+import de.keyboardsurfer.android.widget.crouton.Style
 import java.io.ByteArrayOutputStream
 import java.util.Calendar
 import kotlin.math.absoluteValue
@@ -35,6 +37,7 @@ import kotlin.math.absoluteValue
 // THIS IS FOR THE CREATION OF THE TASK
 // THIS HAS THE VARIABLE ASSIGNMENT
 class TaskForm : AppCompatActivity() {
+    private val e = Errors()
     private lateinit var selectedDateText: TextView
     private lateinit var selectedStartTimeText: TextView
     private lateinit var selectedEndTimeText: TextView
@@ -42,7 +45,14 @@ class TaskForm : AppCompatActivity() {
     private lateinit var imgGallery: ImageView
     private val myDataList = mutableListOf<Tasks.ItemsViewModel>()
     private val customAdapter = Tasks.CustomAdapter(myDataList)
-
+    private val catempty = Crouton.makeText(this, e.EmptyCat, Style.ALERT)
+    private val TaskEmpty = Crouton.makeText(this, e.EmptyTaskName, Style.ALERT)
+    private val noMing = Crouton.makeText(this, e.NoMinGoal, Style.ALERT)
+    private val noMx = Crouton.makeText(this, e.NoMaxGoal, Style.ALERT)
+    private val emptyBody = Crouton.makeText(this, e.EmptyDesc, Style.ALERT)
+    private val sDate = Crouton.makeText(this, e.NoStartDate, Style.ALERT)
+    private val sTime = Crouton.makeText(this, e.StartTimeNotChosen, Style.ALERT)
+    private val eTime = Crouton.makeText(this, e.EndTimeNotChosen, Style.ALERT)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
@@ -382,35 +392,25 @@ class TaskForm : AppCompatActivity() {
                     val min = minimum.selectedItem.toString()
                     val selectedItem = spinner.selectedItem.toString()
                     if (task.text.toString().isEmpty()) {
-                        val message = "ERROR: TASK NAME CAN NOT BE EMPTY "
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-
+                      TaskEmpty.show()
                     } else if (description.text.toString().isEmpty()) {
-                        val message = "ERROR: DESCRIPTION CAN NOT BE EMPTY "
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                      emptyBody.show()
                     } else if (start.text.toString().isEmpty()) {
-                        val message = "ERROR: No Time selected  "
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-                    } else if (end.text.toString().isEmpty()) {
-                        val message = "ERROR: No EndTime selected  "
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
+                     sTime.show()
+                    } else if (end.text.toString().isEmpty()) {
+                    eTime.show()
 
                     } else if (dates.text.toString().isEmpty()) {
-                        val message = "ERROR: START DATE CAN NOT BE EMPTY "
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                       sDate.show()
 
                     } else if (selectedItem.isEmpty()) {
-                        val message = "ERROR: Category CAN NOT BE EMPTY "
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                      catempty.show()
 
                     } else if (max.isEmpty()) {
-                        val message = "ERROR: No Max goal selected "
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-
+                        noMx.show()
                     } else if (min.isEmpty()) {
-                        val message = "ERROR: No Min goal selected "
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                        noMing.show()
                     } else {
                         var picture: String
 
