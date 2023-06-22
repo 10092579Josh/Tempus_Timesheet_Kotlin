@@ -14,11 +14,17 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import de.keyboardsurfer.android.widget.crouton.Crouton
+import de.keyboardsurfer.android.widget.crouton.Style
 
 // THIS ALLOWS THE USER TO CREATE A CATEGORY
 // THIS HOLDS THE DATA ASSIGNMENT
 //ASSIGNS TO THE ARRAY
 class CatergoryForm : AppCompatActivity() {
+
+    private val M = messages()
+    private  val e = Errors()
+    private val catEmpty = Crouton.makeText(this, e.EmptyCat, Style.ALERT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.catergory_form)
@@ -80,8 +86,8 @@ class CatergoryForm : AppCompatActivity() {
                 {
                     val catnames: EditText = findViewById(R.id.categoryNameInput)
                     if (catnames.text.toString().isNullOrEmpty()) {
-                        var message = "ERROR: TASK NAME CAN NOT BE EMPTY "
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                        catEmpty.show()
+
 
                     } else {
                         // Get the current user's unique ID

@@ -1,6 +1,8 @@
 package com.example.tempus
 
+import android.app.AlarmManager
 import android.app.Dialog
+import android.app.PendingIntent
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -29,9 +31,16 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
+import java.io.File
+import kotlin.system.exitProcess
 
 class AppSettings : AppCompatActivity() {
     private val M = messages()
+    private  val e = Errors()
+    private val emailtype = Crouton.makeText(this, e.NotYourUsername, Style.ALERT)
+    private val passwordEmpty = Crouton.makeText(this, e.PasswordCantBeEmpty, Style.ALERT)
+    private val usernameEmpty = Crouton.makeText(this, e.EmptyUserName, Style.ALERT)
+    private val nodetails = Crouton.makeText(this, e.NoDetailsEntered, Style.ALERT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.app_settings)
@@ -47,7 +56,25 @@ class AppSettings : AppCompatActivity() {
         val logout = findViewById<CardView>(R.id.logout)
         val deleteappdata = findViewById<CardView>(R.id.delete_data)
         val deleteuser = findViewById<CardView>(R.id.delete_user)
+        val appcache = findViewById<CardView>(R.id.delete_cache)
 
+        appcache.setOnClickListener()
+        {
+            val clearcache = AlertDialog.Builder(this)
+            clearcache.setTitle("Do you want to clear cache(closes app)?")
+            clearcache.setItems(arrayOf("Yes", "Cancel")) { _, which ->
+                when (which) {
+
+                    0 -> Dialog.BUTTON_NEGATIVE
+                    1 -> activate()
+                }
+
+            }
+
+            val dialog = clearcache.create()
+            dialog.show()
+
+        }
         deleteuser.setOnClickListener()
         {
             val userdeletion = AlertDialog.Builder(this)
@@ -148,7 +175,11 @@ class AppSettings : AppCompatActivity() {
             dialog.show()
         }
     }
-
+fun activate()
+{
+    deleteCache(this)
+    restartApp()
+}
     private fun Security() {
 
         val auth = FirebaseAuth.getInstance()
@@ -192,7 +223,23 @@ class AppSettings : AppCompatActivity() {
     }
 
     private var isDialogOpen = false
-
+    private fun restartApp() {
+        val intent = Intent(applicationContext, Home::class.java)
+        val mPendingIntentId = 0
+        val mPendingIntent = PendingIntent.getActivity(
+            applicationContext,
+            mPendingIntentId,
+            intent,
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val mgr = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+        exitProcess(0)
+    }
+    fun EmailCheck(email: String): Boolean {
+        val emailCheck = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$"
+        return emailCheck.toRegex().matches(email)
+    }
     private fun AccountVerify() {
         if (!isDialogOpen) {
             isDialogOpen = true
@@ -247,9 +294,18 @@ class AppSettings : AppCompatActivity() {
                         .getReference("UserDetails/${userid.toString()}")
 
                     if (usernameInput.text.isNullOrEmpty()) {
+                        usernameEmpty.show()
 
-                    } else if (passwordInput.text.isNullOrEmpty()) {
+                    }  else if (EmailCheck(username)) {
+                        emailtype.show()
+
+                    }
+                    else if (passwordInput.text.isNullOrEmpty()) {
+                        passwordEmpty.show()
+
                     } else if (usernameInput.text.isNullOrEmpty() && passwordInput.text.isNullOrEmpty()) {
+                        nodetails.show()
+
                     } else {
 
                         oldRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -493,5 +549,26 @@ class AppSettings : AppCompatActivity() {
 
             }
         }
+    }
+    fun deleteCache(context: Context) {
+        try {
+            val dir: File = context.cacheDir
+            deleteDir(dir)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun deleteDir(dir: File?): Boolean {
+        if (dir != null && dir.isDirectory) {
+            val children: Array<String> = dir.list()
+            for (i in children.indices) {
+                val success = deleteDir(File(dir, children[i]))
+                if (!success) {
+                    return false
+                }
+            }
+        }
+        return dir?.delete() ?: false
     }
 }

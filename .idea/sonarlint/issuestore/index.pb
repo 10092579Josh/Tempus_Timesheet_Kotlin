@@ -5,16 +5,10 @@ d
 4app/src/main/java/com/example/tempus/SplashScreen.kt,7\e\7e89f39c0ae53f0621d1acf587e9dfd33dc8c90b
 _
 /app/src/main/java/com/example/tempus/Storage.kt,3\a\3a26f21834c45c91c05c9da5dddf15fa938fae34
-`
-0app/src/main/java/com/example/tempus/TaskForm.kt,4\0\404509c193ba4c0dcf4336fc6447c0f0b16f6350
 X
 (app/src/main/res/layout/user_details.xml,0\3\03e5c77c09051e88661c8d56e59a896e7d1776e3
-^
-.app/src/main/java/com/example/tempus/Errors.kt,f\c\fc837ed61b22d047e121f3b3bf182a554df84078
 d
 4app/src/main/java/com/example/tempus/Registration.kt,8\d\8d0ffe530fa84e079be5943b6ad3e228565fa479
-`
-0app/src/main/java/com/example/tempus/TaskPage.kt,5\c\5c5835db020831b35027e1888a8e31f53f40af0f
 w
 G.idea/sonarlint/issuestore/3/a/3a26f21834c45c91c05c9da5dddf15fa938fae34,0\9\09a100ac981db84dd63d4464b14d9e41cd1a07f9
 Å
@@ -41,8 +35,6 @@ P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 @
 app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
-e
-5app/src/main/java/com/example/tempus/CatergoryForm.kt,9\e\9e67afb25409cccfd01c8f84a45a6ef6d12186dc
 Å
 Q.idea/sonarlint/securityhotspotstore/9/5/95a41d6666e94fa4abd41507d7953c34630eb530,a\e\ae46ca14d12e0ad9aa20a22fa42b719131a80b1c
 Å
@@ -479,10 +471,6 @@ w
 G.idea/sonarlint/issuestore/1/7/178146d6b5dfadcf45880d1242548fc1759510b6,f\0\f07c1fc539e44ce3fbcdbb0178be10e4fed2a69c
 w
 G.idea/sonarlint/issuestore/d/a/da4a8b51b3d437f765708586a55f6ecde433f52e,1\5\1584a40bfe620017759aa8e8eae4a9b7913ae355
-]
--app/src/main/java/com/example/tempus/Tasks.kt,0\9\0965774405117665572dffada535525ef52255ca
-c
-3app/src/main/java/com/example/tempus/AppSettings.kt,f\5\f5cbe409350da07321fa52d07f60f4ab8bea7659
 ]
 -app/src/main/java/com/example/tempus/Login.kt,4\b\4bded21f387cd4797d12f08f004d161932e81561
 w

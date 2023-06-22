@@ -125,6 +125,7 @@ class Tasks : AppCompatActivity() {
             intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
             startActivity(intent)
             overridePendingTransition(0, 0)
+
             finish()
 
         }
@@ -136,7 +137,10 @@ class Tasks : AppCompatActivity() {
             finish()
         }
     }
+fun refresh()
+{
 
+}
     fun Security() {
 
         val auth = FirebaseAuth.getInstance()
@@ -247,11 +251,14 @@ class Tasks : AppCompatActivity() {
 
                 val adapter = CustomAdapter(sortedItems.toMutableList())
                 recyclerview.adapter = adapter
+                adapter.notifyDataSetChanged()
+
 
             } catch (e: Exception) {
 
 
             }
+
         }
     }
 
@@ -267,6 +274,7 @@ class Tasks : AppCompatActivity() {
             val view =
                 LayoutInflater.from(parent.context).inflate(R.layout.tastk_tab, parent, false)
             return ViewHolder(view)
+
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -295,6 +303,7 @@ class Tasks : AppCompatActivity() {
                 intent.putExtras(bundle2)
                 intent.putExtra("itemId", clickedData.text)
                 context.startActivity(intent)
+
             }
         }
 
@@ -307,6 +316,11 @@ class Tasks : AppCompatActivity() {
             val textView2: TextView = itemView.findViewById(R.id.mHpurs)
             val textView3: TextView = itemView.findViewById(R.id.mSubtitle)
             val imageView: ImageView = itemView.findViewById(R.id.task_item_image)
+        }
+        fun clear() {
+            val size = myDataList .size
+            myDataList.clear()
+            notifyItemRangeRemoved(0, size)
         }
     }
 

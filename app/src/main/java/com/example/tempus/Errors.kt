@@ -10,7 +10,11 @@ data class Errors(
     var PasswordCantBeEmpty: String = "Password field cant be empty",
     var ConfirmPasswordCantBeEmpty: String = "Confirm Password field cant be empty",
     var PasswordNotMatch: String = "Passwords dont match",
-    var NewSignInRequired: String = " Please Sign in again"
+    var NewSignInRequired: String = " Please Sign in again",
+var NotYourUsername:String = "no username detected , please enter a valid username",
+var EmptyUserName:String = "Username Field is empty!",
+    var EmptyCat:String = "Category Field is empty!",
+val NoDetailsEntered:String = "Please Enter your Details"
 
 
 )

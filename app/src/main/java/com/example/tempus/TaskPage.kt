@@ -1,12 +1,12 @@
 package com.example.tempus
 
+
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,8 +15,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-
-
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -24,6 +22,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
+import java.io.File
+
+
 
 // THIS PAGE HANDLES THE DISPLAY OF THE TASKS WHEN A SPECIFIC TASK IS CLICKED
 class TaskPage : AppCompatActivity() {
@@ -223,9 +224,9 @@ class TaskPage : AppCompatActivity() {
 
 
             if (url != null) {
-                val task = findViewById<EditText>(R.id.taskNameInput)
+                val task = findViewById<TextView>(R.id.task_name)
 
-                val imageView = findViewById<ImageView>(R.id.imgGallery)
+                val imageView = findViewById<ImageView>(R.id.task_image)
                 imageView.setImageURI(url)
 
                 val store = Firebase.storage.reference.child(task.text.toString().trim())
@@ -234,6 +235,9 @@ class TaskPage : AppCompatActivity() {
                 val choice = store.putFile(url)
                 choice.addOnSuccessListener {
 
+                    val message = "IMAGE UPLOADED ,PLEASE RESTART THE APP"
+                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                    deleteCache(this)
                 }.addOnFailureListener {
 
                 }
@@ -242,9 +246,9 @@ class TaskPage : AppCompatActivity() {
     private val camera =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { photo: Bitmap? ->
 
-            val task = findViewById<EditText>(R.id.taskNameInput)
+            val task = findViewById<TextView>(R.id.task_name)
 
-            val imageView = findViewById<ImageView>(R.id.imgGallery)
+            val imageView = findViewById<ImageView>(R.id.task_image)
             imageView.setImageBitmap(photo)
 
 
@@ -256,13 +260,42 @@ class TaskPage : AppCompatActivity() {
 
             val uploadDP = ImageRef.putBytes(data)
             uploadDP.addOnSuccessListener {
-                val message = "IMAGE UPLOADED "
+
+                val message = "IMAGE UPLOADED ,PLEASE RESTART THE APP"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+             deleteCache(this)
+
             }.addOnFailureListener {
                 val message = "INVALID IMAGE!"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             }
         }
+
+
+
+    fun deleteCache(context: Context) {
+        try {
+            val dir: File = context.cacheDir
+            deleteDir(dir)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun deleteDir(dir: File?): Boolean {
+        if (dir != null && dir.isDirectory) {
+            val children: Array<String> = dir.list()
+            for (i in children.indices) {
+                val success = deleteDir(File(dir, children[i]))
+                if (!success) {
+                    return false
+                }
+            }
+        }
+        return dir?.delete() ?: false
+    }
+
+
 
 
 }
