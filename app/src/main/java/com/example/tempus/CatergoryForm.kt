@@ -23,7 +23,7 @@ import de.keyboardsurfer.android.widget.crouton.Style
 class CatergoryForm : AppCompatActivity() {
 
     private val M = messages()
-    private  val e = Errors()
+    private val e = Errors()
     private val catEmpty = Crouton.makeText(this, e.EmptyCat, Style.ALERT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,8 +73,7 @@ class CatergoryForm : AppCompatActivity() {
 
             }
 
-            addbtn.setOnClickListener()
-            {
+            addbtn.setOnClickListener() {
                 val tform = Intent(this, TaskForm::class.java)
                 startActivity(tform)
                 overridePendingTransition(0, 0)
@@ -82,8 +81,7 @@ class CatergoryForm : AppCompatActivity() {
 
             }
             try {
-                create.setOnClickListener()
-                {
+                create.setOnClickListener() {
                     val catnames: EditText = findViewById(R.id.categoryNameInput)
                     if (catnames.text.toString().isNullOrEmpty()) {
                         catEmpty.show()

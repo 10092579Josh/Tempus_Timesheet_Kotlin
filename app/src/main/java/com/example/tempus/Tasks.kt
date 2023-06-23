@@ -14,15 +14,9 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
@@ -137,10 +131,11 @@ class Tasks : AppCompatActivity() {
             finish()
         }
     }
-fun refresh()
-{
 
-}
+    fun refresh() {
+
+    }
+
     fun Security() {
 
         val auth = FirebaseAuth.getInstance()
@@ -317,8 +312,9 @@ fun refresh()
             val textView3: TextView = itemView.findViewById(R.id.mSubtitle)
             val imageView: ImageView = itemView.findViewById(R.id.task_item_image)
         }
+
         fun clear() {
-            val size = myDataList .size
+            val size = myDataList.size
             myDataList.clear()
             notifyItemRangeRemoved(0, size)
         }

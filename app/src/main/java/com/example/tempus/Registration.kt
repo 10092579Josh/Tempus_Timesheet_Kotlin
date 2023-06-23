@@ -1,10 +1,13 @@
 package com.example.tempus
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
@@ -12,20 +15,24 @@ import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
-import android.content.Context
-import android.util.Log
-import android.view.View
-import com.google.firebase.auth.FirebaseAuth
-
-import com.google.firebase.auth.FirebaseAuthException
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 
 
 class Registration : AppCompatActivity() {
+    private val e = Errors()
+    private val emptyemail = Crouton.makeText(this, e.EmailValidationEmptyError, Style.ALERT)
+    private val nousername = Crouton.makeText(this, e.EmptyUserName, Style.ALERT)
+    private val nomatchpass = Crouton.makeText(this, e.PasswordNotMatch, Style.ALERT)
+    private val Confirmpasstooshort = Crouton.makeText(this, e.ConfirmPasswordTooShort, Style.ALERT)
+    private val passtooshort = Crouton.makeText(this, e.PasswordTooShort, Style.ALERT)
+    private val noSName = Crouton.makeText(this, e.NoSName, Style.ALERT)
+    private val noFName = Crouton.makeText(this, e.NoFName, Style.ALERT)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -143,28 +150,22 @@ class Registration : AppCompatActivity() {
 
             //action statements tp check fields if empty
             if (pass?.text.toString() != pass2?.text.toString()) {
-                val message = " passwords do not match"
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                nomatchpass.show()
+
 
             } else if (names?.text.toString().isEmpty()) {
-                val message = " no firstname entered "
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                noFName.show()
             } else if (surnames?.text.toString().isEmpty()) {
-                val message = " no surname entered "
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                noSName.show()
             } else if (user2?.text.toString().isEmpty()) {
-                val message = " no username entered "
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                nousername.show()
             } else if (pass?.text.toString().length < 7) {
-                val message = " enter password is too short"
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                passtooshort.show()
             } else if (pass2?.text.toString().length < 7) {
-                val message = " confirmkey password is too short "
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                Confirmpasstooshort.show()
 
             } else if (emails?.text.toString().isEmpty()) {
-                val message = " no emailaddress entered "
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                emptyemail.show()
             } else { // move to the next screen if filled
 
                 val database = FirebaseDatabase.getInstance()
@@ -231,8 +232,6 @@ class Registration : AppCompatActivity() {
 
                         }
                     }
-
-
 
 
             }

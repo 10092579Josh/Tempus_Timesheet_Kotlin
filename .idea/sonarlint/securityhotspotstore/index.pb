@@ -1,14 +1,10 @@
 
 ?
 settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
-d
-4app/src/main/java/com/example/tempus/SplashScreen.kt,7\e\7e89f39c0ae53f0621d1acf587e9dfd33dc8c90b
 _
 /app/src/main/java/com/example/tempus/Storage.kt,3\a\3a26f21834c45c91c05c9da5dddf15fa938fae34
 X
 (app/src/main/res/layout/user_details.xml,0\3\03e5c77c09051e88661c8d56e59a896e7d1776e3
-d
-4app/src/main/java/com/example/tempus/Registration.kt,8\d\8d0ffe530fa84e079be5943b6ad3e228565fa479
 w
 G.idea/sonarlint/issuestore/3/a/3a26f21834c45c91c05c9da5dddf15fa938fae34,0\9\09a100ac981db84dd63d4464b14d9e41cd1a07f9
 Å
@@ -118,8 +114,6 @@ Q.idea/sonarlint/securityhotspotstore/b/b/bbf202272a96de5cd6b6828ffdc55fb3ce4528
 Å
 Q.idea/sonarlint/securityhotspotstore/b/2/b2f261e77b379b39fd46df02c2922dfed0170c47,d\d\ddbfc39a395808ca04fac4340620dec691f04cd3
 Å
-Q.idea/sonarlint/securityhotspotstore/8/a/8ae3bc76bcfb9a8484157e7b9dca59e0106d85c9,b\2\b2e2bd03a4b5b2ae7fbe3cbbc2651d19d4743f5b
-Å
 Q.idea/sonarlint/securityhotspotstore/a/e/ae46ca14d12e0ad9aa20a22fa42b719131a80b1c,d\c\dcdd03220e093c5d68e1d7cd4dcb147e0549929c
 Å
 Q.idea/sonarlint/securityhotspotstore/4/c/4c8b2d34698fbe92986e2b79cf3fb3e5b283e968,3\6\3676e2166539d51ad356d461214a0366010f152e
@@ -132,8 +126,6 @@ Q.idea/sonarlint/securityhotspotstore/b/b/bb08a4d420fe513e55839b8e1065bca5af7d48
 w
 G.idea/sonarlint/issuestore/4/c/4c8b2d34698fbe92986e2b79cf3fb3e5b283e968,e\3\e311d57bb319037cb485e32a76f444eb445f27f5
 w
-G.idea/sonarlint/issuestore/8/a/8ae3bc76bcfb9a8484157e7b9dca59e0106d85c9,3\1\3199f847102574f7ed37f3d9f54f27df14c3db95
-w
 G.idea/sonarlint/issuestore/f/0/f0e0f9cec86fe4b939ae22be5264c758801eb28f,5\0\50e216b4439d2538168c3ddca9c0c2fe23bd1c02
 w
 G.idea/sonarlint/issuestore/8/6/86a7ecc53ee6c4708e43f853750a7dda966c40e9,b\2\b25d04649d4ae4a4d79a5ee53b6e45f7db559c50
@@ -143,8 +135,6 @@ Q.idea/sonarlint/securityhotspotstore/4/5/45ff80189529414d0a5c8e69e1bba5cd44bf8e
 Q.idea/sonarlint/securityhotspotstore/b/3/b328f357ace733e055243caece463497459b9593,c\0\c04a083010d8bc5b1cce7e88e4e2544b38205545
 w
 G.idea/sonarlint/issuestore/3/1/317c61657a610de5e83a7b161573d494532e7e00,0\d\0d1b59781976b178d7cd908cdb9f2d99792f09d5
-Å
-Q.idea/sonarlint/securityhotspotstore/7/2/72309dd2077bcf953ca0084788a1999f7eb053ad,a\f\af702a2e71b36fa1414c77bafd37d0c92a1aa762
 Å
 Q.idea/sonarlint/securityhotspotstore/7/b/7bd6c14794d626ae333a3108ac7ec43e7be9da5d,e\8\e8ad3d4076813c1bf18b320f90a731843fe139e1
 w
@@ -193,8 +183,6 @@ Q.idea/sonarlint/securityhotspotstore/f/4/f4a01d6a4fcb971362ec00a83903fd3902f521
 Q.idea/sonarlint/securityhotspotstore/4/6/46f699ac0349bb4c3ca431e34a0aa2d74fbed272,1\2\12973944498da8ba057dd2aad06feb1df469e1c9
 Å
 Q.idea/sonarlint/securityhotspotstore/6/d/6d7d1eed2757b149fdd751161d99ea62bc3f6a70,e\b\eb563624538cda8c6a3b772b219da7753c347325
-w
-G.idea/sonarlint/issuestore/7/2/72309dd2077bcf953ca0084788a1999f7eb053ad,1\2\123fe5a70a8e7181ee90bffd2ec0e157ba62a046
 Å
 Q.idea/sonarlint/securityhotspotstore/3/6/369a509158e87272e795636ab433967b2072f401,5\a\5a114e3b57b532c0e20ba307c604e76651ebf9fb
 w
@@ -465,8 +453,6 @@ w
 G.idea/sonarlint/issuestore/1/7/178146d6b5dfadcf45880d1242548fc1759510b6,f\0\f07c1fc539e44ce3fbcdbb0178be10e4fed2a69c
 w
 G.idea/sonarlint/issuestore/d/a/da4a8b51b3d437f765708586a55f6ecde433f52e,1\5\1584a40bfe620017759aa8e8eae4a9b7913ae355
-]
--app/src/main/java/com/example/tempus/Login.kt,4\b\4bded21f387cd4797d12f08f004d161932e81561
 w
 G.idea/sonarlint/issuestore/d/4/d4ea2a03e5518abc969c3cf9744ea779160ddf93,0\9\095dbc95eccbdc3ce51e759839fc8d0cebb7122c
 w
@@ -1963,11 +1949,3 @@ w
 G.idea/sonarlint/issuestore/0/b/0b33756ee165eba4548bf9e7ff0d56bf2477646d,6\b\6bc99eb150a7bbe6cbcf5ff506faf3761426e0c0
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-b
-2app/src/main/java/com/example/tempus/Statistics.kt,b\f\bf7c80de1130a6c8d0d0a21ebf760cc3520f53cb
-^
-.app/src/main/java/com/example/tempus/Breaks.kt,e\c\ecf53e93639713defe00939f639849a4e03123a9
-]
--app/src/main/java/com/example/tempus/Tasks.kt,0\9\0965774405117665572dffada535525ef52255ca
-c
-3app/src/main/java/com/example/tempus/UserDetails.kt,8\b\8b96ef95b26177964def010b1bf7d9c695f26ae7

@@ -1,4 +1,5 @@
 package com.example.tempus
+
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -24,6 +25,11 @@ import de.keyboardsurfer.android.widget.crouton.Style
 
 class Login : AppCompatActivity() {
     private val e = Errors()
+    private val emptypass = Crouton.makeText(this, e.NoNullsPassWord, Style.ALERT)
+    private val emptyemail = Crouton.makeText(this, e.EmailValidationEmptyError, Style.ALERT)
+    private val nofields = Crouton.makeText(this, e.NoDetailsEntered, Style.ALERT)
+
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,9 +143,15 @@ class Login : AppCompatActivity() {
         signButton.setOnClickListener()
         {
             if (pass2?.text.isNullOrEmpty()) {
+                emptypass.show()
 
-                val crouton = Crouton.makeText(this, e.NoNullsPassWord, Style.ALERT)
-                crouton.show()
+            } else if (usernames?.text.isNullOrEmpty()) {
+
+               emptyemail.show()
+
+            } else if (pass2?.text.isNullOrEmpty() && usernames?.text.isNullOrEmpty()) {
+
+                nofields.show()
 
             } else {
 

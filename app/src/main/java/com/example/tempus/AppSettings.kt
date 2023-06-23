@@ -36,7 +36,7 @@ import kotlin.system.exitProcess
 
 class AppSettings : AppCompatActivity() {
     private val M = messages()
-    private  val e = Errors()
+    private val e = Errors()
     private val emailtype = Crouton.makeText(this, e.NotYourUsername, Style.ALERT)
     private val passwordEmpty = Crouton.makeText(this, e.PasswordCantBeEmpty, Style.ALERT)
     private val usernameEmpty = Crouton.makeText(this, e.EmptyUserName, Style.ALERT)
@@ -175,11 +175,12 @@ class AppSettings : AppCompatActivity() {
             dialog.show()
         }
     }
-fun activate()
-{
-    deleteCache(this)
-    restartApp()
-}
+
+    fun activate() {
+        deleteCache(this)
+        restartApp()
+    }
+
     private fun Security() {
 
         val auth = FirebaseAuth.getInstance()
@@ -236,10 +237,12 @@ fun activate()
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
         exitProcess(0)
     }
+
     fun EmailCheck(email: String): Boolean {
         val emailCheck = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$"
         return emailCheck.toRegex().matches(email)
     }
+
     private fun AccountVerify() {
         if (!isDialogOpen) {
             isDialogOpen = true
@@ -296,11 +299,10 @@ fun activate()
                     if (usernameInput.text.isNullOrEmpty()) {
                         usernameEmpty.show()
 
-                    }  else if (EmailCheck(username)) {
+                    } else if (EmailCheck(username)) {
                         emailtype.show()
 
-                    }
-                    else if (passwordInput.text.isNullOrEmpty()) {
+                    } else if (passwordInput.text.isNullOrEmpty()) {
                         passwordEmpty.show()
 
                     } else if (usernameInput.text.isNullOrEmpty() && passwordInput.text.isNullOrEmpty()) {
@@ -550,6 +552,7 @@ fun activate()
             }
         }
     }
+
     fun deleteCache(context: Context) {
         try {
             val dir: File = context.cacheDir

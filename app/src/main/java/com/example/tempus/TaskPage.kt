@@ -25,7 +25,6 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 
-
 // THIS PAGE HANDLES THE DISPLAY OF THE TASKS WHEN A SPECIFIC TASK IS CLICKED
 class TaskPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -263,14 +262,13 @@ class TaskPage : AppCompatActivity() {
 
                 val message = "IMAGE UPLOADED ,PLEASE RESTART THE APP"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-             cacheclosure(this)
+                cacheclosure(this)
 
             }.addOnFailureListener {
                 val message = "INVALID IMAGE!"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             }
         }
-
 
 
     fun cacheclosure(context: Context) {
@@ -294,8 +292,6 @@ class TaskPage : AppCompatActivity() {
         }
         return dir?.delete() ?: false
     }
-
-
 
 
 }

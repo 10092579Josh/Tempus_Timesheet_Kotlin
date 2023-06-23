@@ -1,12 +1,11 @@
 package com.example.tempus
 
 import android.app.NotificationChannel
-import android.graphics.Canvas
-import androidx.recyclerview.widget.ItemTouchHelper
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Canvas
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -21,10 +20,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.tabs.TabLayout
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -257,8 +256,15 @@ class Home : AppCompatActivity() {
                 }
                 recyclerview.adapter = adapter
 
-                val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-                    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+                    0,
+                    ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                ) {
+                    override fun onMove(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        target: RecyclerView.ViewHolder
+                    ): Boolean {
                         return false
                     }
 
@@ -285,22 +291,40 @@ class Home : AppCompatActivity() {
                         actionState: Int,
                         isCurrentlyActive: Boolean
                     ) {
-                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        super.onChildDraw(
+                            c,
+                            recyclerView,
+                            viewHolder,
+                            dX,
+                            dY,
+                            actionState,
+                            isCurrentlyActive
+                        )
 
                         val itemView = viewHolder.itemView
 
                         if (dX > 0) {
                             // Swiping to the right (edit action)
-                            val editIcon = ContextCompat.getDrawable(this@Home, R.drawable.edit_icon)
+                            val editIcon =
+                                ContextCompat.getDrawable(this@Home, R.drawable.edit_icon)
                             val editIconMargin = (itemView.height - editIcon?.intrinsicHeight!!) / 2
                             val editIconTop = itemView.top + editIconMargin
                             val editIconBottom = editIconTop + editIcon.intrinsicHeight
                             val editIconLeft = itemView.left + editIconMargin
-                            val editIconRight = itemView.left + editIconMargin + editIcon.intrinsicWidth
+                            val editIconRight =
+                                itemView.left + editIconMargin + editIcon.intrinsicWidth
 
-                            editIcon?.setBounds(editIconLeft, editIconTop, editIconRight, editIconBottom)
+                            editIcon?.setBounds(
+                                editIconLeft,
+                                editIconTop,
+                                editIconRight,
+                                editIconBottom
+                            )
 
-                            val editBackground = ContextCompat.getDrawable(this@Home, R.drawable.edit_button_background)
+                            val editBackground = ContextCompat.getDrawable(
+                                this@Home,
+                                R.drawable.edit_button_background
+                            )
                             editBackground?.setBounds(
                                 itemView.left,
                                 itemView.top,
@@ -311,16 +335,27 @@ class Home : AppCompatActivity() {
                             editIcon?.draw(c)
                         } else {
                             // Swiping to the left (delete action)
-                            val deleteIcon = ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)
-                            val deleteIconMargin = (itemView.height - deleteIcon?.intrinsicHeight!!) / 2
+                            val deleteIcon =
+                                ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)
+                            val deleteIconMargin =
+                                (itemView.height - deleteIcon?.intrinsicHeight!!) / 2
                             val deleteIconTop = itemView.top + deleteIconMargin
                             val deleteIconBottom = deleteIconTop + deleteIcon.intrinsicHeight
-                            val deleteIconLeft = itemView.right - deleteIconMargin - deleteIcon.intrinsicWidth
+                            val deleteIconLeft =
+                                itemView.right - deleteIconMargin - deleteIcon.intrinsicWidth
                             val deleteIconRight = itemView.right - deleteIconMargin
 
-                            deleteIcon?.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
+                            deleteIcon?.setBounds(
+                                deleteIconLeft,
+                                deleteIconTop,
+                                deleteIconRight,
+                                deleteIconBottom
+                            )
 
-                            val deleteBackground = ContextCompat.getDrawable(this@Home, R.drawable.delete_button_background)
+                            val deleteBackground = ContextCompat.getDrawable(
+                                this@Home,
+                                R.drawable.delete_button_background
+                            )
                             deleteBackground?.setBounds(
                                 itemView.right + dX.toInt(),
                                 itemView.top,
@@ -339,7 +374,6 @@ class Home : AppCompatActivity() {
             }
         }
     }
-
 
 
     data class Task(val name: String, val hours2: String)

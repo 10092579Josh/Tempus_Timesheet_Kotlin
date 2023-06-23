@@ -4,7 +4,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
@@ -31,6 +30,7 @@ class Breaks : AppCompatActivity() {
     private var mStartTimeInMillis: Long = 0
     private var mTimeLeftInMillis: Long = 0
     private var mEndTime: Long = 0
+
     companion object {
         const val NOTIFICATION_CHANNEL_ID = "your_channel_id"
         const val NOTIFICATION_ID = 1
@@ -60,7 +60,8 @@ class Breaks : AppCompatActivity() {
             }
             val millisInput = input.toLong() * 60000
             if (millisInput == 0L) {
-                Toast.makeText(this@Breaks, "Please enter a positive number", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Breaks, "Please enter a positive number", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
             setTime(millisInput)
@@ -125,6 +126,7 @@ class Breaks : AppCompatActivity() {
         resetTimer()
         closeKeyboard()
     }
+
     private fun startTimer() {
         createNotificationChannel()
 
@@ -150,7 +152,8 @@ class Breaks : AppCompatActivity() {
                 updateNotification(getFormattedTimeLeft())
 
                 // Update the notification with the current countdown time
-                val updatedNotificationBuilder = notificationBuilder.setContentText(getFormattedTimeLeft())
+                val updatedNotificationBuilder =
+                    notificationBuilder.setContentText(getFormattedTimeLeft())
                 notificationManager.notify(NOTIFICATION_ID, updatedNotificationBuilder.build())
             }
 
@@ -159,7 +162,8 @@ class Breaks : AppCompatActivity() {
                 updateWatchInterface()
 
                 // Update the notification when the timer finishes
-                val updatedNotificationBuilder = notificationBuilder.setContentText("Timer finished")
+                val updatedNotificationBuilder =
+                    notificationBuilder.setContentText("Timer finished")
                 notificationManager.notify(NOTIFICATION_ID, updatedNotificationBuilder.build())
             }
         }.start()
@@ -182,7 +186,6 @@ class Breaks : AppCompatActivity() {
     }
 
 
-
     private fun getFormattedTimeLeft(): String {
         val minutes = (mTimeLeftInMillis / 1000) / 60
         val seconds = (mTimeLeftInMillis / 1000) % 60
@@ -198,9 +201,11 @@ class Breaks : AppCompatActivity() {
         val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, importance)
         channel.description = channelDescription
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
     private fun pauseTimer() {
         mCountDownTimer!!.cancel()
         mTimerRunning = false
@@ -226,6 +231,7 @@ class Breaks : AppCompatActivity() {
         }
         mTextViewCountDown!!.text = timeLeftFormatted
     }
+
     private fun updateWatchInterface() {
         if (mTimerRunning) {
             mEditTextInput!!.visibility = View.INVISIBLE
@@ -248,6 +254,7 @@ class Breaks : AppCompatActivity() {
             }
         }
     }
+
     private fun closeKeyboard() {
         val view = currentFocus
         if (view != null) {
@@ -269,6 +276,7 @@ class Breaks : AppCompatActivity() {
             mCountDownTimer!!.cancel()
         }
     }
+
     override fun onStart() {
         super.onStart()
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
@@ -290,7 +298,6 @@ class Breaks : AppCompatActivity() {
             }
         }
     }
-
 
 
     fun Security() {

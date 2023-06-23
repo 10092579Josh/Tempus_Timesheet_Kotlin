@@ -392,20 +392,20 @@ class TaskForm : AppCompatActivity() {
                     val min = minimum.selectedItem.toString()
                     val selectedItem = spinner.selectedItem.toString()
                     if (task.text.toString().isEmpty()) {
-                      TaskEmpty.show()
+                        TaskEmpty.show()
                     } else if (description.text.toString().isEmpty()) {
-                      emptyBody.show()
+                        emptyBody.show()
                     } else if (start.text.toString().isEmpty()) {
 
-                     sTime.show()
+                        sTime.show()
                     } else if (end.text.toString().isEmpty()) {
-                    eTime.show()
+                        eTime.show()
 
                     } else if (dates.text.toString().isEmpty()) {
-                       sDate.show()
+                        sDate.show()
 
                     } else if (selectedItem.isEmpty()) {
-                      catempty.show()
+                        catempty.show()
 
                     } else if (max.isEmpty()) {
                         noMx.show()
