@@ -23,7 +23,7 @@ import de.keyboardsurfer.android.widget.crouton.Style
 class CategoryForm : AppCompatActivity() {
 
     private val e = Errors()
-    private val catEmpty = Crouton.makeText(this, e.EmptyCat, Style.ALERT)
+    private val catEmpty = Crouton.makeText(this, e.emptyCat, Style.ALERT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.catergory_form)

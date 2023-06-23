@@ -26,15 +26,15 @@ import de.keyboardsurfer.android.widget.crouton.Style
 
 class Registration : AppCompatActivity() {
     private val e = Errors()
-    private val emptyEmail = Crouton.makeText(this, e.EmailValidationEmptyError, Style.ALERT)
-    private val noUserName = Crouton.makeText(this, e.EmptyUserName, Style.ALERT)
-    private val noMatchPass = Crouton.makeText(this, e.PasswordNotMatch, Style.ALERT)
-    private val confirmPassTooShort = Crouton.makeText(this, e.ConfirmPasswordTooShort, Style.ALERT)
-    private val passTooShort = Crouton.makeText(this, e.PasswordTooShort, Style.ALERT)
-    private val noSName = Crouton.makeText(this, e.NoSName, Style.ALERT)
-    private val noFName = Crouton.makeText(this, e.NoFName, Style.ALERT)
-    private val emailRegAlready = Crouton.makeText(this, e.RegEmailError, Style.ALERT)
-    private val hashCharacter = Crouton.makeText(this, e.IllegalCharacterHash, Style.ALERT)
+    private val emptyEmail = Crouton.makeText(this, e.emailValidationEmptyError, Style.ALERT)
+    private val noUserName = Crouton.makeText(this, e.emptyUserName, Style.ALERT)
+    private val noMatchPass = Crouton.makeText(this, e.passwordNotMatch, Style.ALERT)
+    private val confirmPassTooShort = Crouton.makeText(this, e.confirmPasswordTooShort, Style.ALERT)
+    private val passTooShort = Crouton.makeText(this, e.passwordTooShort, Style.ALERT)
+    private val noSName = Crouton.makeText(this, e.noSName, Style.ALERT)
+    private val noFName = Crouton.makeText(this, e.noFName, Style.ALERT)
+    private val emailRegAlready = Crouton.makeText(this, e.regEmailError, Style.ALERT)
+    private val hashCharacter = Crouton.makeText(this, e.illegalCharacterHash, Style.ALERT)
 
 
 

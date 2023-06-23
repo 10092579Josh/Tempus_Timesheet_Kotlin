@@ -43,14 +43,14 @@ class TaskForm : AppCompatActivity() {
     private lateinit var selectedEndTimeText: TextView
     private lateinit var uploadPictureBtn: Button
     private lateinit var imgGallery: ImageView
-    private val catEmpty = Crouton.makeText(this, e.EmptyCat, Style.ALERT)
-    private val taskEmpty = Crouton.makeText(this, e.EmptyTaskName, Style.ALERT)
-    private val noMing = Crouton.makeText(this, e.NoMinGoal, Style.ALERT)
-    private val noMx = Crouton.makeText(this, e.NoMaxGoal, Style.ALERT)
-    private val emptyBody = Crouton.makeText(this, e.EmptyDesc, Style.ALERT)
-    private val sDate = Crouton.makeText(this, e.NoStartDate, Style.ALERT)
-    private val sTime = Crouton.makeText(this, e.StartTimeNotChosen, Style.ALERT)
-    private val eTime = Crouton.makeText(this, e.EndTimeNotChosen, Style.ALERT)
+    private val catEmpty = Crouton.makeText(this, e.emptyCat, Style.ALERT)
+    private val taskEmpty = Crouton.makeText(this, e.emptyTaskName, Style.ALERT)
+    private val noMing = Crouton.makeText(this, e.noMinGoal, Style.ALERT)
+    private val noMx = Crouton.makeText(this, e.noMaxGoal, Style.ALERT)
+    private val emptyBody = Crouton.makeText(this, e.emptyDesc, Style.ALERT)
+    private val sDate = Crouton.makeText(this, e.noStartDate, Style.ALERT)
+    private val sTime = Crouton.makeText(this, e.startTimeNotChosen, Style.ALERT)
+    private val eTime = Crouton.makeText(this, e.endTimeNotChosen, Style.ALERT)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {

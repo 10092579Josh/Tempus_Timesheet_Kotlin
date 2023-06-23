@@ -27,13 +27,13 @@ import de.keyboardsurfer.android.widget.crouton.Style
 
 class UserDetails : AppCompatActivity() {
     private val e = Errors()
-    private val m = messages()
-    private val emailEmpty = Crouton.makeText(this, e.EmailValidationEmptyError, Style.ALERT)
-    private val passwordEmpty = Crouton.makeText(this, e.PasswordCantBeEmpty, Style.ALERT)
-    private val confirmEmpty = Crouton.makeText(this, e.ConfirmPasswordCantBeEmpty, Style.ALERT)
-    private val passwordMatch = Crouton.makeText(this, e.PasswordNotMatch, Style.ALERT)
-    private val validMessage = Crouton.makeText(this, m.ConfirmedLogin, Style.INFO)
-    private val returns = Crouton.makeText(this, e.NewSignInRequired, Style.INFO)
+    private val m = Messages()
+    private val emailEmpty = Crouton.makeText(this, e.emailValidationEmptyError, Style.ALERT)
+    private val passwordEmpty = Crouton.makeText(this, e.passwordCantBeEmpty, Style.ALERT)
+    private val confirmEmpty = Crouton.makeText(this, e.confirmPasswordCantBeEmpty, Style.ALERT)
+    private val passwordMatch = Crouton.makeText(this, e.passwordNotMatch, Style.ALERT)
+    private val validMessage = Crouton.makeText(this, m.confirmedLogin, Style.INFO)
+    private val returns = Crouton.makeText(this, e.newSignInRequired, Style.INFO)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_details)

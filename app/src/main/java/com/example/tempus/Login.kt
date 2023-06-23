@@ -25,9 +25,9 @@ import de.keyboardsurfer.android.widget.crouton.Style
 
 class Login : AppCompatActivity() {
     private val e = Errors()
-    private val emptyPass = Crouton.makeText(this, e.NoNullsPassWord, Style.ALERT)
-    private val emptyEmail = Crouton.makeText(this, e.EmailValidationEmptyError, Style.ALERT)
-    private val noFields = Crouton.makeText(this, e.NoDetailsEntered, Style.ALERT)
+    private val emptyPass = Crouton.makeText(this, e.noNullsPassWord, Style.ALERT)
+    private val emptyEmail = Crouton.makeText(this, e.emailValidationEmptyError, Style.ALERT)
+    private val noFields = Crouton.makeText(this, e.noDetailsEntered, Style.ALERT)
 
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -58,7 +58,7 @@ class Login : AppCompatActivity() {
 
         )
 
-        val crouton = Crouton.makeText(this, e.IllegalCharacterHash, Style.ALERT)
+        val crouton = Crouton.makeText(this, e.illegalCharacterHash, Style.ALERT)
         usernames1.editText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val email = s.toString()
@@ -173,7 +173,7 @@ class Login : AppCompatActivity() {
                             overridePendingTransition(0, 0)
                             finish()
                         } else {
-                            val crouton = Crouton.makeText(this, e.LoginError, Style.ALERT)
+                            val crouton = Crouton.makeText(this, e.loginError, Style.ALERT)
                             crouton.show()
                         }
                     }

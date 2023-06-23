@@ -35,12 +35,12 @@ import java.io.File
 import kotlin.system.exitProcess
 
 class AppSettings : AppCompatActivity() {
-    private val m = messages()
+    private val m = Messages()
     private val e = Errors()
-    private val emailType = Crouton.makeText(this, e.NotYourUsername, Style.ALERT)
-    private val passwordEmpty = Crouton.makeText(this, e.PasswordCantBeEmpty, Style.ALERT)
-    private val usernameEmpty = Crouton.makeText(this, e.EmptyUserName, Style.ALERT)
-    private val noDetails = Crouton.makeText(this, e.NoDetailsEntered, Style.ALERT)
+    private val emailType = Crouton.makeText(this, e.notYourUsername, Style.ALERT)
+    private val passwordEmpty = Crouton.makeText(this, e.passwordCantBeEmpty, Style.ALERT)
+    private val usernameEmpty = Crouton.makeText(this, e.emptyUserName, Style.ALERT)
+    private val noDetails = Crouton.makeText(this, e.noDetailsEntered, Style.ALERT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.app_settings)
@@ -368,7 +368,7 @@ class AppSettings : AppCompatActivity() {
 
 
     fun validerror(errors: Errors) {
-        val crouton = Crouton.makeText(this, errors.ValidationError, Style.ALERT)
+        val crouton = Crouton.makeText(this, errors.validationError, Style.ALERT)
         crouton.show()
     }
 
@@ -548,7 +548,7 @@ class AppSettings : AppCompatActivity() {
                 val intent = Intent(this@AppSettings, Login::class.java)
                 intent.putExtra("login", R.layout.login)
                 overridePendingTransition(0, 0)
-                Toast.makeText(this, m.DeleteConfirmation, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, m.deleteConfirmation, Toast.LENGTH_SHORT).show()
                 startActivity(intent)
 
 
