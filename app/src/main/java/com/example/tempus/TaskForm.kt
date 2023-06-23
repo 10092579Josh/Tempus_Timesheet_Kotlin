@@ -188,20 +188,22 @@ class TaskForm : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
 
 
-            if (url != null) {
-                val task = findViewById<EditText>(R.id.taskNameInput)
+            when {
+                url != null -> {
+                    val task = findViewById<EditText>(R.id.taskNameInput)
 
-                val imageView = findViewById<ImageView>(R.id.imgGallery)
-                imageView.setImageURI(url)
+                    val imageView = findViewById<ImageView>(R.id.imgGallery)
+                    imageView.setImageURI(url)
 
-                val store =
-                    Firebase.storage.reference.child(task.text.toString().trim())
+                    val store =
+                        Firebase.storage.reference.child(task.text.toString().trim())
 
-                val choice = store.putFile(url)
-                choice.addOnSuccessListener {
+                    val choice = store.putFile(url)
+                    choice.addOnSuccessListener {
 
-                }.addOnFailureListener {
+                    }.addOnFailureListener {
 
+                    }
                 }
             }
         }
@@ -275,8 +277,10 @@ class TaskForm : AppCompatActivity() {
             ) {
                 override fun onTimeChanged(view: TimePicker?, hourOfDay: Int, minute: Int) {
                     val roundedMinute = (minute / 15) * 15
-                    if (minute != roundedMinute) {
-                        view?.minute = roundedMinute
+                    when {
+                        minute != roundedMinute -> {
+                            view?.minute = roundedMinute
+                        }
                     }
                 }
             }
@@ -311,8 +315,10 @@ class TaskForm : AppCompatActivity() {
             ) {
                 override fun onTimeChanged(view: TimePicker?, hourOfDay: Int, minute: Int) {
                     val roundedMinute = (minute / 15) * 15
-                    if (minute != roundedMinute) {
-                        view?.minute = roundedMinute
+                    when {
+                        minute != roundedMinute -> {
+                            view?.minute = roundedMinute
+                        }
                     }
                 }
             }
@@ -388,132 +394,145 @@ class TaskForm : AppCompatActivity() {
                     val max = maximumGoalSpinner.selectedItem.toString()
                     val min = minimum.selectedItem.toString()
                     val selectedItem = spinner.selectedItem.toString()
-                    if (task.text.toString().isEmpty()) {
-                        taskEmpty.show()
-                    } else if (description.text.toString().isEmpty()) {
-                        emptyBody.show()
-                    } else if (start.text.toString().isEmpty()) {
+                    when {
+                        task.text.toString().isEmpty() -> {
+                            taskEmpty.show()
+                        }
+                        description.text.toString().isEmpty() -> {
+                            emptyBody.show()
+                        }
+                        start.text.toString().isEmpty() -> {
 
-                        sTime.show()
-                    } else if (end.text.toString().isEmpty()) {
-                        eTime.show()
+                            sTime.show()
+                        }
+                        end.text.toString().isEmpty() -> {
+                            eTime.show()
 
-                    } else if (dates.text.toString().isEmpty()) {
-                        sDate.show()
+                        }
+                        dates.text.toString().isEmpty() -> {
+                            sDate.show()
 
-                    } else if (selectedItem.isEmpty()) {
-                        catEmpty.show()
+                        }
+                        selectedItem.isEmpty() -> {
+                            catEmpty.show()
 
-                    } else if (max.isEmpty()) {
-                        noMx.show()
-                    } else if (min.isEmpty()) {
-                        noMing.show()
-                    } else {
-                        var picture: String
-
-
-                        val firestore = Firebase.firestore
-                        val storageRef =
-                            Firebase.storage.reference.child(task.text.toString().trim())
-                        storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                            picture = downloadUrl.toString()
-
-                            val itemsAdd = firestore.collection("TaskStorage")
-
-                            val taskName = task.text.toString().trim()
-                            val categoryTask = selectedItem.trim()
-                            val tabName = "$categoryTask$taskName"
-                            val description = description.text.toString().trim()
-                            val startTime = start.text.toString().trim()
-                            val endTime = end.text.toString().trim()
-
-                            val maxGoal = max.trim()
-                            val mingoal = minimum.selectedItem.toString().trim()
-                            val date = dates.text.toString().trim()
-
-                            val userid = Firebase.auth.currentUser?.uid
-                            val start = start.text.toString().replace(Regex("[^\\w\\s:]"), "")
-                            val end = end.text.toString().replace(Regex("[^\\w\\s:]"), "")
-
-                            val startSplit = start.split(":")
-                            val sHours = startSplit[0].toInt()
-                            val sMinutes = startSplit[1].toInt()
-
-                            val endTimeParts = end.split(":")
-                            val endHours = endTimeParts[0].toInt()
-                            val endMinutes = endTimeParts[1].toInt()
-
-                            val startTotalMinutes = sHours * 60 + sMinutes
-                            val endTotalMinutes = endHours * 60 + endMinutes
+                        }
+                        max.isEmpty() -> {
+                            noMx.show()
+                        }
+                        min.isEmpty() -> {
+                            noMing.show()
+                        }
+                        else -> {
+                            var picture: String
 
 
-                            val diffMinutes = (endTotalMinutes - startTotalMinutes).absoluteValue
+                            val firestore = Firebase.firestore
+                            val storageRef =
+                                Firebase.storage.reference.child(task.text.toString().trim())
+                            storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+                                picture = downloadUrl.toString()
 
-                            val diffHours = diffMinutes / 60
-                            val diffRemainingMinutes = diffMinutes % 60
+                                val itemsAdd = firestore.collection("TaskStorage")
 
-                            val categoryName = selectedItem.trim()
+                                val taskName = task.text.toString().trim()
+                                val categoryTask = selectedItem.trim()
+                                val tabName = "$categoryTask$taskName"
+                                val description = description.text.toString().trim()
+                                val startTime = start.text.toString().trim()
+                                val endTime = end.text.toString().trim()
 
-                            val db = Firebase.firestore
-                            val categoryRef =
-                                db.collection("CategoryStorage").document(categoryName)
-                            categoryRef.get()
-                                .addOnSuccessListener { document ->
-                                    val categoryHours = document.get("totalHours")
-                                    val currentSplit = categoryHours.toString().split(":")
-                                    val hoursValue = currentSplit[0].toInt()
-                                    val minutesValue = currentSplit[1].toInt()
+                                val maxGoal = max.trim()
+                                val mingoal = minimum.selectedItem.toString().trim()
+                                val date = dates.text.toString().trim()
 
-                                    val newTotalMinutes =
-                                        hoursValue * 60 + minutesValue + diffMinutes
-                                    val newHoursValue = newTotalMinutes / 60
-                                    val newRemainingMinutesValue = newTotalMinutes % 60
-                                    categoryRef.update(
-                                        "totalHours",
-                                        "%02d:%02d".format(newHoursValue, newRemainingMinutesValue)
-                                    )
+                                val userid = Firebase.auth.currentUser?.uid
+                                val start = start.text.toString().replace(Regex("[^\\w\\s:]"), "")
+                                val end = end.text.toString().replace(Regex("[^\\w\\s:]"), "")
+
+                                val startSplit = start.split(":")
+                                val sHours = startSplit[0].toInt()
+                                val sMinutes = startSplit[1].toInt()
+
+                                val endTimeParts = end.split(":")
+                                val endHours = endTimeParts[0].toInt()
+                                val endMinutes = endTimeParts[1].toInt()
+
+                                val startTotalMinutes = sHours * 60 + sMinutes
+                                val endTotalMinutes = endHours * 60 + endMinutes
+
+
+                                val diffMinutes = (endTotalMinutes - startTotalMinutes).absoluteValue
+
+                                val diffHours = diffMinutes / 60
+                                val diffRemainingMinutes = diffMinutes % 60
+
+                                val categoryName = selectedItem.trim()
+
+                                val db = Firebase.firestore
+                                val categoryRef =
+                                    db.collection("CategoryStorage").document(categoryName)
+                                categoryRef.get()
+                                    .addOnSuccessListener { document ->
+                                        val categoryHours = document.get("totalHours")
+                                        val currentSplit = categoryHours.toString().split(":")
+                                        val hoursValue = currentSplit[0].toInt()
+                                        val minutesValue = currentSplit[1].toInt()
+
+                                        val newTotalMinutes =
+                                            hoursValue * 60 + minutesValue + diffMinutes
+                                        val newHoursValue = newTotalMinutes / 60
+                                        val newRemainingMinutesValue = newTotalMinutes % 60
+                                        categoryRef.update(
+                                            "totalHours",
+                                            "%02d:%02d".format(newHoursValue, newRemainingMinutesValue)
+                                        )
+                                    }
+
+
+                                val hours = "%02d:%02d".format(diffHours, diffRemainingMinutes)
+
+
+                                when {
+                                    picture.isEmpty() -> {
+                                        val message = "ERROR NO IMAGE CHOSEN"
+                                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                    else -> {
+                                        val tasksAdd = TaskStorage(
+                                            taskName,
+                                            categoryTask,
+                                            description,
+                                            startTime,
+                                            endTime,
+                                            hours,
+                                            mingoal,
+                                            maxGoal,
+                                            date,
+                                            picture,
+                                            tabName,
+                                            userid.toString().trim()
+                                        )
+
+                                        val docRef = itemsAdd.document(taskName)
+                                        docRef.set(tasksAdd)
+
+
+                                        val message = "TASK ${task.text} ADDED "
+                                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                            .show()
+
+
+                                    }
                                 }
 
-
-                            val hours = "%02d:%02d".format(diffHours, diffRemainingMinutes)
-
-
-                            if (picture.isEmpty()) {
+                            }.addOnFailureListener {
                                 val message = "ERROR NO IMAGE CHOSEN"
-                                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
-                                    .show()
-                            } else {
-                                val tasksAdd = TaskStorage(
-                                    taskName,
-                                    categoryTask,
-                                    description,
-                                    startTime,
-                                    endTime,
-                                    hours,
-                                    mingoal,
-                                    maxGoal,
-                                    date,
-                                    picture,
-                                    tabName,
-                                    userid.toString().trim()
-                                )
-
-                                val docRef = itemsAdd.document(taskName)
-                                docRef.set(tasksAdd)
-
-
-                                val message = "TASK ${task.text} ADDED "
-                                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
-                                    .show()
-
-
+                                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                             }
 
-                        }.addOnFailureListener {
-                            val message = "ERROR NO IMAGE CHOSEN"
-                            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                         }
-
                     }
                 } catch (e: Exception) {
                     Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()

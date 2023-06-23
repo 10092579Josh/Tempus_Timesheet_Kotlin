@@ -232,24 +232,36 @@ class Breaks : AppCompatActivity() {
     }
 
     private fun updateWatchInterface() {
-        if (mTimerRunning) {
-            mEditTextInput!!.visibility = View.INVISIBLE
-            mButtonSet!!.visibility = View.INVISIBLE
-            mButtonReset!!.visibility = View.INVISIBLE
-            mButtonStartPause!!.text = "Pause"
-        } else {
-            mEditTextInput!!.visibility = View.VISIBLE
-            mButtonSet!!.visibility = View.VISIBLE
-            mButtonStartPause!!.text = "Start"
-            if (mTimeLeftInMillis < 1000) {
-                mButtonStartPause!!.visibility = View.INVISIBLE
-            } else {
-                mButtonStartPause!!.visibility = View.VISIBLE
-            }
-            if (mTimeLeftInMillis < mStartTimeInMillis) {
-                mButtonReset!!.visibility = View.VISIBLE
-            } else {
+        when {
+            mTimerRunning -> {
+                mEditTextInput!!.visibility = View.INVISIBLE
+                mButtonSet!!.visibility = View.INVISIBLE
                 mButtonReset!!.visibility = View.INVISIBLE
+                mButtonStartPause!!.text = "Pause"
+            }
+
+            else -> {
+                mEditTextInput!!.visibility = View.VISIBLE
+                mButtonSet!!.visibility = View.VISIBLE
+                mButtonStartPause!!.text = "Start"
+                when {
+                    mTimeLeftInMillis < 1000 -> {
+                        mButtonStartPause!!.visibility = View.INVISIBLE
+                    }
+
+                    else -> {
+                        mButtonStartPause!!.visibility = View.VISIBLE
+                    }
+                }
+                when {
+                    mTimeLeftInMillis < mStartTimeInMillis -> {
+                        mButtonReset!!.visibility = View.VISIBLE
+                    }
+
+                    else -> {
+                        mButtonReset!!.visibility = View.INVISIBLE
+                    }
+                }
             }
         }
     }
@@ -271,8 +283,10 @@ class Breaks : AppCompatActivity() {
         editor.putBoolean("timerRunning", mTimerRunning)
         editor.putLong("endTime", mEndTime)
         editor.apply()
-        if (mCountDownTimer != null) {
-            mCountDownTimer!!.cancel()
+        when {
+            mCountDownTimer != null -> {
+                mCountDownTimer!!.cancel()
+            }
         }
     }
 
@@ -284,16 +298,22 @@ class Breaks : AppCompatActivity() {
         mTimerRunning = prefs.getBoolean("timerRunning", false)
         updateCountDownText()
         updateWatchInterface()
-        if (mTimerRunning) {
-            mEndTime = prefs.getLong("endTime", 0)
-            mTimeLeftInMillis = mEndTime - System.currentTimeMillis()
-            if (mTimeLeftInMillis < 0) {
-                mTimeLeftInMillis = 0
-                mTimerRunning = false
-                updateCountDownText()
-                updateWatchInterface()
-            } else {
-                startTimer()
+        when {
+            mTimerRunning -> {
+                mEndTime = prefs.getLong("endTime", 0)
+                mTimeLeftInMillis = mEndTime - System.currentTimeMillis()
+                when {
+                    mTimeLeftInMillis < 0 -> {
+                        mTimeLeftInMillis = 0
+                        mTimerRunning = false
+                        updateCountDownText()
+                        updateWatchInterface()
+                    }
+
+                    else -> {
+                        startTimer()
+                    }
+                }
             }
         }
     }
@@ -303,38 +323,47 @@ class Breaks : AppCompatActivity() {
 
         val auth = FirebaseAuth.getInstance()
         auth.addAuthStateListener { firebaseAuth ->
-            val user = firebaseAuth.currentUser
-            if (user == null) {
+            when (firebaseAuth.currentUser) {
+                null -> {
 
-                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                AppSettings.Preloads.userSName = null
-                val intent = Intent(this@Breaks, Login::class.java)
-                intent.putExtra("login", R.layout.login)
-                overridePendingTransition(0, 0)
-                startActivity(intent)
+                    val sharedPreferences =
+                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                    sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                    AppSettings.Preloads.userSName = null
+                    val intent = Intent(this@Breaks, Login::class.java)
+                    intent.putExtra("login", R.layout.login)
+                    overridePendingTransition(0, 0)
+                    startActivity(intent)
 
+                }
             }
         }
 
         val user = FirebaseAuth.getInstance().currentUser
         user?.reload()?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // stuff to do
+            when {
+                task.isSuccessful -> {
+                    // stuff to do
 
-            } else {
-                val exception = task.exception
-                if (exception is FirebaseAuthInvalidUserException) {
-                    val errorCode = exception.errorCode
-                    if (errorCode == "ERROR_USER_NOT_FOUND") {
-                        val sharedPreferences =
-                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.Preloads.userSName = null
-                        val intent = Intent(this@Breaks, Login::class.java)
-                        intent.putExtra("login", R.layout.login)
-                        overridePendingTransition(0, 0)
-                        startActivity(intent)
+                }
+
+                else -> {
+                    when (val exception = task.exception) {
+                        is FirebaseAuthInvalidUserException -> {
+                            when (exception.errorCode) {
+                                "ERROR_USER_NOT_FOUND" -> {
+                                    val sharedPreferences =
+                                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                                    sharedPreferences.edit().putBoolean("isFirstLogin", true)
+                                        .apply()
+                                    AppSettings.Preloads.userSName = null
+                                    val intent = Intent(this@Breaks, Login::class.java)
+                                    intent.putExtra("login", R.layout.login)
+                                    overridePendingTransition(0, 0)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
                     }
                 }
             }

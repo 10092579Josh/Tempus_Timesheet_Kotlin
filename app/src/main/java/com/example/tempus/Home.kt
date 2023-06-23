@@ -48,9 +48,11 @@ class Home : AppCompatActivity() {
 // Set up the ViewPager and the TabLayout
 
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
-        if (sharedPreferences.getBoolean("isFirstLogin", true)) {
-            loggedOnNotification()
-            sharedPreferences.edit().putBoolean("isFirstLogin", false).apply()
+        when {
+            sharedPreferences.getBoolean("isFirstLogin", true) -> {
+                loggedOnNotification()
+                sharedPreferences.edit().putBoolean("isFirstLogin", false).apply()
+            }
         }
 
         try {
@@ -174,38 +176,47 @@ class Home : AppCompatActivity() {
 
         val tempusSecurity = FirebaseAuth.getInstance()
         tempusSecurity.addAuthStateListener { firebaseAuth ->
-            val user = firebaseAuth.currentUser
-            if (user == null) {
+            when (firebaseAuth.currentUser) {
+                null -> {
 
-                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                AppSettings.Preloads.userSName = null
-                val intent = Intent(this@Home, Login::class.java)
-                intent.putExtra("login", R.layout.login)
-                overridePendingTransition(0, 0)
-                startActivity(intent)
+                    val sharedPreferences =
+                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                    sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                    AppSettings.Preloads.userSName = null
+                    val intent = Intent(this@Home, Login::class.java)
+                    intent.putExtra("login", R.layout.login)
+                    overridePendingTransition(0, 0)
+                    startActivity(intent)
 
+                }
             }
         }
 
         val tempusUsers = FirebaseAuth.getInstance().currentUser
         tempusUsers?.reload()?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // stuff to do
+            when {
+                task.isSuccessful -> {
+                    // stuff to do
 
-            } else {
-                val exception = task.exception
-                if (exception is FirebaseAuthInvalidUserException) {
-                    val errorCode = exception.errorCode
-                    if (errorCode == "ERROR_USER_NOT_FOUND") {
-                        val sharedPreferences =
-                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.Preloads.userSName = null
-                        val intent = Intent(this@Home, Login::class.java)
-                        intent.putExtra("login", R.layout.login)
-                        overridePendingTransition(0, 0)
-                        startActivity(intent)
+                }
+
+                else -> {
+                    when (val exception = task.exception) {
+                        is FirebaseAuthInvalidUserException -> {
+                            when (exception.errorCode) {
+                                "ERROR_USER_NOT_FOUND" -> {
+                                    val sharedPreferences =
+                                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                                    sharedPreferences.edit().putBoolean("isFirstLogin", true)
+                                        .apply()
+                                    AppSettings.Preloads.userSName = null
+                                    val intent = Intent(this@Home, Login::class.java)
+                                    intent.putExtra("login", R.layout.login)
+                                    overridePendingTransition(0, 0)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -300,67 +311,72 @@ class Home : AppCompatActivity() {
 
                         val itemView = viewHolder.itemView
 
-                        if (dX > 0) {
-                            // Swiping to the right (edit action)
-                            val editIcon =
-                                ContextCompat.getDrawable(this@Home, R.drawable.edit_icon)
-                            val editIconMargin = (itemView.height - editIcon?.intrinsicHeight!!) / 2
-                            val editIconTop = itemView.top + editIconMargin
-                            val editIconBottom = editIconTop + editIcon.intrinsicHeight
-                            val editIconLeft = itemView.left + editIconMargin
-                            val editIconRight =
-                                itemView.left + editIconMargin + editIcon.intrinsicWidth
+                        when {
+                            dX > 0 -> {
+                                // Swiping to the right (edit action)
+                                val editIcon =
+                                    ContextCompat.getDrawable(this@Home, R.drawable.edit_icon)
+                                val editIconMargin =
+                                    (itemView.height - editIcon?.intrinsicHeight!!) / 2
+                                val editIconTop = itemView.top + editIconMargin
+                                val editIconBottom = editIconTop + editIcon.intrinsicHeight
+                                val editIconLeft = itemView.left + editIconMargin
+                                val editIconRight =
+                                    itemView.left + editIconMargin + editIcon.intrinsicWidth
 
-                            editIcon.setBounds(
-                                editIconLeft,
-                                editIconTop,
-                                editIconRight,
-                                editIconBottom
-                            )
+                                editIcon.setBounds(
+                                    editIconLeft,
+                                    editIconTop,
+                                    editIconRight,
+                                    editIconBottom
+                                )
 
-                            val editBackground = ContextCompat.getDrawable(
-                                this@Home,
-                                R.drawable.edit_button_background
-                            )
-                            editBackground?.setBounds(
-                                itemView.left,
-                                itemView.top,
-                                itemView.left + dX.toInt(),
-                                itemView.bottom
-                            )
-                            editBackground?.draw(c)
-                            editIcon.draw(c)
-                        } else {
-                            // Swiping to the left (delete action)
-                            val deleteIcon =
-                                ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)
-                            val deleteIconMargin =
-                                (itemView.height - deleteIcon?.intrinsicHeight!!) / 2
-                            val deleteIconTop = itemView.top + deleteIconMargin
-                            val deleteIconBottom = deleteIconTop + deleteIcon.intrinsicHeight
-                            val deleteIconLeft =
-                                itemView.right - deleteIconMargin - deleteIcon.intrinsicWidth
-                            val deleteIconRight = itemView.right - deleteIconMargin
+                                val editBackground = ContextCompat.getDrawable(
+                                    this@Home,
+                                    R.drawable.edit_button_background
+                                )
+                                editBackground?.setBounds(
+                                    itemView.left,
+                                    itemView.top,
+                                    itemView.left + dX.toInt(),
+                                    itemView.bottom
+                                )
+                                editBackground?.draw(c)
+                                editIcon.draw(c)
+                            }
 
-                            deleteIcon.setBounds(
-                                deleteIconLeft,
-                                deleteIconTop,
-                                deleteIconRight,
-                                deleteIconBottom
-                            )
+                            else -> {
+                                // Swiping to the left (delete action)
+                                val deleteIcon =
+                                    ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)
+                                val deleteIconMargin =
+                                    (itemView.height - deleteIcon?.intrinsicHeight!!) / 2
+                                val deleteIconTop = itemView.top + deleteIconMargin
+                                val deleteIconBottom = deleteIconTop + deleteIcon.intrinsicHeight
+                                val deleteIconLeft =
+                                    itemView.right - deleteIconMargin - deleteIcon.intrinsicWidth
+                                val deleteIconRight = itemView.right - deleteIconMargin
 
-                            val deleteBackground = ContextCompat.getDrawable(
-                                this@Home,
-                                R.drawable.delete_button_background
-                            )
-                            deleteBackground?.setBounds(
-                                itemView.right + dX.toInt(),
-                                itemView.top,
-                                itemView.right,
-                                itemView.bottom
-                            )
-                            deleteBackground?.draw(c)
-                            deleteIcon.draw(c)
+                                deleteIcon.setBounds(
+                                    deleteIconLeft,
+                                    deleteIconTop,
+                                    deleteIconRight,
+                                    deleteIconBottom
+                                )
+
+                                val deleteBackground = ContextCompat.getDrawable(
+                                    this@Home,
+                                    R.drawable.delete_button_background
+                                )
+                                deleteBackground?.setBounds(
+                                    itemView.right + dX.toInt(),
+                                    itemView.top,
+                                    itemView.right,
+                                    itemView.bottom
+                                )
+                                deleteBackground?.draw(c)
+                                deleteIcon.draw(c)
+                            }
                         }
                     }
                 }
@@ -397,11 +413,15 @@ class Home : AppCompatActivity() {
 
             holder.itemView.setOnClickListener {
 
-                if (holder.tasksLayout.visibility == View.GONE) {
-                    holder.tasksLayout.visibility = View.VISIBLE
-                    populateTasks(holder, itemsViewModel.text)
-                } else {
-                    holder.tasksLayout.visibility = View.GONE
+                when (holder.tasksLayout.visibility) {
+                    View.GONE -> {
+                        holder.tasksLayout.visibility = View.VISIBLE
+                        populateTasks(holder, itemsViewModel.text)
+                    }
+
+                    else -> {
+                        holder.tasksLayout.visibility = View.GONE
+                    }
                 }
             }
 
@@ -441,13 +461,17 @@ class Home : AppCompatActivity() {
                     val tabName = document.getString("tabID") ?: ""
 
                     val task = Task(name, hours)
-                    if (tasksByTab.containsKey(tabName)) {
-                        tasksByTab[tabName]?.add(task)
+                    when {
+                        tasksByTab.containsKey(tabName) -> {
+                            tasksByTab[tabName]?.add(task)
 
-                    } else {
-                        tasksByTab[tabName] = mutableListOf(task)
+                        }
+
+                        else -> {
+                            tasksByTab[tabName] = mutableListOf(task)
 
 
+                        }
                     }
 
                 }
@@ -565,13 +589,17 @@ class Home : AppCompatActivity() {
                 for (ds in dataSnapshot.children) {
                     val documentName = ds.key
 
-                    if (documentName == userid.toString().trim()) {
-                        tempusManager.notify(0, builder.build())
+                    when {
+                        documentName == userid.toString().trim() -> {
+                            tempusManager.notify(0, builder.build())
 
 
-                    } else if (AppSettings.Preloads.userSName.isNullOrEmpty()) {
+                        }
 
-                        tempusManager.notify(1, unverifiedBuilder.build())
+                        AppSettings.Preloads.userSName.isNullOrEmpty() -> {
+
+                            tempusManager.notify(1, unverifiedBuilder.build())
+                        }
                     }
 
                 }
@@ -596,21 +624,23 @@ class Home : AppCompatActivity() {
                 for (data in dataSnapshot.children) {
                     val userId = data.child("userid").getValue(String::class.java)
 
-                    if (userId.toString().trim() == userid.toString().trim()) {
-                        AppSettings.Preloads.names =
-                            data.child("firstname").getValue(String::class.java).toString()
-                        AppSettings.Preloads.emails =
-                            data.child("emailaddress").getValue(String::class.java).toString()
-                        AppSettings.Preloads.surname =
-                            data.child("surname").getValue(String::class.java).toString()
-                        AppSettings.Preloads.userSName =
-                            data.child("displayname").getValue(String::class.java).toString()
-                        AppSettings.Preloads.conPass =
-                            data.child("confirmkey").getValue(String::class.java).toString()
-                        AppSettings.Preloads.pass =
-                            data.child("password").getValue(String::class.java).toString()
+                    when {
+                        userId.toString().trim() == userid.toString().trim() -> {
+                            AppSettings.Preloads.names =
+                                data.child("firstname").getValue(String::class.java).toString()
+                            AppSettings.Preloads.emails =
+                                data.child("emailaddress").getValue(String::class.java).toString()
+                            AppSettings.Preloads.surname =
+                                data.child("surname").getValue(String::class.java).toString()
+                            AppSettings.Preloads.userSName =
+                                data.child("displayname").getValue(String::class.java).toString()
+                            AppSettings.Preloads.conPass =
+                                data.child("confirmkey").getValue(String::class.java).toString()
+                            AppSettings.Preloads.pass =
+                                data.child("password").getValue(String::class.java).toString()
 
 
+                        }
                     }
 
 

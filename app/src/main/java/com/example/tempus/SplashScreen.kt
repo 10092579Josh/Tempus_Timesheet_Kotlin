@@ -33,47 +33,50 @@ class SplashScreen : AppCompatActivity() {
             val auth = FirebaseAuth.getInstance()
             val currentUser = auth.currentUser
             Log.d("MyApp", "$currentUser")
-            if (currentUser != null) {
-                updateBar(progressBar, progressText, 50)
+            when {
+                currentUser != null -> {
+                    updateBar(progressBar, progressText, 50)
 
-                Log.d("MyApp", "Method X started")
-
-
-                updateBar(progressBar, progressText, 75)
-                val splashImageView = findViewById<ImageView>(R.id.splashImageView)
-                splashImageView.setImageResource(R.drawable.splash_screen_logo)
-
-                splashImageView.bringToFront()
-                splashImageView.invalidate()
-                updateBar(progressBar, progressText, 100)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    val homepage = Intent(this@SplashScreen, Home::class.java)
-                    homepage.putExtra("home", R.layout.home)
-                    startActivity(homepage)
-
-                    finish()
-
-                }, splashDelay)
-            } else {
-                updateBar(progressBar, progressText, 50)
-                val splashImageView = findViewById<ImageView>(R.id.splashImageView)
-                splashImageView.setImageResource(R.drawable.splash_screen_logo)
-
-                splashImageView.bringToFront()
-                splashImageView.invalidate()
-                updateBar(progressBar, progressText, 75)
-
-                Handler(Looper.getMainLooper()).postDelayed({
-
-                    val loginpage = Intent(this@SplashScreen, Login::class.java)
-                    loginpage.putExtra("login", R.layout.login)
+                    Log.d("MyApp", "Method X started")
 
 
-                    startActivity(loginpage)
-                    finish()
+                    updateBar(progressBar, progressText, 75)
+                    val splashImageView = findViewById<ImageView>(R.id.splashImageView)
+                    splashImageView.setImageResource(R.drawable.splash_screen_logo)
 
-                }, splashDelay)
-                updateBar(progressBar, progressText, 100)
+                    splashImageView.bringToFront()
+                    splashImageView.invalidate()
+                    updateBar(progressBar, progressText, 100)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        val homepage = Intent(this@SplashScreen, Home::class.java)
+                        homepage.putExtra("home", R.layout.home)
+                        startActivity(homepage)
+
+                        finish()
+
+                    }, splashDelay)
+                }
+                else -> {
+                    updateBar(progressBar, progressText, 50)
+                    val splashImageView = findViewById<ImageView>(R.id.splashImageView)
+                    splashImageView.setImageResource(R.drawable.splash_screen_logo)
+
+                    splashImageView.bringToFront()
+                    splashImageView.invalidate()
+                    updateBar(progressBar, progressText, 75)
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+
+                        val loginpage = Intent(this@SplashScreen, Login::class.java)
+                        loginpage.putExtra("login", R.layout.login)
+
+
+                        startActivity(loginpage)
+                        finish()
+
+                    }, splashDelay)
+                    updateBar(progressBar, progressText, 100)
+                }
             }
         } catch (E: Exception) {
             val message = Exception()

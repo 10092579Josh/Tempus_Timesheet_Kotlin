@@ -39,8 +39,8 @@ class Login : AppCompatActivity() {
 
         permissions()
         signup()
+        login()
         notifications()
-
         FirebaseApp.initializeApp(this)
 
     }
@@ -141,44 +141,56 @@ class Login : AppCompatActivity() {
         val signButton: Button = findViewById(R.id.insign)
         signButton.setOnClickListener()
         {
-            if (pass2?.text.isNullOrEmpty()) {
-                emptyPass.show()
+            when {
+                pass2?.text.isNullOrEmpty() -> {
+                    emptyPass.show()
 
-            } else if (usernames?.text.isNullOrEmpty()) {
+                }
 
-               emptyEmail.show()
+                usernames?.text.isNullOrEmpty() -> {
 
-            } else if (pass2?.text.isNullOrEmpty() && usernames?.text.isNullOrEmpty()) {
+                    emptyEmail.show()
 
-                noFields.show()
+                }
 
-            } else {
+                pass2?.text.isNullOrEmpty() && usernames?.text.isNullOrEmpty() -> {
 
-                val security = Firebase.auth
+                    noFields.show()
+
+                }
+
+                else -> {
+
+                    val security = Firebase.auth
 
 
-                security.signInWithEmailAndPassword(
-                    usernames?.text.toString().trim(),
-                    pass2?.text.toString().trim()
-                )
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
+                    security.signInWithEmailAndPassword(
+                        usernames?.text.toString().trim(),
+                        pass2?.text.toString().trim()
+                    )
+                        .addOnCompleteListener(this) { task ->
+                            when {
+                                task.isSuccessful -> {
 
-                            val homepage = Intent(this, Home::class.java)
-                            homepage.putExtra(
-                                "home",
-                                intent.getIntExtra("home", R.layout.home)
-                            )
-                            startActivity(homepage)
-                            overridePendingTransition(0, 0)
-                            finish()
-                        } else {
-                            val crouton = Crouton.makeText(this, e.loginError, Style.ALERT)
-                            crouton.show()
+                                    val homepage = Intent(this, Home::class.java)
+                                    homepage.putExtra(
+                                        "home",
+                                        intent.getIntExtra("home", R.layout.home)
+                                    )
+                                    startActivity(homepage)
+                                    overridePendingTransition(0, 0)
+                                    finish()
+                                }
+
+                                else -> {
+                                    val crouton = Crouton.makeText(this, e.loginError, Style.ALERT)
+                                    crouton.show()
+                                }
+                            }
                         }
-                    }
 
 
+                }
             }
         }
 
@@ -189,51 +201,45 @@ class Login : AppCompatActivity() {
     private fun permissions() {
         val code = 0
 
-        if (ContextCompat.checkSelfPermission(
+        when {
+            ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_MEDIA_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_MEDIA_IMAGES
-            ) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_MEDIA_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_MEDIA_VIDEO
-            ) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this, arrayOf(
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.ACCESS_MEDIA_LOCATION,
-                    Manifest.permission.READ_MEDIA_IMAGES,
-                    Manifest.permission.READ_MEDIA_AUDIO,
-                    Manifest.permission.READ_MEDIA_VIDEO,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ), code
-            )
+            ) != PackageManager.PERMISSION_GRANTED -> {
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.ACCESS_MEDIA_LOCATION,
+                        Manifest.permission.READ_MEDIA_IMAGES,
+                        Manifest.permission.READ_MEDIA_AUDIO,
+                        Manifest.permission.READ_MEDIA_VIDEO,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ), code
+                )
+            }
         }
     }
 

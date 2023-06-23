@@ -1,5 +1,8 @@
 package com.example.tempus
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -14,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.EmailAuthProvider
@@ -153,148 +157,174 @@ class UserDetails : AppCompatActivity() {
         saveButton.setOnClickListener {
 
 
-            if (password.text.toString() != conPassword.text.toString()) {
-                val message = " passwords do not match"
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+            when {
+                password.text.toString() != conPassword.text.toString() -> {
+                    val message = " passwords do not match"
+                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
-            } else if (name.text.toString().isEmpty()) {
-                val message = " no firstname entered "
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-            } else if (surname.text.toString().isEmpty()) {
-                val message = " no surname entered "
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-            } else if (password.text.toString().length < 7) {
-                val message = " enter password is too short"
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-            } else if (conPassword.text.toString().length < 7) {
-                val message = " confirmkey password is too short "
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-
-            } else if (email.text.toString().isEmpty()) {
-                val message = " no emailaddress entered "
-                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-            } else { // move to the next screen if filled
-
-                val database = Firebase.database
-                val userid = FirebaseAuth.getInstance().currentUser?.uid
-                val myRef = database.getReference("UserDetails")
-
-                val user = FirebaseAuth.getInstance().currentUser
-                user?.let {
-                    it.updateEmail((email.text.toString().replace("\\s".toRegex(), "")))
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-
-                                myRef.child(userid.toString()).child("displayname").setValue(
-                                    username.text.toString().replace("\\s".toRegex(), "")
-                                )
-                                myRef.child(userid.toString()).child("password").setValue(
-                                    password.text.toString().replace("\\s".toRegex(), "")
-                                )
-                                myRef.child(userid.toString()).child("confirmkey").setValue(
-                                    conPassword.text.toString().replace("\\s".toRegex(), "")
-                                )
-                                myRef.child(userid.toString()).child("firstname")
-                                    .setValue(name.text.toString().replace("\\s".toRegex(), ""))
-                                myRef.child(userid.toString()).child("surname")
-                                    .setValue(surname.text.toString().replace("\\s".toRegex(), ""))
-                                myRef.child(userid.toString()).child("emailaddress")
-                                    .setValue(email.text.toString().replace("\\s".toRegex(), ""))
-
-                                Toast.makeText(
-                                    this,
-                                    "${username.text}:New Details Captured",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-
-                                // to do stuff soon
-                            }
-                        }.addOnFailureListener { exception ->
-
-                            when ((exception as? FirebaseAuthException)?.errorCode) {
-                                "ERROR_REQUIRES_RECENT_LOGIN" -> {
-                                    authorise()
-
-                                }
-
-                                "ERROR_USER_TOKEN_EXPIRED" -> {
-                                    returns.show()
-                                    FirebaseAuth.getInstance().signOut()
-
-
-                                    val message =
-                                        " ${AppSettings.Preloads.userSName} HAS LOGGED OUT!"
-                                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
-                                        .show()
-                                    val sharedPreferences =
-                                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                                    sharedPreferences.edit().putBoolean("isFirstLogin", true)
-                                        .apply()
-                                    AppSettings.Preloads.userSName = null
-                                    val intent = Intent(this@UserDetails, Login::class.java)
-                                    intent.putExtra("login", R.layout.login)
-                                    overridePendingTransition(0, 0)
-                                    startActivity(intent)
-
-
-                                }
-
-                                else -> {
-
-                                    // to do stuff
-                                }
-                            }
-                        }
-
-                    it.updatePassword(password.text.toString().replace("\\s".toRegex(), ""))
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-
-                                Toast.makeText(
-                                    this,
-                                    "${username.text}:New Details Captured",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                            }
-                        }.addOnFailureListener { exception ->
-                            when ((exception as? FirebaseAuthException)?.errorCode) {
-                                "ERROR_REQUIRES_RECENT_LOGIN" -> {
-                                    authorise()
-
-                                }
-
-                                "ERROR_USER_TOKEN_EXPIRED" -> {
-                                    returns.show()
-                                    FirebaseAuth.getInstance().signOut()
-
-
-                                    val message =
-                                        " ${AppSettings.Preloads.userSName} HAS LOGGED OUT!"
-                                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
-                                        .show()
-                                    val sharedPreferences =
-                                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                                    sharedPreferences.edit().putBoolean("isFirstLogin", true)
-                                        .apply()
-                                    AppSettings.Preloads.userSName = null
-                                    val intent = Intent(this@UserDetails, Login::class.java)
-                                    intent.putExtra("login", R.layout.login)
-                                    overridePendingTransition(0, 0)
-                                    startActivity(intent)
-
-                                }
-
-                                else -> {
-                                    // to do stuff soon
-
-                                }
-                            }
-                        }
                 }
 
+                name.text.toString().isEmpty() -> {
+                    val message = " no firstname entered "
+                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                }
 
+                surname.text.toString().isEmpty() -> {
+                    val message = " no surname entered "
+                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                }
+
+                password.text.toString().length < 7 -> {
+                    val message = " enter password is too short"
+                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                }
+
+                conPassword.text.toString().length < 7 -> {
+                    val message = " confirmkey password is too short "
+                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+
+                }
+
+                email.text.toString().isEmpty() -> {
+                    val message = " no emailaddress entered "
+                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                }
+
+                else -> { // move to the next screen if filled
+
+                    val database = Firebase.database
+                    val userid = FirebaseAuth.getInstance().currentUser?.uid
+                    val myRef = database.getReference("UserDetails")
+
+                    val user = FirebaseAuth.getInstance().currentUser
+                    user?.let {
+                        it.updateEmail((email.text.toString().replace("\\s".toRegex(), "")))
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+
+                                    myRef.child(userid.toString()).child("displayname").setValue(
+                                        username.text.toString().replace("\\s".toRegex(), "")
+                                    )
+                                    myRef.child(userid.toString()).child("password").setValue(
+                                        password.text.toString().replace("\\s".toRegex(), "")
+                                    )
+                                    myRef.child(userid.toString()).child("confirmkey").setValue(
+                                        conPassword.text.toString().replace("\\s".toRegex(), "")
+                                    )
+                                    myRef.child(userid.toString()).child("firstname")
+                                        .setValue(name.text.toString().replace("\\s".toRegex(), ""))
+                                    myRef.child(userid.toString()).child("surname")
+                                        .setValue(
+                                            surname.text.toString().replace("\\s".toRegex(), "")
+                                        )
+                                    myRef.child(userid.toString()).child("emailaddress")
+                                        .setValue(
+                                            email.text.toString().replace("\\s".toRegex(), "")
+                                        )
+                                    emailChange()
+
+                                } else {
+
+                                    // to do stuff soon
+                                }
+                            }.addOnFailureListener { exception ->
+
+                                when ((exception as? FirebaseAuthException)?.errorCode) {
+                                    "ERROR_REQUIRES_RECENT_LOGIN" -> {
+                                        authorise()
+
+                                    }
+
+                                    "ERROR_USER_TOKEN_EXPIRED" -> {
+                                        returns.show()
+                                        FirebaseAuth.getInstance().signOut()
+
+
+                                        val message =
+                                            " ${AppSettings.Preloads.userSName} HAS LOGGED OUT!"
+                                        Toast.makeText(
+                                            applicationContext,
+                                            message,
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                        val sharedPreferences =
+                                            getSharedPreferences(
+                                                "preferences",
+                                                Context.MODE_PRIVATE
+                                            )
+                                        sharedPreferences.edit().putBoolean("isFirstLogin", true)
+                                            .apply()
+                                        AppSettings.Preloads.userSName = null
+                                        val intent = Intent(this@UserDetails, Login::class.java)
+                                        intent.putExtra("login", R.layout.login)
+                                        overridePendingTransition(0, 0)
+                                        startActivity(intent)
+
+
+                                    }
+
+                                    else -> {
+
+                                        // to do stuff
+                                    }
+                                }
+                            }
+
+                        it.updatePassword(password.text.toString().replace("\\s".toRegex(), ""))
+                            .addOnCompleteListener { task ->
+                                when {
+                                    task.isSuccessful -> {
+                                        passwordChange()
+
+
+                                    }
+                                }
+                            }.addOnFailureListener { exception ->
+                                when ((exception as? FirebaseAuthException)?.errorCode) {
+                                    "ERROR_REQUIRES_RECENT_LOGIN" -> {
+                                        authorise()
+
+                                    }
+
+                                    "ERROR_USER_TOKEN_EXPIRED" -> {
+                                        returns.show()
+                                        FirebaseAuth.getInstance().signOut()
+
+
+                                        val message =
+                                            " ${AppSettings.Preloads.userSName} HAS LOGGED OUT!"
+                                        Toast.makeText(
+                                            applicationContext,
+                                            message,
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                        val sharedPreferences =
+                                            getSharedPreferences(
+                                                "preferences",
+                                                Context.MODE_PRIVATE
+                                            )
+                                        sharedPreferences.edit().putBoolean("isFirstLogin", true)
+                                            .apply()
+                                        AppSettings.Preloads.userSName = null
+                                        val intent = Intent(this@UserDetails, Login::class.java)
+                                        intent.putExtra("login", R.layout.login)
+                                        overridePendingTransition(0, 0)
+                                        startActivity(intent)
+
+                                    }
+
+                                    else -> {
+                                        // to do stuff soon
+
+                                    }
+                                }
+                            }
+                    }
+
+
+                }
             }
         }
     }
@@ -353,43 +383,55 @@ class UserDetails : AppCompatActivity() {
                 ).setPositiveButton("SUBMIT") { _, _ ->
 
 
-                    if (emailVerification.text.isNullOrEmpty()) {
+                    when {
+                        emailVerification.text.isNullOrEmpty() -> {
 
-                        emailEmpty.show()
-
-
-                    } else if (confirmInput.text.isNullOrEmpty()) {
-                        confirmEmpty.show()
-
-                    } else if (passwordInput.text.isNullOrEmpty()) {
-                        passwordEmpty.show()
-
-                    } else if (emailVerification.text.isNullOrEmpty() && confirmInput.text.isNullOrEmpty()) {
-                        emailEmpty.show()
-                        confirmEmpty.show()
+                            emailEmpty.show()
 
 
-                    } else if (passwordInput.text.toString() != confirmInput.text.toString()) {
-                        passwordMatch.show()
-
-
-                    } else {
-
-                        val user = FirebaseAuth.getInstance().currentUser
-                        val credential = EmailAuthProvider.getCredential(
-                            emailVerification.text.toString().trim(),
-                            confirmInput.text.toString().trim()
-                        )
-                        user?.reauthenticate(credential)?.addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                validMessage.show()
-
-
-                            } else {
-                                // Failed to re-authenticate user
-                            }
                         }
 
+                        confirmInput.text.isNullOrEmpty() -> {
+                            confirmEmpty.show()
+
+                        }
+
+                        passwordInput.text.isNullOrEmpty() -> {
+                            passwordEmpty.show()
+
+                        }
+
+                        emailVerification.text.isNullOrEmpty() && confirmInput.text.isNullOrEmpty() -> {
+                            emailEmpty.show()
+                            confirmEmpty.show()
+
+
+                        }
+
+                        passwordInput.text.toString() != confirmInput.text.toString() -> {
+                            passwordMatch.show()
+
+
+                        }
+
+                        else -> {
+
+                            val user = FirebaseAuth.getInstance().currentUser
+                            val credential = EmailAuthProvider.getCredential(
+                                emailVerification.text.toString().trim(),
+                                confirmInput.text.toString().trim()
+                            )
+                            user?.reauthenticate(credential)?.addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    validMessage.show()
+
+
+                                } else {
+                                    // Failed to re-authenticate user
+                                }
+                            }
+
+                        }
                     }
                     isDialogOpen = false
                 }
@@ -422,4 +464,67 @@ class UserDetails : AppCompatActivity() {
         }
 
     }
+
+    private fun emailChange() {
+        val logIntent = Intent(this, AppSettings::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val settingsIntent =
+            PendingIntent.getActivity(this, 0, logIntent, PendingIntent.FLAG_MUTABLE)
+
+        val user = FirebaseAuth.getInstance().currentUser?.email
+        val channelId = "Details Changed"
+        val channelName = "Accounts"
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val notificationChannel = NotificationChannel(channelId, channelName, importance)
+
+        val tempusManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        tempusManager.createNotificationChannel(notificationChannel)
+
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.imageuser)
+            .setContentTitle("$user Account details")
+            .setContentText("Email has been changed and Details captured $user")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_EVENT)
+            .setContentIntent(settingsIntent)
+            .setAutoCancel(true)
+
+
+
+        tempusManager.notify(0, builder.build())
+
+
+    }
+
+    private fun passwordChange() {
+        val logIntent = Intent(this, AppSettings::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val settingsIntent =
+            PendingIntent.getActivity(this, 0, logIntent, PendingIntent.FLAG_MUTABLE)
+
+        val user = FirebaseAuth.getInstance().currentUser?.email
+        val channelId = "Details Changed"
+        val channelName = "Accounts"
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val notificationChannel = NotificationChannel(channelId, channelName, importance)
+
+        val tempusManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        tempusManager.createNotificationChannel(notificationChannel)
+
+
+        val unverifiedBuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.imageuser)
+            .setContentTitle("$user logged in")
+            .setContentText("welcome to tempus new $user please verify your account")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_EVENT)
+            .setContentIntent(settingsIntent)
+            .setAutoCancel(true)
+
+        tempusManager.notify(1, unverifiedBuilder.build())
+    }
+
+
 }

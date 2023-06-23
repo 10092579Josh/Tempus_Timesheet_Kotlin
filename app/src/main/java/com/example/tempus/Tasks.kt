@@ -132,7 +132,6 @@ class Tasks : AppCompatActivity() {
     }
 
 
-
     private fun security() {
 
         val auth = FirebaseAuth.getInstance()

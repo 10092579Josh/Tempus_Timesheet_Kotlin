@@ -1,13 +1,6 @@
 package com.example.tempus
 
 
-data class Storage(
-
-    val stuff: String
-
-
-)
-
 data class TaskStorage(
     val taskName: String,
     val categoryName: String,

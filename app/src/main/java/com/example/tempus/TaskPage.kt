@@ -129,22 +129,27 @@ class TaskPage : AppCompatActivity() {
 
         val user = FirebaseAuth.getInstance().currentUser
         user?.reload()?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                //stuff to do
+            when {
+                task.isSuccessful -> {
+                    //stuff to do
 
-            } else {
-                val exception = task.exception
-                if (exception is FirebaseAuthInvalidUserException) {
-                    val errorCode = exception.errorCode
-                    if (errorCode == "ERROR_USER_NOT_FOUND") {
-                        val sharedPreferences =
-                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.Preloads.userSName = null
-                        val intent = Intent(this@TaskPage, Login::class.java)
-                        intent.putExtra("login", R.layout.login)
-                        overridePendingTransition(0, 0)
-                        startActivity(intent)
+                }
+                else -> {
+                    when (val exception = task.exception) {
+                        is FirebaseAuthInvalidUserException -> {
+                            when (exception.errorCode) {
+                                "ERROR_USER_NOT_FOUND" -> {
+                                    val sharedPreferences =
+                                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                                    sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                                    AppSettings.Preloads.userSName = null
+                                    val intent = Intent(this@TaskPage, Login::class.java)
+                                    intent.putExtra("login", R.layout.login)
+                                    overridePendingTransition(0, 0)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -221,23 +226,25 @@ class TaskPage : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
 
 
-            if (url != null) {
-                val task = findViewById<TextView>(R.id.task_name)
+            when {
+                url != null -> {
+                    val task = findViewById<TextView>(R.id.task_name)
 
-                val imageView = findViewById<ImageView>(R.id.task_image)
-                imageView.setImageURI(url)
+                    val imageView = findViewById<ImageView>(R.id.task_image)
+                    imageView.setImageURI(url)
 
-                val store = Firebase.storage.reference.child(task.text.toString().trim())
+                    val store = Firebase.storage.reference.child(task.text.toString().trim())
 
 
-                val choice = store.putFile(url)
-                choice.addOnSuccessListener {
+                    val choice = store.putFile(url)
+                    choice.addOnSuccessListener {
 
-                    val message = "IMAGE UPLOADED ,PLEASE RESTART THE APP"
-                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-                    cacheClosure(this)
-                }.addOnFailureListener {
+                        val message = "IMAGE UPLOADED ,PLEASE RESTART THE APP"
+                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                        cacheClosure(this)
+                    }.addOnFailureListener {
 
+                    }
                 }
             }
         }

@@ -143,15 +143,19 @@ class AppSettings : AppCompatActivity() {
             startActivity(loginpage)
         }
         accsetting.setOnClickListener {
-            if (Preloads.userSName == null) {
-                accountVerify()
-            } else {
-                val accsettings = Intent(this, UserDetails::class.java)
-                startActivity(accsettings)
-                overridePendingTransition(0, 0)
-                finish()
+            when (Preloads.userSName) {
+                null -> {
+                    accountVerify()
+                }
+
+                else -> {
+                    val accsettings = Intent(this, UserDetails::class.java)
+                    startActivity(accsettings)
+                    overridePendingTransition(0, 0)
+                    finish()
 
 
+                }
             }
         }
         deleteappdata.setOnClickListener {
@@ -185,38 +189,47 @@ class AppSettings : AppCompatActivity() {
 
         val auth = FirebaseAuth.getInstance()
         auth.addAuthStateListener { firebaseAuth ->
-            val user = firebaseAuth.currentUser
-            if (user == null) {
+            when (firebaseAuth.currentUser) {
+                null -> {
 
-                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                Preloads.userSName = null
-                val intent = Intent(this@AppSettings, Login::class.java)
-                intent.putExtra("login", R.layout.login)
-                overridePendingTransition(0, 0)
-                startActivity(intent)
+                    val sharedPreferences =
+                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                    sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                    Preloads.userSName = null
+                    val intent = Intent(this@AppSettings, Login::class.java)
+                    intent.putExtra("login", R.layout.login)
+                    overridePendingTransition(0, 0)
+                    startActivity(intent)
 
+                }
             }
         }
 
         val user = FirebaseAuth.getInstance().currentUser
         user?.reload()?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                //stuff to do
+            when {
+                task.isSuccessful -> {
+                    //stuff to do
 
-            } else {
-                val exception = task.exception
-                if (exception is FirebaseAuthInvalidUserException) {
-                    val errorCode = exception.errorCode
-                    if (errorCode == "ERROR_USER_NOT_FOUND") {
-                        val sharedPreferences =
-                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        Preloads.userSName = null
-                        val loginpage = Intent(this@AppSettings, Login::class.java)
-                        loginpage.putExtra("login", R.layout.login)
-                        overridePendingTransition(0, 0)
-                        startActivity(loginpage)
+                }
+
+                else -> {
+                    when (val exception = task.exception) {
+                        is FirebaseAuthInvalidUserException -> {
+                            when (exception.errorCode) {
+                                "ERROR_USER_NOT_FOUND" -> {
+                                    val sharedPreferences =
+                                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                                    sharedPreferences.edit().putBoolean("isFirstLogin", true)
+                                        .apply()
+                                    Preloads.userSName = null
+                                    val loginpage = Intent(this@AppSettings, Login::class.java)
+                                    loginpage.putExtra("login", R.layout.login)
+                                    overridePendingTransition(0, 0)
+                                    startActivity(loginpage)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -297,42 +310,52 @@ class AppSettings : AppCompatActivity() {
                     val newRef = FirebaseDatabase.getInstance()
                         .getReference("UserDetails/${userid.toString()}")
 
-                    if (usernameInput.text.isNullOrEmpty()) {
-                        usernameEmpty.show()
+                    when {
+                        usernameInput.text.isNullOrEmpty() -> {
+                            usernameEmpty.show()
 
-                    } else if (emailCheck(username)) {
-                        emailType.show()
+                        }
 
-                    } else if (passwordInput.text.isNullOrEmpty()) {
-                        passwordEmpty.show()
+                        emailCheck(username) -> {
+                            emailType.show()
 
-                    } else if (usernameInput.text.isNullOrEmpty() && passwordInput.text.isNullOrEmpty()) {
-                        noDetails.show()
+                        }
 
-                    } else {
+                        passwordInput.text.isNullOrEmpty() -> {
+                            passwordEmpty.show()
 
-                        oldRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                val data = dataSnapshot.value as? Map<*, *>
-                                if (dataSnapshot.exists()) {
-                                    if (data != null) {
-                                        newRef.setValue(data) { error, _ ->
-                                            if (error == null) {
-                                                oldRef.removeValue()
-                                                myRef.child(userid.toString()).child("userid")
-                                                    .setValue(userid)
+                        }
+
+                        usernameInput.text.isNullOrEmpty() && passwordInput.text.isNullOrEmpty() -> {
+                            noDetails.show()
+
+                        }
+
+                        else -> {
+
+                            oldRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                    val data = dataSnapshot.value as? Map<*, *>
+                                    if (dataSnapshot.exists()) {
+                                        if (data != null) {
+                                            newRef.setValue(data) { error, _ ->
+                                                if (error == null) {
+                                                    oldRef.removeValue()
+                                                    myRef.child(userid.toString()).child("userid")
+                                                        .setValue(userid)
+                                                }
                                             }
+                                        } else {
+                                            validerror(Errors())
                                         }
-                                    } else {
-                                        validerror(Errors())
                                     }
                                 }
-                            }
 
-                            override fun onCancelled(databaseError: DatabaseError) {
-                                // Handle error
-                            }
-                        })
+                                override fun onCancelled(databaseError: DatabaseError) {
+                                    // Handle error
+                                }
+                            })
+                        }
                     }
                     isDialogOpen = false
                 }
@@ -391,23 +414,33 @@ class AppSettings : AppCompatActivity() {
                 for (data in dataSnapshot.children) {
 
                     val userId = data.child("userid").getValue(String::class.java)
-                    if (userId.toString().trim() == userid.toString().trim()) {
+                    when {
+                        userId.toString().trim() == userid.toString().trim() -> {
 
-                        if (Preloads.names.isEmpty()) {
-                            Preloads.names =
-                                data.child("firstname").getValue(String::class.java).toString()
-                            Preloads.emails =
-                                data.child("emailaddress").getValue(String::class.java).toString()
-                            Preloads.surname =
-                                data.child("surname").getValue(String::class.java).toString()
-                            Preloads.userSName =
-                                data.child("displayname").getValue(String::class.java).toString()
-                            Preloads.conPass =
-                                data.child("confirmkey").getValue(String::class.java).toString()
-                            Preloads.pass =
-                                data.child("password").getValue(String::class.java).toString()
+                            when {
+                                Preloads.names.isEmpty() -> {
+                                    Preloads.names =
+                                        data.child("firstname").getValue(String::class.java)
+                                            .toString()
+                                    Preloads.emails =
+                                        data.child("emailaddress").getValue(String::class.java)
+                                            .toString()
+                                    Preloads.surname =
+                                        data.child("surname").getValue(String::class.java)
+                                            .toString()
+                                    Preloads.userSName =
+                                        data.child("displayname").getValue(String::class.java)
+                                            .toString()
+                                    Preloads.conPass =
+                                        data.child("confirmkey").getValue(String::class.java)
+                                            .toString()
+                                    Preloads.pass =
+                                        data.child("password").getValue(String::class.java)
+                                            .toString()
 
 
+                                }
+                            }
                         }
                     }
 

@@ -10,8 +10,8 @@ data class Errors(
     val passwordCantBeEmpty: String = "Password field cant be empty",
     val confirmPasswordCantBeEmpty: String = "Confirm Password field cant be empty",
     val passwordNotMatch: String = "Passwords don't match",
-    val passwordTooShort:String =" Password does not meet the required length",
-    val confirmPasswordTooShort:String =" Confirm Password does not meet the required length",
+    val passwordTooShort: String = " Password does not meet the required length",
+    val confirmPasswordTooShort: String = " Confirm Password does not meet the required length",
     val newSignInRequired: String = " Please Sign in again",
     val notYourUsername: String = "no username detected , please enter a valid username",
     val emptyUserName: String = "Username Field is empty!",
@@ -25,10 +25,8 @@ data class Errors(
     val noEndDate: String = "Please Enter A Start date",
     val noMinGoal: String = " Please enter a Minimum Goal",
     val noMaxGoal: String = "Please enter a Max Goal",
-    val noFName:String = " no First Name Entered",
-    val noSName:String = "No Surname Entered",
-
-
+    val noFName: String = " no First Name Entered",
+    val noSName: String = "No Surname Entered",
 
 
     )

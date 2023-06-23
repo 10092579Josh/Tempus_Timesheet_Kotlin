@@ -142,18 +142,20 @@ class CategoryForm : AppCompatActivity() {
                 // to do things here
 
             } else {
-                val exception = task.exception
-                if (exception is FirebaseAuthInvalidUserException) {
-                    val errorCode = exception.errorCode
-                    if (errorCode == "ERROR_USER_NOT_FOUND") {
-                        val sharedPreferences =
-                            getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                        sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.Preloads.userSName = null
-                        val intent = Intent(this@CategoryForm, Login::class.java)
-                        intent.putExtra("login", R.layout.login)
-                        overridePendingTransition(0, 0)
-                        startActivity(intent)
+                when (val exception = task.exception) {
+                    is FirebaseAuthInvalidUserException -> {
+                        when (exception.errorCode) {
+                            "ERROR_USER_NOT_FOUND" -> {
+                                val sharedPreferences =
+                                    getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
+                                AppSettings.Preloads.userSName = null
+                                val intent = Intent(this@CategoryForm, Login::class.java)
+                                intent.putExtra("login", R.layout.login)
+                                overridePendingTransition(0, 0)
+                                startActivity(intent)
+                            }
+                        }
                     }
                 }
             }

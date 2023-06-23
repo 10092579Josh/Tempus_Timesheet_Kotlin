@@ -1,8 +1,6 @@
 
 ?
 settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
-_
-/app/src/main/java/com/example/tempus/Storage.kt,3\a\3a26f21834c45c91c05c9da5dddf15fa938fae34
 X
 (app/src/main/res/layout/user_details.xml,0\3\03e5c77c09051e88661c8d56e59a896e7d1776e3
 w
@@ -25,8 +23,6 @@ w
 G.idea/sonarlint/issuestore/0/5/05efc8b1657769a27696d478ded1e95f38737233,3\c\3c8c56407c35e5f5ebbd6c7250a79af8128a13a6
 Å
 Q.idea/sonarlint/securityhotspotstore/7/e/7e89f39c0ae53f0621d1acf587e9dfd33dc8c90b,1\4\149cf95591e0c3320f8a91eac01a47bedc8adfc5
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 @
 app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
 Å

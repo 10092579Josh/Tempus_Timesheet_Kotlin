@@ -42,6 +42,7 @@ class Registration : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration)
         notifications()
+        input()
         FirebaseApp.initializeApp(this)
 
     }
@@ -70,22 +71,29 @@ class Registration : AppCompatActivity() {
         email1.editText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val email = s.toString()
-                if (check(email)) {
+                when {
+                    check(email) -> {
 
-                    newPopupWindow.dismiss()
-                    input()
+                        newPopupWindow.dismiss()
+                        input()
 
-
-                } else {
-
-                    if (!newPopupWindow.isShowing) {
-                        newPopupWindow.showAsDropDown(email1.editText, 0, 0)
-                    }
-                    if (email.contains("#")) {
-                        hashCharacter.show()
 
                     }
+                    else -> {
 
+                        when {
+                            !newPopupWindow.isShowing -> {
+                                newPopupWindow.showAsDropDown(email1.editText, 0, 0)
+                            }
+                        }
+                        when {
+                            email.contains("#") -> {
+                                hashCharacter.show()
+
+                            }
+                        }
+
+                    }
                 }
             }
 
@@ -143,93 +151,105 @@ class Registration : AppCompatActivity() {
         {
 
             //action statements tp check fields if empty
-            if (pass?.text.toString() != pass2?.text.toString()) {
-                noMatchPass.show()
+            when {
+                names?.text.toString().isNullOrEmpty() -> {
+                    noFName.show()
+                }
+                surnames?.text.toString().isEmpty() -> {
+                    noSName.show()
+                }
+                user2?.text.toString().isEmpty() -> {
+                    noUserName.show()
+                }
+                pass?.text.toString().length < 7 -> {
+                    passTooShort.show()
+                }
+                pass2?.text.toString().length < 7 -> {
+                    confirmPassTooShort.show()
+
+                }
+                emails?.text.toString().isEmpty() -> {
+                    emptyEmail.show()
+                }
+                pass?.text.toString() != pass2?.text.toString() -> {
+                    noMatchPass.show()
+
+                }
+                else -> { // move to the next screen if filled
+
+                    val database = FirebaseDatabase.getInstance()
+                    val myRef = database.getReference("UserDetails")
+        //stuff
+
+                    val auth = Firebase.auth
+        // Capture user details
+                    val name = names?.text.toString().replace("\\s".toRegex(), "")
+                    val surname = surnames?.text.toString().replace("\\s".toRegex(), "")
+                    val usersName = user2?.text.toString().replace("\\s".toRegex(), "")
+                    val email = emails?.text.toString().replace("\\s".toRegex(), "")
+                    val password = pass?.text.toString().replace("\\s".toRegex(), "")
+                    val confirm = pass2?.text.toString().replace("\\s".toRegex(), "")
+                    val userId = ""
 
 
-            } else if (names?.text.toString().isEmpty()) {
-                noFName.show()
-            } else if (surnames?.text.toString().isEmpty()) {
-                noSName.show()
-            } else if (user2?.text.toString().isEmpty()) {
-                noUserName.show()
-            } else if (pass?.text.toString().length < 7) {
-                passTooShort.show()
-            } else if (pass2?.text.toString().length < 7) {
-                confirmPassTooShort.show()
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this) { task ->
+                            val auth = FirebaseAuth.getInstance()
+                            val currentUser = auth.currentUser
+                            Log.d("MyApp", "$currentUser")
+                            val exception = task.exception
+                            when {
+                                task.isSuccessful && currentUser != null -> {
 
-            } else if (emails?.text.toString().isEmpty()) {
-                emptyEmail.show()
-            } else { // move to the next screen if filled
+                                    auth.currentUser
 
-                val database = FirebaseDatabase.getInstance()
-                val myRef = database.getReference("UserDetails")
-//stuff
-
-                val auth = Firebase.auth
-// Capture user details
-                val name = names?.text.toString().replace("\\s".toRegex(), "")
-                val surname = surnames?.text.toString().replace("\\s".toRegex(), "")
-                val usersName = user2?.text.toString().replace("\\s".toRegex(), "")
-                val email = emails?.text.toString().replace("\\s".toRegex(), "")
-                val password = pass?.text.toString().replace("\\s".toRegex(), "")
-                val confirm = pass2?.text.toString().replace("\\s".toRegex(), "")
-                val userId = ""
+                                    val users = User(
+                                        name,
+                                        surname,
+                                        usersName,
+                                        email,
+                                        password,
+                                        confirm,
+                                        userId
+                                    )
+                                    myRef.child(usersName + password).setValue(users)
+                                    val message = "USER ${user2?.text} HAS REGISTERED "
+                                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
 
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this) { task ->
-                        val auth = FirebaseAuth.getInstance()
-                        val currentUser = auth.currentUser
-                        Log.d("MyApp", "$currentUser")
-                        val exception = task.exception
-                        if (task.isSuccessful && currentUser != null) {
+                                    val homepage = Intent(this, Home::class.java)
+                                    homepage.putExtra("home", R.layout.home)
+                                    startActivity(homepage)
 
-                            auth.currentUser
-
-                            val users = User(
-                                name,
-                                surname,
-                                usersName,
-                                email,
-                                password,
-                                confirm,
-                                userId
-                            )
-                            myRef.child(usersName + password).setValue(users)
-                            val message = "USER ${user2?.text} HAS REGISTERED "
-                            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                                    finish()
 
 
-                            val homepage = Intent(this, Home::class.java)
-                            homepage.putExtra("home", R.layout.home)
-                            startActivity(homepage)
-
-                            finish()
+                                }
+                                task.isSuccessful && currentUser == null -> {
 
 
-                        } else if (task.isSuccessful && currentUser == null) {
+                                    val loginpage = Intent(this, Login::class.java)
+                                    loginpage.putExtra("login", R.layout.login)
 
 
-                            val loginpage = Intent(this, Login::class.java)
-                            loginpage.putExtra("login", R.layout.login)
+                                    startActivity(loginpage)
+                                    finish()
+
+                                }
+                                exception is FirebaseAuthException && exception.errorCode == "ERROR_EMAIL_ALREADY_IN_USE" -> {
+                                    emailRegAlready.show()
 
 
-                            startActivity(loginpage)
-                            finish()
+                                }
+                                else -> {
+                                    // STUFF TO DO
 
-                        } else if (exception is FirebaseAuthException && exception.errorCode == "ERROR_EMAIL_ALREADY_IN_USE") {
-                            emailRegAlready.show()
-
-
-
-                        } else {
-                            // STUFF TO DO
-
+                                }
+                            }
                         }
-                    }
 
 
+                }
             }
 
 
