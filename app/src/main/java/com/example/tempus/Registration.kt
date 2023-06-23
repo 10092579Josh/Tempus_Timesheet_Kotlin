@@ -26,13 +26,16 @@ import de.keyboardsurfer.android.widget.crouton.Style
 
 class Registration : AppCompatActivity() {
     private val e = Errors()
-    private val emptyemail = Crouton.makeText(this, e.EmailValidationEmptyError, Style.ALERT)
-    private val nousername = Crouton.makeText(this, e.EmptyUserName, Style.ALERT)
-    private val nomatchpass = Crouton.makeText(this, e.PasswordNotMatch, Style.ALERT)
-    private val Confirmpasstooshort = Crouton.makeText(this, e.ConfirmPasswordTooShort, Style.ALERT)
-    private val passtooshort = Crouton.makeText(this, e.PasswordTooShort, Style.ALERT)
+    private val emptyEmail = Crouton.makeText(this, e.EmailValidationEmptyError, Style.ALERT)
+    private val noUserName = Crouton.makeText(this, e.EmptyUserName, Style.ALERT)
+    private val noMatchPass = Crouton.makeText(this, e.PasswordNotMatch, Style.ALERT)
+    private val confirmPassTooShort = Crouton.makeText(this, e.ConfirmPasswordTooShort, Style.ALERT)
+    private val passTooShort = Crouton.makeText(this, e.PasswordTooShort, Style.ALERT)
     private val noSName = Crouton.makeText(this, e.NoSName, Style.ALERT)
     private val noFName = Crouton.makeText(this, e.NoFName, Style.ALERT)
+    private val emailRegAlready = Crouton.makeText(this, e.RegEmailError, Style.ALERT)
+    private val hashCharacter = Crouton.makeText(this, e.IllegalCharacterHash, Style.ALERT)
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,9 +46,9 @@ class Registration : AppCompatActivity() {
 
     }
 
-    fun notifications() {
-        var back: ImageButton = findViewById(R.id.back_btn)
-        back.setOnClickListener() {
+    private fun notifications() {
+        val back: ImageButton = findViewById(R.id.back_btn)
+        back.setOnClickListener {
 
             val loginpage = Intent(this, Login::class.java)
             loginpage.putExtra("login", R.layout.login)
@@ -56,29 +59,30 @@ class Registration : AppCompatActivity() {
 
         }
         val layoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val regpopupView = layoutInflater.inflate(R.layout.popup_window, null)
-        val newpopupWindow = PopupWindow(
-            regpopupView,
+        val regPopupView = layoutInflater.inflate(R.layout.popup_window, null)
+        val newPopupWindow = PopupWindow(
+            regPopupView,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
-        var email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
+        val email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
         email1.editText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val email = s.toString()
                 if (check(email)) {
 
-                    newpopupWindow.dismiss()
+                    newPopupWindow.dismiss()
                     input()
 
 
                 } else {
 
-                    if (!newpopupWindow.isShowing) {
-                        newpopupWindow.showAsDropDown(email1.editText, 0, 0)
+                    if (!newPopupWindow.isShowing) {
+                        newPopupWindow.showAsDropDown(email1.editText, 0, 0)
                     }
                     if (email.contains("#")) {
+                        hashCharacter.show()
 
                     }
 
@@ -94,7 +98,7 @@ class Registration : AppCompatActivity() {
         email1.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
 
-                newpopupWindow.dismiss()
+                newPopupWindow.dismiss()
             }
         }
 
@@ -105,17 +109,7 @@ class Registration : AppCompatActivity() {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(str).matches()
     }
 
-    object SourceClass {
-        const val rows = 5
-        const val columns = 7
 
-        val datas = Array(rows) { arrayOfNulls<String>(columns) }
-    }
-
-    fun regerror(errors: Errors) {
-        val crouton = Crouton.makeText(this, errors.RegEmailError, Style.ALERT)
-        crouton.show()
-    }
 
     fun input() { //variables
 
@@ -134,9 +128,9 @@ class Registration : AppCompatActivity() {
         val password1: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.enterPassword)
         val pass = password1.editText
-        val confirmpassword: com.google.android.material.textfield.TextInputLayout =
+        val confirmPassword: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.confirm_password)
-        val pass2 = confirmpassword.editText
+        val pass2 = confirmPassword.editText
         val email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
         val emails = email1.editText
 
@@ -150,7 +144,7 @@ class Registration : AppCompatActivity() {
 
             //action statements tp check fields if empty
             if (pass?.text.toString() != pass2?.text.toString()) {
-                nomatchpass.show()
+                noMatchPass.show()
 
 
             } else if (names?.text.toString().isEmpty()) {
@@ -158,14 +152,14 @@ class Registration : AppCompatActivity() {
             } else if (surnames?.text.toString().isEmpty()) {
                 noSName.show()
             } else if (user2?.text.toString().isEmpty()) {
-                nousername.show()
+                noUserName.show()
             } else if (pass?.text.toString().length < 7) {
-                passtooshort.show()
+                passTooShort.show()
             } else if (pass2?.text.toString().length < 7) {
-                Confirmpasstooshort.show()
+                confirmPassTooShort.show()
 
             } else if (emails?.text.toString().isEmpty()) {
-                emptyemail.show()
+                emptyEmail.show()
             } else { // move to the next screen if filled
 
                 val database = FirebaseDatabase.getInstance()
@@ -176,7 +170,7 @@ class Registration : AppCompatActivity() {
 // Capture user details
                 val name = names?.text.toString().replace("\\s".toRegex(), "")
                 val surname = surnames?.text.toString().replace("\\s".toRegex(), "")
-                val usersname = user2?.text.toString().replace("\\s".toRegex(), "")
+                val usersName = user2?.text.toString().replace("\\s".toRegex(), "")
                 val email = emails?.text.toString().replace("\\s".toRegex(), "")
                 val password = pass?.text.toString().replace("\\s".toRegex(), "")
                 val confirm = pass2?.text.toString().replace("\\s".toRegex(), "")
@@ -196,14 +190,14 @@ class Registration : AppCompatActivity() {
                             val users = User(
                                 name,
                                 surname,
-                                usersname,
+                                usersName,
                                 email,
                                 password,
                                 confirm,
-                                userId.toString()
+                                userId
                             )
-                            myRef.child(usersname + password).setValue(users)
-                            var message = "USER ${user2?.text} HAS REGISTERED "
+                            myRef.child(usersName + password).setValue(users)
+                            val message = "USER ${user2?.text} HAS REGISTERED "
                             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
 
@@ -225,10 +219,12 @@ class Registration : AppCompatActivity() {
                             finish()
 
                         } else if (exception is FirebaseAuthException && exception.errorCode == "ERROR_EMAIL_ALREADY_IN_USE") {
+                            emailRegAlready.show()
 
-                            regerror(Errors())
+
 
                         } else {
+                            // STUFF TO DO
 
                         }
                     }

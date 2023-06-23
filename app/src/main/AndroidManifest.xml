@@ -29,7 +29,7 @@
         tools:targetApi="31">
 
     <activity
-        android:name=".CatergoryForm"
+        android:name=".CategoryForm"
         android:exported="false" />
     <activity
         android:name=".Home"

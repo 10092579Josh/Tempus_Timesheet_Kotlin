@@ -31,20 +31,20 @@ class TaskPage : AppCompatActivity() {
         try {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.task_page)
-            Security()
+            security()
             FirebaseApp.initializeApp(this)
-            taskpopulation()
+            taskPopulation()
 
-            val taskimage = findViewById<ImageView>(R.id.task_image)
+            val taskImage = findViewById<ImageView>(R.id.task_image)
             val homebtn = findViewById<ImageButton>(R.id.hometbtn)
             val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
             val statsbtn = findViewById<ImageButton>(R.id.statstbtn)
             val settingsbtn = findViewById<ImageButton>(R.id.settingstbtn)
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
 
-            taskimage.isEnabled = true
-            taskimage.isClickable = true
-            taskimage.setOnClickListener() {
+            taskImage.isEnabled = true
+            taskImage.isClickable = true
+            taskImage.setOnClickListener {
                 Log.d("MyApp", "ImageView clicked")
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Choose an option")
@@ -52,7 +52,7 @@ class TaskPage : AppCompatActivity() {
                     when (which) {
 
                         0 -> camera.launch(null)
-                        1 -> GalleryContent.launch("imageURL/*")
+                        1 -> galleryContent.launch("imageURL/*")
                     }
 
                 }
@@ -104,12 +104,12 @@ class TaskPage : AppCompatActivity() {
 
             }
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
 
     }
 
-    fun Security() {
+    private fun security() {
 
         val auth = FirebaseAuth.getInstance()
         auth.addAuthStateListener { firebaseAuth ->
@@ -118,7 +118,7 @@ class TaskPage : AppCompatActivity() {
 
                 val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                AppSettings.preloads.usersname = null
+                AppSettings.Preloads.userSName = null
                 val intent = Intent(this@TaskPage, Login::class.java)
                 intent.putExtra("login", R.layout.login)
                 overridePendingTransition(0, 0)
@@ -130,6 +130,7 @@ class TaskPage : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         user?.reload()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                //stuff to do
 
             } else {
                 val exception = task.exception
@@ -139,7 +140,7 @@ class TaskPage : AppCompatActivity() {
                         val sharedPreferences =
                             getSharedPreferences("preferences", Context.MODE_PRIVATE)
                         sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.preloads.usersname = null
+                        AppSettings.Preloads.userSName = null
                         val intent = Intent(this@TaskPage, Login::class.java)
                         intent.putExtra("login", R.layout.login)
                         overridePendingTransition(0, 0)
@@ -151,25 +152,23 @@ class TaskPage : AppCompatActivity() {
 
     }
 
-    fun taskpopulation() {
+    private fun taskPopulation() {
 //THIS INSTANTIATES THE FIELDS AND CREATES VARIABLES
         try {
 
 
-            val tname = findViewById<TextView>(R.id.task_name)
+            val tName = findViewById<TextView>(R.id.task_name)
             val catname = findViewById<TextView>(R.id.category_name)
             val desc = findViewById<TextView>(R.id.description_text)
-            val sdate = findViewById<TextView>(R.id.start_date_display)
-            val edate = findViewById<TextView>(R.id.end_date_display)
+            val sDate = findViewById<TextView>(R.id.start_date_display)
+            val eDate = findViewById<TextView>(R.id.end_date_display)
             val hours2 = findViewById<TextView>(R.id.hour_text)
             val min = findViewById<TextView>(R.id.min_text)
             val max = findViewById<TextView>(R.id.max_text)
             val date = findViewById<TextView>(R.id.date_display)
-            val taskimage = findViewById<ImageView>(R.id.task_image)
-            val position = intent.getIntExtra("position1", 0)
-            val hours = intent.getStringExtra("duration")
-            val task = intent.getStringExtra("task")
-            val rowIndex = position
+            val taskImage = findViewById<ImageView>(R.id.task_image)
+
+
             val itemId = intent.getStringExtra("itemId")
             //THIS INDEX LETS THE FOR LOOP SORT THE SPECIFIC INDEX WHICH WONT CHANGE AS PER THE POSITION WHICH WILL CHANGE
 
@@ -191,11 +190,11 @@ class TaskPage : AppCompatActivity() {
 
 
                         // Use the data from Firestore to populate the fields in your form
-                        tname.text = document.getString("taskName")
+                        tName.text = document.getString("taskName")
                         catname.text = document.getString("categoryName")
                         desc.text = document.getString("description")
-                        sdate.text = document.getString("starTime")
-                        edate.text = document.getString("endTime")
+                        sDate.text = document.getString("starTime")
+                        eDate.text = document.getString("endTime")
                         hours2.text = document.getString("duration")
                         min.text = document.getString("minGoal")
                         max.text = document.getString("maxGoal")
@@ -205,7 +204,7 @@ class TaskPage : AppCompatActivity() {
 
                         Glide.with(this)
                             .load(url)
-                            .into(taskimage)
+                            .into(taskImage)
 
 
                     }
@@ -213,12 +212,12 @@ class TaskPage : AppCompatActivity() {
 
 
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
 
     }
 
-    private val GalleryContent =
+    private val galleryContent =
         registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
 
 
@@ -236,7 +235,7 @@ class TaskPage : AppCompatActivity() {
 
                     val message = "IMAGE UPLOADED ,PLEASE RESTART THE APP"
                     Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-                    cacheclosure(this)
+                    cacheClosure(this)
                 }.addOnFailureListener {
 
                 }
@@ -251,18 +250,18 @@ class TaskPage : AppCompatActivity() {
             imageView.setImageBitmap(photo)
 
 
-            val ImageRef = Firebase.storage.reference.child(task.text.toString().trim())
+            val imageRef = Firebase.storage.reference.child(task.text.toString().trim())
 
             val stream = ByteArrayOutputStream()
             photo?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             val data = stream.toByteArray()
 
-            val uploadDP = ImageRef.putBytes(data)
+            val uploadDP = imageRef.putBytes(data)
             uploadDP.addOnSuccessListener {
 
                 val message = "IMAGE UPLOADED ,PLEASE RESTART THE APP"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-                cacheclosure(this)
+                cacheClosure(this)
 
             }.addOnFailureListener {
                 val message = "INVALID IMAGE!"
@@ -271,20 +270,20 @@ class TaskPage : AppCompatActivity() {
         }
 
 
-    fun cacheclosure(context: Context) {
+    private fun cacheClosure(context: Context) {
         try {
             val location: File = context.cacheDir
-            appfiles(location)
+            appFiles(location)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun appfiles(dir: File?): Boolean {
+    private fun appFiles(dir: File?): Boolean {
         if (dir != null && dir.isDirectory) {
-            val sub: Array<String> = dir.list()
+            val sub: Array<String> = dir.list() as Array<String>
             for (i in sub.indices) {
-                val deleted = appfiles(File(dir, sub[i]))
+                val deleted = appFiles(File(dir, sub[i]))
                 if (!deleted) {
                     return false
                 }

@@ -92,7 +92,7 @@
             android:layout_marginEnd="0dp"
             android:layout_toLeftOf="@id/selectEndDate_cat"
             android:background="@drawable/home_nav"
-            android:onClick="selectstartDate"
+            android:onClick="selectStartDate"
             android:src="@drawable/calendar" />
 
         <ImageButton
@@ -102,7 +102,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="0dp"
             android:background="@drawable/home_nav"
-            android:onClick="selectendDate"
+            android:onClick="selectEndDate"
             android:src="@drawable/calendar" />
 
         <Button

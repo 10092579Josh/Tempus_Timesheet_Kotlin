@@ -5,11 +5,11 @@ data class Errors(
     val RegEmailError: String = "EMAIL ALREADY IN USE",
     val ValidationError: String = " please check credentials",
     val EmailValidationEmptyError: String = "Email cant be empty",
-    val NoNullsPassWord: String = " PASASWORD CANT BE EMPTY",
+    val NoNullsPassWord: String = " PASSWORD CANT BE EMPTY",
     val IllegalCharacterHash: String = "# Cant be used in Emails",
     val PasswordCantBeEmpty: String = "Password field cant be empty",
     val ConfirmPasswordCantBeEmpty: String = "Confirm Password field cant be empty",
-    val PasswordNotMatch: String = "Passwords dont match",
+    val PasswordNotMatch: String = "Passwords don't match",
     val PasswordTooShort:String =" Password does not meet the required length",
     val ConfirmPasswordTooShort:String =" Confirm Password does not meet the required length",
     val NewSignInRequired: String = " Please Sign in again",
@@ -26,7 +26,8 @@ data class Errors(
     val NoMinGoal: String = " Please enter a Minimum Goal",
     val NoMaxGoal: String = "Please enter a Max Goal",
     val NoFName:String = " no First Name Entered",
-    val NoSName:String = "No Surname Entered"
+    val NoSName:String = "No Surname Entered",
+
 
 
 

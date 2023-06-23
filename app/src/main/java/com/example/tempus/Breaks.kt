@@ -40,7 +40,7 @@ class Breaks : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.breaks)
-        Security()
+        security()
         val home = findViewById<ImageButton>(R.id.hometbtn)
         val breaks = findViewById<ImageButton>(R.id.breakstbtn)
         val stats = findViewById<ImageButton>(R.id.statstbtn)
@@ -223,8 +223,7 @@ class Breaks : AppCompatActivity() {
         val hours = (mTimeLeftInMillis / 1000).toInt() / 3600
         val minutes = ((mTimeLeftInMillis / 1000) % 3600).toInt() / 60
         val seconds = (mTimeLeftInMillis / 1000).toInt() % 60
-        val timeLeftFormatted: String
-        timeLeftFormatted = if (hours > 0) {
+        val timeLeftFormatted: String = if (hours > 0) {
             String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds)
         } else {
             String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
@@ -300,7 +299,7 @@ class Breaks : AppCompatActivity() {
     }
 
 
-    fun Security() {
+    private fun security() {
 
         val auth = FirebaseAuth.getInstance()
         auth.addAuthStateListener { firebaseAuth ->
@@ -309,7 +308,7 @@ class Breaks : AppCompatActivity() {
 
                 val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                AppSettings.preloads.usersname = null
+                AppSettings.Preloads.userSName = null
                 val intent = Intent(this@Breaks, Login::class.java)
                 intent.putExtra("login", R.layout.login)
                 overridePendingTransition(0, 0)
@@ -321,6 +320,7 @@ class Breaks : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         user?.reload()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                // stuff to do
 
             } else {
                 val exception = task.exception
@@ -330,7 +330,7 @@ class Breaks : AppCompatActivity() {
                         val sharedPreferences =
                             getSharedPreferences("preferences", Context.MODE_PRIVATE)
                         sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.preloads.usersname = null
+                        AppSettings.Preloads.userSName = null
                         val intent = Intent(this@Breaks, Login::class.java)
                         intent.putExtra("login", R.layout.login)
                         overridePendingTransition(0, 0)

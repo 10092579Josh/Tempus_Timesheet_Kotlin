@@ -3,7 +3,6 @@ package com.example.tempus
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.charts.CombinedChart
@@ -22,8 +21,6 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
 class Statistics : AppCompatActivity() {
@@ -35,7 +32,7 @@ class Statistics : AppCompatActivity() {
 
         FirebaseApp.initializeApp(this)
 
-        //Initialzation of bottom navigation buttons
+        //Initialization of bottom navigation buttons
 
         val homebtn = findViewById<ImageButton>(R.id.hometbtn)
         val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
@@ -46,9 +43,10 @@ class Statistics : AppCompatActivity() {
         setupLineChart()
 
 
-        // Onclick listnerner
-        addbtn.setOnClickListener() {
+        // Onclick listener
+        addbtn.setOnClickListener {
             val tform = Intent(this, TaskForm::class.java)
+            overridePendingTransition(0, 0)
             startActivity(tform)
             finish()
 
@@ -67,21 +65,21 @@ class Statistics : AppCompatActivity() {
             val breakspage = Intent(this, Breaks::class.java)
             startActivity(breakspage)
             overridePendingTransition(0, 0)
-            finish();
+            finish()
         }
 
         statsbtn.setOnClickListener {
             val statspage = Intent(this, Statistics::class.java)
             startActivity(statspage)
             overridePendingTransition(0, 0)
-            finish();
+            finish()
         }
 
         settingsbtn.setOnClickListener {
             val settingspage = Intent(this, AppSettings::class.java)
             startActivity(settingspage)
             overridePendingTransition(0, 0)
-            finish();
+            finish()
         }
 
 
@@ -93,58 +91,53 @@ class Statistics : AppCompatActivity() {
         val tasksRef = db.collection("TaskStorage")
         val durationList = mutableListOf<Float>()
         val compList = mutableListOf<Float>()
-        val mings = mutableListOf<Float>()
+        val min = mutableListOf<Float>()
         val mags = mutableListOf<Float>()
-        val datedatabase = mutableListOf<String>()
+        val dateDatabase = mutableListOf<String>()
         val userid = FirebaseAuth.getInstance().currentUser?.uid
-        val dparse = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val startDate = dparse.parse("01/01/2023")
-        val endDate = dparse.parse("31/12/2023")
-        val accreditedhours = mutableListOf<BarEntry>()
-        val finisedhours = mutableListOf<Entry>()
-        val mgoals = mutableListOf<Entry>()
-        val axgoals = mutableListOf<Entry>()
-        val Tempustats = findViewById<CombinedChart>(R.id.statsChart)
-        val usertks = mutableListOf<String>()
+        val accreditedHours = mutableListOf<BarEntry>()
+        val finishedHours = mutableListOf<Entry>()
+        val lowGoals = mutableListOf<Entry>()
+        val maxGoals = mutableListOf<Entry>()
+        val tempuStats = findViewById<CombinedChart>(R.id.statsChart)
+        val userTasks = mutableListOf<String>()
         tasksRef.whereEqualTo("userIdTask", userid).get().addOnSuccessListener { documents ->
             for (document in documents) {
                 val data = document.data
                 val task = data["taskName"] as String
-                val TempusMingoal = data["minGoal"] as String
-                val TempusMaxgoal = data["maxGoal"] as String
-                val whenadded = data["dateAdded"] as String
-                val intialhours = data["duration"] as String
-                val breaKup = intialhours.split(":")
-                val intialtime = breaKup[0].toInt() * 60
-                val intialmin = breaKup[1].toInt()
-                val result = intialtime + intialmin
-                val graphpoints = result / 60.0f
+                val tempusMingoal = data["minGoal"] as String
+                val tempusMaxGoal = data["maxGoal"] as String
+                val whenAdded = data["dateAdded"] as String
+                val initialHours = data["duration"] as String
+                val breakup = initialHours.split(":")
+                val initialTime = breakup[0].toInt() * 60
+                val initialMin = breakup[1].toInt()
+                val result = initialTime + initialMin
+                val graphPoints = result / 60.0f
 
-                mings.add(TempusMingoal.toFloat())
-                mags.add(TempusMaxgoal.toFloat())
-                usertks.add(task)
-                datedatabase.add(whenadded)
+                min.add(tempusMingoal.toFloat())
+                mags.add(tempusMaxGoal.toFloat())
+                userTasks.add(task)
+                dateDatabase.add(whenAdded)
                 compList.add(3.0f)
-                durationList.add(graphpoints)
-                Log.d("dateslist", "$datedatabase")
-                Log.d("datesadded", "$whenadded")
+                durationList.add(graphPoints)
+
             }
-            val test = 3.0f
+
 
             for (h in durationList.indices) {
-                val dateadded = dparse.parse(datedatabase[h])
-                val task = usertks[h]
-                val taskIndex = usertks.indexOf(task)
-                val dayrange = (dateadded.time - startDate.time) / (24 * 60 * 60 * 1000)
+
+                val task = userTasks[h]
+                val taskIndex = userTasks.indexOf(task)
                 val barEntry =
                     BarEntry(taskIndex.toFloat(), floatArrayOf(compList[h], durationList[h]))
-                accreditedhours.add(barEntry)
-                finisedhours.add(Entry(taskIndex.toFloat(), durationList[h]))
-                mgoals.add(Entry(taskIndex.toFloat(), mings[h]))
-                axgoals.add(Entry(taskIndex.toFloat(), mags[h]))
+                accreditedHours.add(barEntry)
+                finishedHours.add(Entry(taskIndex.toFloat(), durationList[h]))
+                lowGoals.add(Entry(taskIndex.toFloat(), min[h]))
+                maxGoals.add(Entry(taskIndex.toFloat(), mags[h]))
 
             }
-            val mx = LineDataSet(axgoals, "Max goals")
+            val mx = LineDataSet(maxGoals, "Max goals")
             mx.setColors(Color.GREEN)
             mx.valueTextSize = 16f
             mx.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
@@ -152,7 +145,7 @@ class Statistics : AppCompatActivity() {
             mx.circleRadius = 5f
             mx.circleHoleRadius = 5f
             mx.setCircleColor(Color.rgb(2, 69, 30))
-            val m = LineDataSet(mgoals, "Min goals")
+            val m = LineDataSet(lowGoals, "Min goals")
             m.setColors(Color.rgb(248, 30, 30))
             m.valueTextSize = 16f
             m.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
@@ -161,34 +154,34 @@ class Statistics : AppCompatActivity() {
             m.circleRadius = 5f
             m.setCircleColor((Color.rgb(189, 4, 4)))
 
-            val hoursfinihed = LineDataSet(finisedhours, "Completed Hours")
-            hoursfinihed.color = Color.rgb(98, 0, 234)
-            hoursfinihed.valueTextSize = 16f
-            hoursfinihed.setCircleColor(Color.rgb(25, 1, 58))
-            hoursfinihed.circleRadius = 5f
-            hoursfinihed.circleHoleRadius = 5f
+            val hoursFinished = LineDataSet(finishedHours, "Completed Hours")
+            hoursFinished.color = Color.rgb(98, 0, 234)
+            hoursFinished.valueTextSize = 16f
+            hoursFinished.setCircleColor(Color.rgb(25, 1, 58))
+            hoursFinished.circleRadius = 5f
+            hoursFinished.circleHoleRadius = 5f
 
-            val accumolatedhours = BarDataSet(accreditedhours, "")
+            val accumulateHours = BarDataSet(accreditedHours, "")
 
-            accumolatedhours.setColors(Color.LTGRAY, Color.DKGRAY)
-            accumolatedhours.valueTextColor = Color.CYAN
-            accumolatedhours.valueTextSize = 16f
-            val barData = BarData(accumolatedhours)
+            accumulateHours.setColors(Color.LTGRAY, Color.DKGRAY)
+            accumulateHours.valueTextColor = Color.CYAN
+            accumulateHours.valueTextSize = 16f
+            val barData = BarData(accumulateHours)
             barData.barWidth = 0.6f // Set the width of the bars
 
             val combinedData = CombinedData()
 
             val lineData = LineData()
-            lineData.addDataSet(hoursfinihed)
+            lineData.addDataSet(hoursFinished)
             lineData.addDataSet(m)
             lineData.addDataSet(mx)
-            hoursfinihed.mode = LineDataSet.Mode.CUBIC_BEZIER
-            hoursfinihed.lineWidth = 3f
+            hoursFinished.mode = LineDataSet.Mode.CUBIC_BEZIER
+            hoursFinished.lineWidth = 3f
 
             combinedData.setData(lineData)
             combinedData.setData(barData)
-            Tempustats.legend.resetCustom()
-            val legendEntries = Tempustats.legend.entries.toMutableList()
+            tempuStats.legend.resetCustom()
+            val legendEntries = tempuStats.legend.entries.toMutableList()
             legendEntries.add(
                 LegendEntry(
                     "min goals",
@@ -239,49 +232,48 @@ class Statistics : AppCompatActivity() {
                     Color.MAGENTA
                 )
             )
-            Tempustats.legend.setCustom(legendEntries)
-            Tempustats.legend.textSize = 10.5f
-            Tempustats.data = combinedData
-            Tempustats.isScaleXEnabled = true
-            Tempustats.isScaleYEnabled = false
-            Tempustats.isDragEnabled = true
+            tempuStats.legend.setCustom(legendEntries)
+            tempuStats.legend.textSize = 10.5f
+            tempuStats.data = combinedData
+            tempuStats.isScaleXEnabled = true
+            tempuStats.isScaleYEnabled = false
+            tempuStats.isDragEnabled = true
 
-            Tempustats.setVisibleXRangeMaximum(5f)
-            Tempustats.xAxis.textSize = 9.5f
-            Tempustats.xAxis.xOffset = 3f
-            Tempustats.xAxis.yOffset = 0f
-            Tempustats.xAxis.granularity = 1f
-            val dates = datedatabase.toTypedArray()
+            tempuStats.setVisibleXRangeMaximum(5f)
+            tempuStats.xAxis.textSize = 9.5f
+            tempuStats.xAxis.xOffset = 3f
+            tempuStats.xAxis.yOffset = 0f
+            tempuStats.xAxis.granularity = 1f
 
 
-            Tempustats.invalidate()
+            tempuStats.invalidate()
 
-            Tempustats.description.isEnabled = false // Hide the description text
-            Tempustats.legend.isEnabled = true // Show the legend
-            Tempustats.setDrawGridBackground(false) // Hide the grid background
-            Tempustats.setDrawBorders(false) // Hide the borders
-            Tempustats.axisRight.isEnabled = false // Hide the right axis
-            val topXAxis = Tempustats.xAxis
+            tempuStats.description.isEnabled = false // Hide the description text
+            tempuStats.legend.isEnabled = true // Show the legend
+            tempuStats.setDrawGridBackground(false) // Hide the grid background
+            tempuStats.setDrawBorders(false) // Hide the borders
+            tempuStats.axisRight.isEnabled = false // Hide the right axis
+            val topXAxis = tempuStats.xAxis
             topXAxis.position = XAxis.XAxisPosition.TOP // Set the position to top
             topXAxis.setDrawGridLines(false) // Hide the grid lines
             topXAxis.valueFormatter = object : ValueFormatter() {
                 override fun getAxisLabel(value: Float, axis: AxisBase?): String {
                     val index = value.toInt()
-                    return if (index >= 0 && index < datedatabase.size) datedatabase[index] else ""
+                    return if (index >= 0 && index < dateDatabase.size) dateDatabase[index] else ""
 
                 }
             }
-            val yAxis = Tempustats.axisLeft
+            val yAxis = tempuStats.axisLeft
             yAxis.setDrawGridLines(false) // Hide the grid lines
             yAxis.setDrawZeroLine(true) // Draw a zero line
             yAxis.axisMinimum = 0f // Set the minimum value to zero
-            val bottomXAxis = Tempustats.xAxis
+            val bottomXAxis = tempuStats.xAxis
             bottomXAxis.position = XAxis.XAxisPosition.BOTTOM // Set the position to bottom
             bottomXAxis.setDrawGridLines(true) // Hide the grid lines
             bottomXAxis.valueFormatter = object : ValueFormatter() {
                 override fun getAxisLabel(value: Float, axis: AxisBase?): String {
                     val index = value.toInt()
-                    return if (index >= 0 && index < usertks.size) usertks[index] else ""
+                    return if (index >= 0 && index < userTasks.size) userTasks[index] else ""
                 }
             }
 

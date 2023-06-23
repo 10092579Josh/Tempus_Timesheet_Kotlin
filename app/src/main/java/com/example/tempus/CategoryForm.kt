@@ -20,16 +20,15 @@ import de.keyboardsurfer.android.widget.crouton.Style
 // THIS ALLOWS THE USER TO CREATE A CATEGORY
 // THIS HOLDS THE DATA ASSIGNMENT
 //ASSIGNS TO THE ARRAY
-class CatergoryForm : AppCompatActivity() {
+class CategoryForm : AppCompatActivity() {
 
-    private val M = messages()
     private val e = Errors()
     private val catEmpty = Crouton.makeText(this, e.EmptyCat, Style.ALERT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.catergory_form)
         try {
-            Security()
+            security()
 
             val create = findViewById<Button>(R.id.createCategory)
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
@@ -73,7 +72,7 @@ class CatergoryForm : AppCompatActivity() {
 
             }
 
-            addbtn.setOnClickListener() {
+            addbtn.setOnClickListener {
                 val tform = Intent(this, TaskForm::class.java)
                 startActivity(tform)
                 overridePendingTransition(0, 0)
@@ -81,9 +80,9 @@ class CatergoryForm : AppCompatActivity() {
 
             }
             try {
-                create.setOnClickListener() {
-                    val catnames: EditText = findViewById(R.id.categoryNameInput)
-                    if (catnames.text.toString().isNullOrEmpty()) {
+                create.setOnClickListener {
+                    val catNames: EditText = findViewById(R.id.categoryNameInput)
+                    if (catNames.text.toString().isEmpty()) {
                         catEmpty.show()
 
 
@@ -91,18 +90,18 @@ class CatergoryForm : AppCompatActivity() {
                         // Get the current user's unique ID
                         val firestore = Firebase.firestore
                         val userid = Firebase.auth.currentUser?.uid
-                        val itemsadd = firestore.collection("CategoryStorage")
+                        val itemAdd = firestore.collection("CategoryStorage")
 
 
-                        val catname = catnames.text.toString().trim()
-                        val TotalHours = "00:00"
+                        val catname = catNames.text.toString().trim()
+                        val totalHours = "00:00"
 
 
-                        val cat = CategoryStorage(catname, TotalHours, userid.toString().trim())
+                        val cat = CategoryStorage(catname, totalHours, userid.toString().trim())
 
-                        val docRef = itemsadd.document(catname)
+                        val docRef = itemAdd.document(catname)
                         docRef.set(cat)
-                        var message = "$catname added "
+                        val message = "$catname added "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                     }
 
@@ -111,15 +110,15 @@ class CatergoryForm : AppCompatActivity() {
 
 
             } catch (e: Exception) {
-                Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
             }
 
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun Security() {
+    private fun security() {
 
         val auth = FirebaseAuth.getInstance()
         auth.addAuthStateListener { firebaseAuth ->
@@ -128,8 +127,8 @@ class CatergoryForm : AppCompatActivity() {
 
                 val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                AppSettings.preloads.usersname = null
-                val intent = Intent(this@CatergoryForm, Login::class.java)
+                AppSettings.Preloads.userSName = null
+                val intent = Intent(this@CategoryForm, Login::class.java)
                 intent.putExtra("login", R.layout.login)
                 overridePendingTransition(0, 0)
                 startActivity(intent)
@@ -140,6 +139,7 @@ class CatergoryForm : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         user?.reload()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                // to do things here
 
             } else {
                 val exception = task.exception
@@ -149,8 +149,8 @@ class CatergoryForm : AppCompatActivity() {
                         val sharedPreferences =
                             getSharedPreferences("preferences", Context.MODE_PRIVATE)
                         sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.preloads.usersname = null
-                        val intent = Intent(this@CatergoryForm, Login::class.java)
+                        AppSettings.Preloads.userSName = null
+                        val intent = Intent(this@CategoryForm, Login::class.java)
                         intent.putExtra("login", R.layout.login)
                         overridePendingTransition(0, 0)
                         startActivity(intent)

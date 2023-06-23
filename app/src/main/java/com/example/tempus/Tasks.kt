@@ -5,7 +5,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +33,7 @@ class Tasks : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tasks_display)
-        Security()
+        security()
         print()
 
         val addbtn = findViewById<ImageButton>(R.id.addbtn)
@@ -53,11 +52,11 @@ class Tasks : AppCompatActivity() {
 
             val userid = FirebaseAuth.getInstance().currentUser?.uid
 
-            val datequery = itemsRef.whereEqualTo("userIdTask", userid.toString().trim())
+            val dateQuery = itemsRef.whereEqualTo("userIdTask", userid.toString().trim())
                 .whereGreaterThanOrEqualTo("dateAdded", DateClass.startDate)
                 .whereLessThanOrEqualTo("dateAdded", DateClass.endDate)
 
-            val task = datequery.get()
+            val task = dateQuery.get()
 
             task.addOnSuccessListener { documents ->
 
@@ -73,7 +72,6 @@ class Tasks : AppCompatActivity() {
                         val item = ItemsViewModel(name, description, sub, date, imageUrl)
                         items.add(item)
                     }
-                    Log.d("taskcheck", items.toString())
 
                     val sortedItems = items.sortedBy { it.date }
                     try {
@@ -83,6 +81,7 @@ class Tasks : AppCompatActivity() {
                         adapter.notifyDataSetChanged()
 
                     } catch (e: Exception) {
+                        // stuff to do
 
 
                     }
@@ -132,11 +131,9 @@ class Tasks : AppCompatActivity() {
         }
     }
 
-    fun refresh() {
 
-    }
 
-    fun Security() {
+    private fun security() {
 
         val auth = FirebaseAuth.getInstance()
         auth.addAuthStateListener { firebaseAuth ->
@@ -145,7 +142,7 @@ class Tasks : AppCompatActivity() {
 
                 val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                AppSettings.preloads.usersname = null
+                AppSettings.Preloads.userSName = null
                 val intent = Intent(this@Tasks, Login::class.java)
                 intent.putExtra("login", R.layout.login)
                 overridePendingTransition(0, 0)
@@ -157,6 +154,7 @@ class Tasks : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         user?.reload()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                // stuff to do
 
             } else {
                 val exception = task.exception
@@ -166,7 +164,7 @@ class Tasks : AppCompatActivity() {
                         val sharedPreferences =
                             getSharedPreferences("preferences", Context.MODE_PRIVATE)
                         sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.preloads.usersname = null
+                        AppSettings.Preloads.userSName = null
                         val intent = Intent(this@Tasks, Login::class.java)
                         intent.putExtra("login", R.layout.login)
                         overridePendingTransition(0, 0)
@@ -178,7 +176,7 @@ class Tasks : AppCompatActivity() {
 
     }
 
-    fun selectstartDate(view: View) {
+    fun selectStartDate(view: View) {
 
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -194,23 +192,23 @@ class Tasks : AppCompatActivity() {
         datePickerDialog.show()
     }
 
-    fun selectendDate(view: View) {
+    fun selectEndDate(view: View) {
 
-        val taskcalendar = Calendar.getInstance()
-        val taskyear = taskcalendar.get(Calendar.YEAR)
-        val taskmonth = taskcalendar.get(Calendar.MONTH)
-        val taskdayOfMonth = taskcalendar.get(Calendar.DAY_OF_MONTH)
+        val taskCalendar = Calendar.getInstance()
+        val taskYear = taskCalendar.get(Calendar.YEAR)
+        val taskMonth = taskCalendar.get(Calendar.MONTH)
+        val taskDayOfMonth = taskCalendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(
             this, { _, year, month, dayOfMonth ->
                 DateClass.endDate = "$dayOfMonth/${month + 1}/$year"
-            }, taskyear, taskmonth, taskdayOfMonth
+            }, taskYear, taskMonth, taskDayOfMonth
         )
         datePickerDialog.show()
     }
 
 
-    fun print() {
+    private fun print() {
         val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
         recyclerview.layoutManager = LinearLayoutManager(this)
         val db = FirebaseFirestore.getInstance()
@@ -250,6 +248,7 @@ class Tasks : AppCompatActivity() {
 
 
             } catch (e: Exception) {
+                // stuff to do
 
 
             }
@@ -262,7 +261,7 @@ class Tasks : AppCompatActivity() {
         val text: String, val hours: String, val sub: String, var date: String, val imageUrl: String
     )
 
-    class CustomAdapter(var myDataList: MutableList<ItemsViewModel> = mutableListOf()) :
+    class CustomAdapter(private var myDataList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -313,11 +312,7 @@ class Tasks : AppCompatActivity() {
             val imageView: ImageView = itemView.findViewById(R.id.task_item_image)
         }
 
-        fun clear() {
-            val size = myDataList.size
-            myDataList.clear()
-            notifyItemRangeRemoved(0, size)
-        }
+
     }
 
 

@@ -43,10 +43,8 @@ class TaskForm : AppCompatActivity() {
     private lateinit var selectedEndTimeText: TextView
     private lateinit var uploadPictureBtn: Button
     private lateinit var imgGallery: ImageView
-    private val myDataList = mutableListOf<Tasks.ItemsViewModel>()
-    private val customAdapter = Tasks.CustomAdapter(myDataList)
-    private val catempty = Crouton.makeText(this, e.EmptyCat, Style.ALERT)
-    private val TaskEmpty = Crouton.makeText(this, e.EmptyTaskName, Style.ALERT)
+    private val catEmpty = Crouton.makeText(this, e.EmptyCat, Style.ALERT)
+    private val taskEmpty = Crouton.makeText(this, e.EmptyTaskName, Style.ALERT)
     private val noMing = Crouton.makeText(this, e.NoMinGoal, Style.ALERT)
     private val noMx = Crouton.makeText(this, e.NoMaxGoal, Style.ALERT)
     private val emptyBody = Crouton.makeText(this, e.EmptyDesc, Style.ALERT)
@@ -57,7 +55,7 @@ class TaskForm : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             FirebaseApp.initializeApp(this)
-            Security()
+            security()
             super.onCreate(savedInstanceState)
             setContentView(R.layout.task_form)
             selectedDateText = findViewById(R.id.selectedDateText)
@@ -76,21 +74,21 @@ class TaskForm : AppCompatActivity() {
 
             uploadPictureBtn.setOnClickListener {
                 val task = findViewById<EditText>(R.id.taskNameInput)
-                if (task.text.toString().isNullOrEmpty()) {
+                if (task.text.toString().isEmpty()) {
 
 
                     val message = "TASK MUST BE ENTERED FIRST! "
                     Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
 
-                } else if (task.text.toString() != null) {
+                } else {
                     val builder = AlertDialog.Builder(this)
                     builder.setTitle("Choose an option")
                     builder.setItems(arrayOf("Take a photo", "Pick from gallery")) { _, which ->
                         when (which) {
 
                             0 -> camera.launch(null)
-                            1 -> GalleryContent.launch("imageURL/*")
+                            1 -> galleryContent.launch("imageURL/*")
                         }
                     }
                     val dialog = builder.create()
@@ -139,11 +137,11 @@ class TaskForm : AppCompatActivity() {
                 finish()
             }
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun Security() {
+    private fun security() {
 
         val auth = FirebaseAuth.getInstance()
         auth.addAuthStateListener { firebaseAuth ->
@@ -152,7 +150,7 @@ class TaskForm : AppCompatActivity() {
 
                 val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                AppSettings.preloads.usersname = null
+                AppSettings.Preloads.userSName = null
                 val intent = Intent(this@TaskForm, Login::class.java)
                 intent.putExtra("login", R.layout.login)
                 overridePendingTransition(0, 0)
@@ -164,6 +162,7 @@ class TaskForm : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         user?.reload()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                // stuff to do
 
             } else {
                 val exception = task.exception
@@ -173,7 +172,7 @@ class TaskForm : AppCompatActivity() {
                         val sharedPreferences =
                             getSharedPreferences("preferences", Context.MODE_PRIVATE)
                         sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.preloads.usersname = null
+                        AppSettings.Preloads.userSName = null
                         val intent = Intent(this@TaskForm, Login::class.java)
                         intent.putExtra("login", R.layout.login)
                         overridePendingTransition(0, 0)
@@ -185,7 +184,7 @@ class TaskForm : AppCompatActivity() {
 
     }
 
-    private val GalleryContent =
+    private val galleryContent =
         registerForActivityResult(ActivityResultContracts.GetContent()) { url: Uri? ->
 
 
@@ -215,15 +214,15 @@ class TaskForm : AppCompatActivity() {
             imageView.setImageBitmap(photo)
 
 
-            val ImageRef = Firebase.storage.reference.child(task.text.toString().trim())
+            val imageRef = Firebase.storage.reference.child(task.text.toString().trim())
 
 
-            val Imagestream = ByteArrayOutputStream()
-            photo?.compress(Bitmap.CompressFormat.JPEG, 100, Imagestream)
-            val data = Imagestream.toByteArray()
+            val imageStream = ByteArrayOutputStream()
+            photo?.compress(Bitmap.CompressFormat.JPEG, 100, imageStream)
+            val data = imageStream.toByteArray()
 
-            val UploadDP = ImageRef.putBytes(data)
-            UploadDP.addOnSuccessListener {
+            val uploadDP = imageRef.putBytes(data)
+            uploadDP.addOnSuccessListener {
                 val message = "IMAGE UPLOADED "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
@@ -252,7 +251,7 @@ class TaskForm : AppCompatActivity() {
             )
             datePickerDialog.show()
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
 
 
@@ -284,7 +283,7 @@ class TaskForm : AppCompatActivity() {
 
             timePickerDialog.show()
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
 
 
@@ -320,7 +319,7 @@ class TaskForm : AppCompatActivity() {
 
             timePickerDialog.show()
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
 
 
@@ -330,8 +329,6 @@ class TaskForm : AppCompatActivity() {
     private fun tasks() {
         try {
 
-
-            val myArray = arrayOf(Home.TaskClass.tasks)
             val spinner = findViewById<Spinner>(R.id.category_spinner)
             val userid = Firebase.auth.currentUser?.uid
             val db = FirebaseFirestore.getInstance()
@@ -392,7 +389,7 @@ class TaskForm : AppCompatActivity() {
                     val min = minimum.selectedItem.toString()
                     val selectedItem = spinner.selectedItem.toString()
                     if (task.text.toString().isEmpty()) {
-                        TaskEmpty.show()
+                        taskEmpty.show()
                     } else if (description.text.toString().isEmpty()) {
                         emptyBody.show()
                     } else if (start.text.toString().isEmpty()) {
@@ -405,7 +402,7 @@ class TaskForm : AppCompatActivity() {
                         sDate.show()
 
                     } else if (selectedItem.isEmpty()) {
-                        catempty.show()
+                        catEmpty.show()
 
                     } else if (max.isEmpty()) {
                         noMx.show()
@@ -421,16 +418,16 @@ class TaskForm : AppCompatActivity() {
                         storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
                             picture = downloadUrl.toString()
 
-                            val itemsadd = firestore.collection("TaskStorage")
+                            val itemsAdd = firestore.collection("TaskStorage")
 
-                            val taskname = task.text.toString().trim()
-                            val catergorytask = selectedItem.trim()
-                            val tabname = "$catergorytask$taskname"
+                            val taskName = task.text.toString().trim()
+                            val categoryTask = selectedItem.trim()
+                            val tabName = "$categoryTask$taskName"
                             val description = description.text.toString().trim()
-                            val startime = start.text.toString().trim()
-                            val endtime = end.text.toString().trim()
+                            val startTime = start.text.toString().trim()
+                            val endTime = end.text.toString().trim()
 
-                            val maxgoal = max.trim()
+                            val maxGoal = max.trim()
                             val mingoal = minimum.selectedItem.toString().trim()
                             val date = dates.text.toString().trim()
 
@@ -438,9 +435,9 @@ class TaskForm : AppCompatActivity() {
                             val start = start.text.toString().replace(Regex("[^\\w\\s:]"), "")
                             val end = end.text.toString().replace(Regex("[^\\w\\s:]"), "")
 
-                            val startsplit = start.split(":")
-                            val sHours = startsplit[0].toInt()
-                            val sMinutes = startsplit[1].toInt()
+                            val startSplit = start.split(":")
+                            val sHours = startSplit[0].toInt()
+                            val sMinutes = startSplit[1].toInt()
 
                             val endTimeParts = end.split(":")
                             val endHours = endTimeParts[0].toInt()
@@ -462,13 +459,13 @@ class TaskForm : AppCompatActivity() {
                                 db.collection("CategoryStorage").document(categoryName)
                             categoryRef.get()
                                 .addOnSuccessListener { document ->
-                                    val CategoryHours = document.get("totalHours")
-                                    val currentsplit = CategoryHours.toString().split(":")
-                                    val HoursValue = currentsplit[0].toInt()
-                                    val MinutesValue = currentsplit[1].toInt()
+                                    val categoryHours = document.get("totalHours")
+                                    val currentSplit = categoryHours.toString().split(":")
+                                    val hoursValue = currentSplit[0].toInt()
+                                    val minutesValue = currentSplit[1].toInt()
 
                                     val newTotalMinutes =
-                                        HoursValue * 60 + MinutesValue + diffMinutes
+                                        hoursValue * 60 + minutesValue + diffMinutes
                                     val newHoursValue = newTotalMinutes / 60
                                     val newRemainingMinutesValue = newTotalMinutes % 60
                                     categoryRef.update(
@@ -481,28 +478,28 @@ class TaskForm : AppCompatActivity() {
                             val hours = "%02d:%02d".format(diffHours, diffRemainingMinutes)
 
 
-                            if (picture.isNullOrEmpty()) {
+                            if (picture.isEmpty()) {
                                 val message = "ERROR NO IMAGE CHOSEN"
                                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
                                     .show()
                             } else {
-                                val tasksadd = TaskStorage(
-                                    taskname,
-                                    catergorytask,
+                                val tasksAdd = TaskStorage(
+                                    taskName,
+                                    categoryTask,
                                     description,
-                                    startime,
-                                    endtime,
+                                    startTime,
+                                    endTime,
                                     hours,
                                     mingoal,
-                                    maxgoal,
+                                    maxGoal,
                                     date,
                                     picture,
-                                    tabname,
+                                    tabName,
                                     userid.toString().trim()
                                 )
 
-                                val docRef = itemsadd.document(taskname)
-                                docRef.set(tasksadd)
+                                val docRef = itemsAdd.document(taskName)
+                                docRef.set(tasksAdd)
 
 
                                 val message = "TASK ${task.text} ADDED "
@@ -512,7 +509,7 @@ class TaskForm : AppCompatActivity() {
 
                             }
 
-                        }.addOnFailureListener() {
+                        }.addOnFailureListener {
                             val message = "ERROR NO IMAGE CHOSEN"
                             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                         }

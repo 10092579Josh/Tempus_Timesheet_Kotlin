@@ -27,18 +27,18 @@ import de.keyboardsurfer.android.widget.crouton.Style
 
 class UserDetails : AppCompatActivity() {
     private val e = Errors()
-    private val M = messages()
+    private val m = messages()
     private val emailEmpty = Crouton.makeText(this, e.EmailValidationEmptyError, Style.ALERT)
     private val passwordEmpty = Crouton.makeText(this, e.PasswordCantBeEmpty, Style.ALERT)
     private val confirmEmpty = Crouton.makeText(this, e.ConfirmPasswordCantBeEmpty, Style.ALERT)
     private val passwordMatch = Crouton.makeText(this, e.PasswordNotMatch, Style.ALERT)
-    private val validMessage = Crouton.makeText(this, M.ConfirmedLogin, Style.INFO)
-    private val Returns = Crouton.makeText(this, e.NewSignInRequired, Style.INFO)
+    private val validMessage = Crouton.makeText(this, m.ConfirmedLogin, Style.INFO)
+    private val returns = Crouton.makeText(this, e.NewSignInRequired, Style.INFO)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_details)
         FirebaseApp.initializeApp(this)
-        Security()
+        security()
         details()
         val homebtn = findViewById<ImageButton>(R.id.hometbtn)
         val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
@@ -77,7 +77,7 @@ class UserDetails : AppCompatActivity() {
         }
 
         addbtn.setOnClickListener {
-            val tform = Intent(this, CatergoryForm::class.java)
+            val tform = Intent(this, CategoryForm::class.java)
             startActivity(tform)
             overridePendingTransition(0, 0)
             finish()
@@ -87,7 +87,7 @@ class UserDetails : AppCompatActivity() {
 
     }
 
-    fun Security() {
+    private fun security() {
 
         val auth = FirebaseAuth.getInstance()
         auth.addAuthStateListener { firebaseAuth ->
@@ -96,7 +96,7 @@ class UserDetails : AppCompatActivity() {
 
                 val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                AppSettings.preloads.usersname = null
+                AppSettings.Preloads.userSName = null
                 val intent = Intent(this@UserDetails, Login::class.java)
                 intent.putExtra("login", R.layout.login)
                 overridePendingTransition(0, 0)
@@ -108,6 +108,7 @@ class UserDetails : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         user?.reload()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                // to do stuff here
 
             } else {
                 val exception = task.exception
@@ -117,7 +118,7 @@ class UserDetails : AppCompatActivity() {
                         val sharedPreferences =
                             getSharedPreferences("preferences", Context.MODE_PRIVATE)
                         sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.preloads.usersname = null
+                        AppSettings.Preloads.userSName = null
                         val intent = Intent(this@UserDetails, Login::class.java)
                         intent.putExtra("login", R.layout.login)
                         overridePendingTransition(0, 0)
@@ -129,48 +130,48 @@ class UserDetails : AppCompatActivity() {
 
     }
 
-    fun details() {
-        var username: EditText = findViewById(R.id.userName_text)
-        var password: EditText = findViewById(R.id.passwordEditText)
-        var conpassword: EditText = findViewById(R.id.confirmPasswordEditText)
-        var name: EditText = findViewById(R.id.nameEditText)
-        var surname: EditText = findViewById(R.id.surnameEditText)
-        var email: EditText = findViewById(R.id.emailEditText)
-        var savebutton: Button = findViewById(R.id.saveButton)
+    private fun details() {
+        val username: EditText = findViewById(R.id.userName_text)
+        val password: EditText = findViewById(R.id.passwordEditText)
+        val conPassword: EditText = findViewById(R.id.confirmPasswordEditText)
+        val name: EditText = findViewById(R.id.nameEditText)
+        val surname: EditText = findViewById(R.id.surnameEditText)
+        val email: EditText = findViewById(R.id.emailEditText)
+        val saveButton: Button = findViewById(R.id.saveButton)
 
-        username.setText(AppSettings.preloads.usersname)
-        password.setText(AppSettings.preloads.pass)
-        name.setText(AppSettings.preloads.names)
-        surname.setText(AppSettings.preloads.surname)
-        email.setText(AppSettings.preloads.emails)
-        conpassword.setText(AppSettings.preloads.conpass)
-
-
+        username.setText(AppSettings.Preloads.userSName)
+        password.setText(AppSettings.Preloads.pass)
+        name.setText(AppSettings.Preloads.names)
+        surname.setText(AppSettings.Preloads.surname)
+        email.setText(AppSettings.Preloads.emails)
+        conPassword.setText(AppSettings.Preloads.conPass)
 
 
 
-        savebutton.setOnClickListener {
 
 
-            if (password.text.toString() != conpassword.text.toString()) {
-                var message = " passwords do not match"
+        saveButton.setOnClickListener {
+
+
+            if (password.text.toString() != conPassword.text.toString()) {
+                val message = " passwords do not match"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
             } else if (name.text.toString().isEmpty()) {
-                var message = " no firstname entered "
+                val message = " no firstname entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             } else if (surname.text.toString().isEmpty()) {
-                var message = " no surname entered "
+                val message = " no surname entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             } else if (password.text.toString().length < 7) {
-                var message = " enter password is too short"
+                val message = " enter password is too short"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-            } else if (conpassword.text.toString().length < 7) {
-                var message = " confirmkey password is too short "
+            } else if (conPassword.text.toString().length < 7) {
+                val message = " confirmkey password is too short "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 
             } else if (email.text.toString().isEmpty()) {
-                var message = " no emailaddress entered "
+                val message = " no emailaddress entered "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             } else { // move to the next screen if filled
 
@@ -191,7 +192,7 @@ class UserDetails : AppCompatActivity() {
                                     password.text.toString().replace("\\s".toRegex(), "")
                                 )
                                 myRef.child(userid.toString()).child("confirmkey").setValue(
-                                    conpassword.text.toString().replace("\\s".toRegex(), "")
+                                    conPassword.text.toString().replace("\\s".toRegex(), "")
                                 )
                                 myRef.child(userid.toString()).child("firstname")
                                     .setValue(name.text.toString().replace("\\s".toRegex(), ""))
@@ -206,31 +207,43 @@ class UserDetails : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
+
+                                // to do stuff soon
                             }
                         }.addOnFailureListener { exception ->
-                            val errorCode = (exception as? FirebaseAuthException)?.errorCode
-                            Log.d("emailerror", errorCode.toString())
-                            if (errorCode == "ERROR_REQUIRES_RECENT_LOGIN") {
-                                Authorise()
 
-                            } else if (errorCode == "ERROR_USER_TOKEN_EXPIRED") {
-                                Returns.show()
-                                FirebaseAuth.getInstance().signOut()
+                            when ((exception as? FirebaseAuthException)?.errorCode) {
+                                "ERROR_REQUIRES_RECENT_LOGIN" -> {
+                                    authorise()
 
+                                }
 
-                                var message = " ${AppSettings.preloads.usersname} HAS LOGGED OUT!"
-                                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-                                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                                AppSettings.preloads.usersname = null
-                                val intent = Intent(this@UserDetails, Login::class.java)
-                                intent.putExtra("login", R.layout.login)
-                                overridePendingTransition(0, 0)
-                                startActivity(intent)
+                                "ERROR_USER_TOKEN_EXPIRED" -> {
+                                    returns.show()
+                                    FirebaseAuth.getInstance().signOut()
 
 
-                            } else {
+                                    val message =
+                                        " ${AppSettings.Preloads.userSName} HAS LOGGED OUT!"
+                                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                        .show()
+                                    val sharedPreferences =
+                                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                                    sharedPreferences.edit().putBoolean("isFirstLogin", true)
+                                        .apply()
+                                    AppSettings.Preloads.userSName = null
+                                    val intent = Intent(this@UserDetails, Login::class.java)
+                                    intent.putExtra("login", R.layout.login)
+                                    overridePendingTransition(0, 0)
+                                    startActivity(intent)
 
+
+                                }
+
+                                else -> {
+
+                                    // to do stuff
+                                }
                             }
                         }
 
@@ -246,28 +259,37 @@ class UserDetails : AppCompatActivity() {
 
                             }
                         }.addOnFailureListener { exception ->
-                            val errorCode = (exception as? FirebaseAuthException)?.errorCode
-                            Log.d("emailerror", errorCode.toString())
-                            if (errorCode == "ERROR_REQUIRES_RECENT_LOGIN") {
-                                Authorise()
+                            when ((exception as? FirebaseAuthException)?.errorCode) {
+                                "ERROR_REQUIRES_RECENT_LOGIN" -> {
+                                    authorise()
 
-                            } else if (errorCode == "ERROR_USER_TOKEN_EXPIRED") {
-                                Returns.show()
-                                FirebaseAuth.getInstance().signOut()
+                                }
+
+                                "ERROR_USER_TOKEN_EXPIRED" -> {
+                                    returns.show()
+                                    FirebaseAuth.getInstance().signOut()
 
 
-                                var message = " ${AppSettings.preloads.usersname} HAS LOGGED OUT!"
-                                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-                                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
-                                sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                                AppSettings.preloads.usersname = null
-                                val intent = Intent(this@UserDetails, Login::class.java)
-                                intent.putExtra("login", R.layout.login)
-                                overridePendingTransition(0, 0)
-                                startActivity(intent)
+                                    val message =
+                                        " ${AppSettings.Preloads.userSName} HAS LOGGED OUT!"
+                                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                        .show()
+                                    val sharedPreferences =
+                                        getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                                    sharedPreferences.edit().putBoolean("isFirstLogin", true)
+                                        .apply()
+                                    AppSettings.Preloads.userSName = null
+                                    val intent = Intent(this@UserDetails, Login::class.java)
+                                    intent.putExtra("login", R.layout.login)
+                                    overridePendingTransition(0, 0)
+                                    startActivity(intent)
 
-                            } else {
+                                }
 
+                                else -> {
+                                    // to do stuff soon
+
+                                }
                             }
                         }
                 }
@@ -278,7 +300,7 @@ class UserDetails : AppCompatActivity() {
     }
 
     private var isDialogOpen = false
-    private fun Authorise() {
+    private fun authorise() {
 
         if (!isDialogOpen) {
             isDialogOpen = true
@@ -291,11 +313,11 @@ class UserDetails : AppCompatActivity() {
             layout.orientation = LinearLayout.VERTICAL
 
             // Set up the username input
-            val emailverification = EditText(this)
-            emailverification.hint = "Email"
-            emailverification.inputType =
+            val emailVerification = EditText(this)
+            emailVerification.hint = "Email"
+            emailVerification.inputType =
                 InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS or InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS
-            layout.addView(emailverification)
+            layout.addView(emailVerification)
 
             // Set up the password input
             val passwordInput = EditText(this)
@@ -322,22 +344,16 @@ class UserDetails : AppCompatActivity() {
                     alertDialog.dismiss()
                     Log.d("MyTag", "closed")
                     isDialogOpen = false
-                    Log.d("MyTag", "$isDialogOpen")
+
                 }
                 setPositiveButtonIcon(
                     ContextCompat.getDrawable(
                         context, R.drawable.baseline_check_box_24
                     )
                 ).setPositiveButton("SUBMIT") { _, _ ->
-                    val username = emailverification.text.toString().trim()
-                    val password = confirmInput.text.toString().trim()
-                    val verify = username + password
-                    val database = Firebase.database
-                    val userid = FirebaseAuth.getInstance().currentUser?.uid
 
 
-
-                    if (emailverification.text.isNullOrEmpty()) {
+                    if (emailVerification.text.isNullOrEmpty()) {
 
                         emailEmpty.show()
 
@@ -348,7 +364,7 @@ class UserDetails : AppCompatActivity() {
                     } else if (passwordInput.text.isNullOrEmpty()) {
                         passwordEmpty.show()
 
-                    } else if (emailverification.text.isNullOrEmpty() && confirmInput.text.isNullOrEmpty()) {
+                    } else if (emailVerification.text.isNullOrEmpty() && confirmInput.text.isNullOrEmpty()) {
                         emailEmpty.show()
                         confirmEmpty.show()
 
@@ -361,7 +377,7 @@ class UserDetails : AppCompatActivity() {
 
                         val user = FirebaseAuth.getInstance().currentUser
                         val credential = EmailAuthProvider.getCredential(
-                            emailverification.text.toString().trim(),
+                            emailVerification.text.toString().trim(),
                             confirmInput.text.toString().trim()
                         )
                         user?.reauthenticate(credential)?.addOnCompleteListener { task ->

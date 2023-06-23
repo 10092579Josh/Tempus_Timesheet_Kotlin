@@ -25,9 +25,9 @@ import de.keyboardsurfer.android.widget.crouton.Style
 
 class Login : AppCompatActivity() {
     private val e = Errors()
-    private val emptypass = Crouton.makeText(this, e.NoNullsPassWord, Style.ALERT)
-    private val emptyemail = Crouton.makeText(this, e.EmailValidationEmptyError, Style.ALERT)
-    private val nofields = Crouton.makeText(this, e.NoDetailsEntered, Style.ALERT)
+    private val emptyPass = Crouton.makeText(this, e.NoNullsPassWord, Style.ALERT)
+    private val emptyEmail = Crouton.makeText(this, e.EmailValidationEmptyError, Style.ALERT)
+    private val noFields = Crouton.makeText(this, e.NoDetailsEntered, Style.ALERT)
 
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -45,15 +45,14 @@ class Login : AppCompatActivity() {
 
     }
 
-    fun notifications() {
-        val pass: com.google.android.material.textfield.TextInputLayout =
-            findViewById(R.id.passwords)
+    private fun notifications() {
+
         val usernames1: com.google.android.material.textfield.TextInputLayout =
             findViewById(R.id.usernames)
         val layoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val emailpopup = layoutInflater.inflate(R.layout.popup_window, null)
+        val emailPopup = layoutInflater.inflate(R.layout.popup_window, null)
         val emailWindow = PopupWindow(
-            emailpopup,
+            emailPopup,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
 
@@ -63,7 +62,7 @@ class Login : AppCompatActivity() {
         usernames1.editText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val email = s.toString()
-                if (isValidString(email) && pass.editText.toString() != null) {
+                if (isValidString(email)) {
 
 
                     login()
@@ -119,7 +118,7 @@ class Login : AppCompatActivity() {
     }
 
 
-    fun signup() {
+    private fun signup() {
         val signup: Button = findViewById(R.id.signup)
         signup.setOnClickListener()
         {
@@ -143,15 +142,15 @@ class Login : AppCompatActivity() {
         signButton.setOnClickListener()
         {
             if (pass2?.text.isNullOrEmpty()) {
-                emptypass.show()
+                emptyPass.show()
 
             } else if (usernames?.text.isNullOrEmpty()) {
 
-               emptyemail.show()
+               emptyEmail.show()
 
             } else if (pass2?.text.isNullOrEmpty() && usernames?.text.isNullOrEmpty()) {
 
-                nofields.show()
+                noFields.show()
 
             } else {
 
@@ -168,7 +167,7 @@ class Login : AppCompatActivity() {
                             val homepage = Intent(this, Home::class.java)
                             homepage.putExtra(
                                 "home",
-                                getIntent().getIntExtra("home", R.layout.home)
+                                intent.getIntExtra("home", R.layout.home)
                             )
                             startActivity(homepage)
                             overridePendingTransition(0, 0)
@@ -183,10 +182,6 @@ class Login : AppCompatActivity() {
             }
         }
 
-    }
-
-    fun forgotpassword() {
-// need front end UI
     }
 
 

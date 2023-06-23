@@ -35,17 +35,17 @@ import java.io.File
 import kotlin.system.exitProcess
 
 class AppSettings : AppCompatActivity() {
-    private val M = messages()
+    private val m = messages()
     private val e = Errors()
-    private val emailtype = Crouton.makeText(this, e.NotYourUsername, Style.ALERT)
+    private val emailType = Crouton.makeText(this, e.NotYourUsername, Style.ALERT)
     private val passwordEmpty = Crouton.makeText(this, e.PasswordCantBeEmpty, Style.ALERT)
     private val usernameEmpty = Crouton.makeText(this, e.EmptyUserName, Style.ALERT)
-    private val nodetails = Crouton.makeText(this, e.NoDetailsEntered, Style.ALERT)
+    private val noDetails = Crouton.makeText(this, e.NoDetailsEntered, Style.ALERT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.app_settings)
-        Security()
-        populatefields()
+        security()
+        populateFields()
         FirebaseApp.initializeApp(this)
         val homebtn = findViewById<ImageButton>(R.id.hometbtn)
         val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
@@ -60,42 +60,42 @@ class AppSettings : AppCompatActivity() {
 
         appcache.setOnClickListener()
         {
-            val clearcache = AlertDialog.Builder(this)
-            clearcache.setTitle("Do you want to clear cache(closes app)?")
-            clearcache.setItems(arrayOf("Yes", "Cancel")) { _, which ->
+            val clearCache = AlertDialog.Builder(this)
+            clearCache.setTitle("Do you want to clear cache(closes app)?")
+            clearCache.setItems(arrayOf("Yes", "Cancel")) { _, which ->
                 when (which) {
 
-                    0 -> Dialog.BUTTON_NEGATIVE
-                    1 -> activate()
+                    0 -> activate()
+                    1 -> Dialog.BUTTON_NEGATIVE
                 }
 
             }
 
-            val dialog = clearcache.create()
+            val dialog = clearCache.create()
             dialog.show()
 
         }
         deleteuser.setOnClickListener()
         {
-            val userdeletion = AlertDialog.Builder(this)
-            userdeletion.setTitle("Are you sure?")
-            userdeletion.setItems(arrayOf("Yes", "Cancel")) { _, which ->
+            val userDeletion = AlertDialog.Builder(this)
+            userDeletion.setTitle("Are you sure?")
+            userDeletion.setItems(arrayOf("Yes", "Cancel")) { _, which ->
                 when (which) {
 
-                    0 -> Dialog.BUTTON_NEGATIVE
-                    1 -> DeleteUser()
+                    0 -> deleteUser()
+                    1 -> Dialog.BUTTON_NEGATIVE
                 }
 
             }
 
-            val dialog = userdeletion.create()
+            val dialog = userDeletion.create()
             dialog.show()
 
 
         }
         homebtn.setOnClickListener {
             val homepage = Intent(this, Home::class.java)
-            homepage.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+            homepage.putExtra("home", intent.getIntExtra("home", R.layout.home))
             startActivity(homepage)
             overridePendingTransition(0, 0)
             finish()
@@ -121,30 +121,30 @@ class AppSettings : AppCompatActivity() {
             overridePendingTransition(0, 0)
             finish()
         }
-        addbtn.setOnClickListener() {
+        addbtn.setOnClickListener {
             val taskform = Intent(this, TaskForm::class.java)
             startActivity(taskform)
             overridePendingTransition(0, 0)
             finish()
 
         }
-        logout.setOnClickListener() {
+        logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
 
 
-            val message = " ${preloads.usersname} HAS LOGGED OUT!"
+            val message = " ${Preloads.userSName} HAS LOGGED OUT!"
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-            preloads.usersname = null
+            Preloads.userSName = null
             val loginpage = Intent(this@AppSettings, Login::class.java)
             loginpage.putExtra("login", R.layout.login)
             overridePendingTransition(0, 0)
             startActivity(loginpage)
         }
-        accsetting.setOnClickListener() {
-            if (preloads.usersname == null) {
-                AccountVerify()
+        accsetting.setOnClickListener {
+            if (Preloads.userSName == null) {
+                accountVerify()
             } else {
                 val accsettings = Intent(this, UserDetails::class.java)
                 startActivity(accsettings)
@@ -154,7 +154,7 @@ class AppSettings : AppCompatActivity() {
 
             }
         }
-        deleteappdata.setOnClickListener() {
+        deleteappdata.setOnClickListener {
 
             val deleteoptions = AlertDialog.Builder(this)
             deleteoptions.setTitle("Choose an option")
@@ -163,9 +163,9 @@ class AppSettings : AppCompatActivity() {
             ) { _, which ->
                 when (which) {
 
-                    0 -> ImageDelete()
-                    1 -> TasksImageDelete()
-                    2 -> AllDelete()
+                    0 -> imageDelete()
+                    1 -> tasksImageDelete()
+                    2 -> allDelete()
 
                 }
 
@@ -176,12 +176,12 @@ class AppSettings : AppCompatActivity() {
         }
     }
 
-    fun activate() {
-        deleteCache(this)
+    private fun activate() {
+        cache(this)
         restartApp()
     }
 
-    private fun Security() {
+    private fun security() {
 
         val auth = FirebaseAuth.getInstance()
         auth.addAuthStateListener { firebaseAuth ->
@@ -190,7 +190,7 @@ class AppSettings : AppCompatActivity() {
 
                 val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                preloads.usersname = null
+                Preloads.userSName = null
                 val intent = Intent(this@AppSettings, Login::class.java)
                 intent.putExtra("login", R.layout.login)
                 overridePendingTransition(0, 0)
@@ -202,6 +202,7 @@ class AppSettings : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         user?.reload()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                //stuff to do
 
             } else {
                 val exception = task.exception
@@ -211,7 +212,7 @@ class AppSettings : AppCompatActivity() {
                         val sharedPreferences =
                             getSharedPreferences("preferences", Context.MODE_PRIVATE)
                         sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        preloads.usersname = null
+                        Preloads.userSName = null
                         val loginpage = Intent(this@AppSettings, Login::class.java)
                         loginpage.putExtra("login", R.layout.login)
                         overridePendingTransition(0, 0)
@@ -238,12 +239,12 @@ class AppSettings : AppCompatActivity() {
         exitProcess(0)
     }
 
-    fun EmailCheck(email: String): Boolean {
+    private fun emailCheck(email: String): Boolean {
         val emailCheck = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$"
         return emailCheck.toRegex().matches(email)
     }
 
-    private fun AccountVerify() {
+    private fun accountVerify() {
         if (!isDialogOpen) {
             isDialogOpen = true
             val builder = AlertDialog.Builder(this)
@@ -279,7 +280,7 @@ class AppSettings : AppCompatActivity() {
                     alertDialog.dismiss()
                     Log.d("MyTag", "closed")
                     isDialogOpen = false
-                    Log.d("MyTag", "$isDialogOpen")
+
                 }
                 setPositiveButtonIcon(
                     ContextCompat.getDrawable(
@@ -299,14 +300,14 @@ class AppSettings : AppCompatActivity() {
                     if (usernameInput.text.isNullOrEmpty()) {
                         usernameEmpty.show()
 
-                    } else if (EmailCheck(username)) {
-                        emailtype.show()
+                    } else if (emailCheck(username)) {
+                        emailType.show()
 
                     } else if (passwordInput.text.isNullOrEmpty()) {
                         passwordEmpty.show()
 
                     } else if (usernameInput.text.isNullOrEmpty() && passwordInput.text.isNullOrEmpty()) {
-                        nodetails.show()
+                        noDetails.show()
 
                     } else {
 
@@ -371,16 +372,16 @@ class AppSettings : AppCompatActivity() {
         crouton.show()
     }
 
-    object preloads {
+    object Preloads {
         var names: String = ""
         var surname: String = ""
         var emails: String = ""
-        var usersname: String? = null
-        var conpass: String = ""
+        var userSName: String? = null
+        var conPass: String = ""
         var pass: String = ""
     }
 
-    fun populatefields() {
+    private fun populateFields() {
         val userid = FirebaseAuth.getInstance().currentUser?.uid
         val database = Firebase.database
         val myRef = database.getReference("UserDetails")
@@ -391,19 +392,19 @@ class AppSettings : AppCompatActivity() {
 
                     val userId = data.child("userid").getValue(String::class.java)
                     if (userId.toString().trim() == userid.toString().trim()) {
-                        Log.d("datas", preloads.names)
-                        if (preloads.names.isNullOrEmpty()) {
-                            preloads.names =
+
+                        if (Preloads.names.isEmpty()) {
+                            Preloads.names =
                                 data.child("firstname").getValue(String::class.java).toString()
-                            preloads.emails =
+                            Preloads.emails =
                                 data.child("emailaddress").getValue(String::class.java).toString()
-                            preloads.surname =
+                            Preloads.surname =
                                 data.child("surname").getValue(String::class.java).toString()
-                            preloads.usersname =
+                            Preloads.userSName =
                                 data.child("displayname").getValue(String::class.java).toString()
-                            preloads.conpass =
+                            Preloads.conPass =
                                 data.child("confirmkey").getValue(String::class.java).toString()
-                            preloads.pass =
+                            Preloads.pass =
                                 data.child("password").getValue(String::class.java).toString()
 
 
@@ -414,12 +415,14 @@ class AppSettings : AppCompatActivity() {
                 }
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {}
+            override fun onCancelled(databaseError: DatabaseError) {
+                //stuff to do still
+            }
         })
 
     }
 
-    fun AllDelete() {
+    private fun allDelete() {
 
         val db = FirebaseFirestore.getInstance()
         val userid = FirebaseAuth.getInstance().currentUser?.uid
@@ -454,7 +457,7 @@ class AppSettings : AppCompatActivity() {
             }
     }
 
-    fun TasksImageDelete() {
+    private fun tasksImageDelete() {
         val db = FirebaseFirestore.getInstance()
         val userid = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -482,7 +485,7 @@ class AppSettings : AppCompatActivity() {
 
     }
 
-    fun ImageDelete() {
+    private fun imageDelete() {
 
 
         val db = FirebaseFirestore.getInstance()
@@ -502,7 +505,7 @@ class AppSettings : AppCompatActivity() {
 
     }
 
-    fun DeleteUser() {
+    private fun deleteUser() {
         val db = FirebaseFirestore.getInstance()
         val userid = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -534,18 +537,18 @@ class AppSettings : AppCompatActivity() {
                     db.collection("CategoryStorage").document(category.id).delete()
                 }
             }
-        val TempusUser = FirebaseAuth.getInstance().currentUser
-        TempusUser?.delete()?.addOnCompleteListener { task ->
+        val tempusUser = FirebaseAuth.getInstance().currentUser
+        tempusUser?.delete()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
 
                 val sharedPreferences =
                     getSharedPreferences("preferences", Context.MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                preloads.usersname = null
+                Preloads.userSName = null
                 val intent = Intent(this@AppSettings, Login::class.java)
                 intent.putExtra("login", R.layout.login)
                 overridePendingTransition(0, 0)
-                Toast.makeText(this, M.DeleteConfirmation, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, m.DeleteConfirmation, Toast.LENGTH_SHORT).show()
                 startActivity(intent)
 
 
@@ -553,20 +556,20 @@ class AppSettings : AppCompatActivity() {
         }
     }
 
-    fun deleteCache(context: Context) {
+    private fun cache(context: Context) {
         try {
             val dir: File = context.cacheDir
-            deleteDir(dir)
+            appFiles(dir)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun deleteDir(dir: File?): Boolean {
+    private fun appFiles(dir: File?): Boolean {
         if (dir != null && dir.isDirectory) {
-            val children: Array<String> = dir.list()
+            val children: Array<String> = dir.list() as Array<String>
             for (i in children.indices) {
-                val success = deleteDir(File(dir, children[i]))
+                val success = appFiles(File(dir, children[i]))
                 if (!success) {
                     return false
                 }

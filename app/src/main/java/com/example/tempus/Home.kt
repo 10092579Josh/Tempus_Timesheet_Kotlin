@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,15 +41,15 @@ class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val homeID = intent.getIntExtra("home", 0)
-        val homelayout = layoutInflater.inflate(homeID, null)
-        setContentView(homelayout)
-        SecurGuard()
-        populatefields()
+        val homeLayout = layoutInflater.inflate(homeID, null)
+        setContentView(homeLayout)
+        securGuard()
+        populateFields()
 // Set up the ViewPager and the TabLayout
 
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
         if (sharedPreferences.getBoolean("isFirstLogin", true)) {
-            loggedonnotification()
+            loggedOnNotification()
             sharedPreferences.edit().putBoolean("isFirstLogin", false).apply()
         }
 
@@ -121,46 +120,46 @@ class Home : AppCompatActivity() {
             {
 
 
-                val Shortcut = BottomSheetDialog(this)
-                val ShortcutView = layoutInflater.inflate(R.layout.shortcut, null)
+                val shortcut = BottomSheetDialog(this)
+                val shortcutView = layoutInflater.inflate(R.layout.shortcut, null)
 
-                Shortcut.setContentView(ShortcutView)
+                shortcut.setContentView(shortcutView)
 
-                Shortcut.show()
+                shortcut.show()
 
-                val CreateNewCat = ShortcutView.findViewById<Button>(R.id.add_category)
+                val createNewCat = shortcutView.findViewById<Button>(R.id.add_category)
 
-                CreateNewCat.setOnClickListener {
-                    val Newform = Intent(this, CatergoryForm::class.java)
-                    startActivity(Newform)
+                createNewCat.setOnClickListener {
+                    val newForm = Intent(this, CategoryForm::class.java)
+                    startActivity(newForm)
                     overridePendingTransition(0, 0)
                     finish()
 
-                    Shortcut.dismiss()
+                    shortcut.dismiss()
                 }
 
-                val CreateNewTask = ShortcutView.findViewById<Button>(R.id.add_task)
-                CreateNewTask.setOnClickListener {
+                val createNewTask = shortcutView.findViewById<Button>(R.id.add_task)
+                createNewTask.setOnClickListener {
 
-                    val NewTask = Intent(this, TaskForm::class.java)
-                    startActivity(NewTask)
+                    val newTask = Intent(this, TaskForm::class.java)
+                    startActivity(newTask)
                     overridePendingTransition(0, 0)
                     finish()
 
-                    Shortcut.dismiss()
+                    shortcut.dismiss()
                 }
 
-                val AddNewGoals = ShortcutView.findViewById<Button>(R.id.add_goals)
-                AddNewGoals.setOnClickListener {
+                val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
+                addNewGoals.setOnClickListener {
                     // to be implemented
 
-                    Shortcut.dismiss()
+                    shortcut.dismiss()
                 }
 
 
             }
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -171,16 +170,16 @@ class Home : AppCompatActivity() {
         outState.putInt("selectedTabIndex", selectedTabIndex)
     }
 
-    private fun SecurGuard() {
+    private fun securGuard() {
 
-        val TempusSecurity = FirebaseAuth.getInstance()
-        TempusSecurity.addAuthStateListener { firebaseAuth ->
+        val tempusSecurity = FirebaseAuth.getInstance()
+        tempusSecurity.addAuthStateListener { firebaseAuth ->
             val user = firebaseAuth.currentUser
             if (user == null) {
 
                 val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                AppSettings.preloads.usersname = null
+                AppSettings.Preloads.userSName = null
                 val intent = Intent(this@Home, Login::class.java)
                 intent.putExtra("login", R.layout.login)
                 overridePendingTransition(0, 0)
@@ -189,9 +188,10 @@ class Home : AppCompatActivity() {
             }
         }
 
-        val TempusUsers = FirebaseAuth.getInstance().currentUser
-        TempusUsers?.reload()?.addOnCompleteListener { task ->
+        val tempusUsers = FirebaseAuth.getInstance().currentUser
+        tempusUsers?.reload()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                // stuff to do
 
             } else {
                 val exception = task.exception
@@ -201,7 +201,7 @@ class Home : AppCompatActivity() {
                         val sharedPreferences =
                             getSharedPreferences("preferences", Context.MODE_PRIVATE)
                         sharedPreferences.edit().putBoolean("isFirstLogin", true).apply()
-                        AppSettings.preloads.usersname = null
+                        AppSettings.Preloads.userSName = null
                         val intent = Intent(this@Home, Login::class.java)
                         intent.putExtra("login", R.layout.login)
                         overridePendingTransition(0, 0)
@@ -213,29 +213,26 @@ class Home : AppCompatActivity() {
 
     }
 
-    companion object {
-        private const val TAG = "Home"
-    }
 
     object TaskClass {
-        val rows = 10
-        val columns = 12
+        private const val rows = 10
+        private const val columns = 12
 
         val tasks = Array(rows) { arrayOfNulls<String>(columns) }
         val hours = Array(rows) { arrayOfNulls<String>(columns) }
-        var check: Int? = null
+
 
     }
 
-    fun print() {
+    private fun print() {
         val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_category)
         recyclerview.layoutManager = LinearLayoutManager(this)
         val db = FirebaseFirestore.getInstance()
         val itemsRef = db.collection("CategoryStorage")
 
         val userid = FirebaseAuth.getInstance().currentUser?.uid
-        val catergoryquery = itemsRef.whereEqualTo("userIdCat", userid.toString().trim())
-        val task = catergoryquery.get()
+        val categoryQuery = itemsRef.whereEqualTo("userIdCat", userid.toString().trim())
+        val task = categoryQuery.get()
 
         task.addOnSuccessListener { documents ->
 
@@ -314,7 +311,7 @@ class Home : AppCompatActivity() {
                             val editIconRight =
                                 itemView.left + editIconMargin + editIcon.intrinsicWidth
 
-                            editIcon?.setBounds(
+                            editIcon.setBounds(
                                 editIconLeft,
                                 editIconTop,
                                 editIconRight,
@@ -332,7 +329,7 @@ class Home : AppCompatActivity() {
                                 itemView.bottom
                             )
                             editBackground?.draw(c)
-                            editIcon?.draw(c)
+                            editIcon.draw(c)
                         } else {
                             // Swiping to the left (delete action)
                             val deleteIcon =
@@ -345,7 +342,7 @@ class Home : AppCompatActivity() {
                                 itemView.right - deleteIconMargin - deleteIcon.intrinsicWidth
                             val deleteIconRight = itemView.right - deleteIconMargin
 
-                            deleteIcon?.setBounds(
+                            deleteIcon.setBounds(
                                 deleteIconLeft,
                                 deleteIconTop,
                                 deleteIconRight,
@@ -363,7 +360,7 @@ class Home : AppCompatActivity() {
                                 itemView.bottom
                             )
                             deleteBackground?.draw(c)
-                            deleteIcon?.draw(c)
+                            deleteIcon.draw(c)
                         }
                     }
                 }
@@ -371,6 +368,7 @@ class Home : AppCompatActivity() {
                 val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
                 itemTouchHelper.attachToRecyclerView(recyclerview)
             } catch (e: Exception) {
+                // stuff to do aka error handling
             }
         }
     }
@@ -380,7 +378,7 @@ class Home : AppCompatActivity() {
 
     data class ItemsViewModel(val text: String, val hours: String)
 
-    class CustomAdapter(val catlist: MutableList<ItemsViewModel> = mutableListOf()) :
+    class CustomAdapter(private val catList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
         var onTaskClickListener: ((Task) -> Unit)? = null
@@ -393,7 +391,7 @@ class Home : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val itemsViewModel = catlist[position]
+            val itemsViewModel = catList[position]
             holder.textView.text = itemsViewModel.text
             holder.textView2.text = itemsViewModel.hours
 
@@ -411,28 +409,27 @@ class Home : AppCompatActivity() {
         }
 
         override fun getItemCount(): Int {
-            return catlist.size
+            return catList.size
         }
 
-        class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-            val textView: TextView = itemView.findViewById(R.id.mTitle)
-            val textView2: TextView = itemView.findViewById(R.id.mHours_category)
-            val tasksLayout: LinearLayout = itemView.findViewById(R.id.tasksLayout)
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val textView: TextView = this.itemView.findViewById(R.id.mTitle)
+            val textView2: TextView = this.itemView.findViewById(R.id.mHours_category)
+            val tasksLayout: LinearLayout = this.itemView.findViewById(R.id.tasksLayout)
         }
 
-        private fun populateTasks(holder: ViewHolder, CategoryTask: String) {
+        private fun populateTasks(holder: ViewHolder, categoryTask: String) {
 
             val db = FirebaseFirestore.getInstance()
             val tasksRef = db.collection("TaskStorage")
             val userid = FirebaseAuth.getInstance().currentUser?.uid
 
 
-            val CatQuery = tasksRef.whereEqualTo("userIdTask", userid)
-                .whereEqualTo("categoryName", CategoryTask)
+            val catQuery = tasksRef.whereEqualTo("userIdTask", userid)
+                .whereEqualTo("categoryName", categoryTask)
 
-            val task = CatQuery.get()
-            Log.d("categoryID", "$CategoryTask")
-            Log.d("userIdTask", "$userid")
+            val task = catQuery.get()
+
 
             task.addOnSuccessListener { documents ->
                 val tasksByTab = mutableMapOf<String, MutableList<Task>>()
@@ -440,33 +437,33 @@ class Home : AppCompatActivity() {
                     // Get the data for each document
                     val name = document.getString("taskName") ?: ""
                     val hours = document.getString("duration") ?: ""
-                    Log.d("Taskname", "$name")
+
                     val tabName = document.getString("tabID") ?: ""
-                    Log.d("tabID", "$tabName")
+
                     val task = Task(name, hours)
                     if (tasksByTab.containsKey(tabName)) {
                         tasksByTab[tabName]?.add(task)
-                        Log.d("tabname2", "$tabName")
+
                     } else {
                         tasksByTab[tabName] = mutableListOf(task)
 
-                        Log.d("tabname3", "$tabName")
+
                     }
-                    Log.d("tabname4", "$tabName")
+
                 }
 
                 holder.tasksLayout.removeAllViews()
 
-                for ((tabName, tasks) in tasksByTab) {
+                for ((_, tasks) in tasksByTab) {
 
-                    val DisplayTab = TextView(holder.itemView.context)
-                    DisplayTab.setTypeface(null, Typeface.BOLD)
-                    holder.tasksLayout.addView(DisplayTab)
-                    val NewView = RecyclerView(holder.itemView.context)
-                    NewView.layoutManager = LinearLayoutManager(holder.itemView.context)
-                    val SubAdapter = SubTasksAdapter(tasks)
-                    NewView.adapter = SubAdapter
-                    holder.tasksLayout.addView(NewView)
+                    val displayTab = TextView(holder.itemView.context)
+                    displayTab.setTypeface(null, Typeface.BOLD)
+                    holder.tasksLayout.addView(displayTab)
+                    val newView = RecyclerView(holder.itemView.context)
+                    newView.layoutManager = LinearLayoutManager(holder.itemView.context)
+                    val subAdapter = SubTasksAdapter(tasks)
+                    newView.adapter = subAdapter
+                    holder.tasksLayout.addView(newView)
                 }
 
             }
@@ -500,19 +497,19 @@ class Home : AppCompatActivity() {
             {
                 val clickedData = tasks[position]
                 val context = holder.itemView.context
-                val HomeIntent = Intent(context, TaskPage::class.java)
-                HomeIntent.putExtra("task", clickedData.name)
-                HomeIntent.putExtra("duration", clickedData.hours2)
+                val homeIntent = Intent(context, TaskPage::class.java)
+                homeIntent.putExtra("task", clickedData.name)
+                homeIntent.putExtra("duration", clickedData.hours2)
                 val bundle = Bundle()
                 val bundle2 = Bundle()
-                bundle.putSerializable("myDataList", Home.TaskClass.tasks)
-                HomeIntent.putExtra("position1", position) // use "position" as the key
-                HomeIntent.putExtras(bundle)
-                bundle2.putSerializable("Hours", Home.TaskClass.hours)
-                HomeIntent.putExtra("position2", position) // use "position" as the key
-                HomeIntent.putExtras(bundle2)
-                HomeIntent.putExtra("itemId", clickedData.name)
-                context.startActivity(HomeIntent)
+                bundle.putSerializable("myDataList", TaskClass.tasks)
+                homeIntent.putExtra("position1", position) // use "position" as the key
+                homeIntent.putExtras(bundle)
+                bundle2.putSerializable("Hours", TaskClass.hours)
+                homeIntent.putExtra("position2", position) // use "position" as the key
+                homeIntent.putExtras(bundle2)
+                homeIntent.putExtra("itemId", clickedData.name)
+                context.startActivity(homeIntent)
             }
 
         }
@@ -523,12 +520,12 @@ class Home : AppCompatActivity() {
     }
 
 
-    fun loggedonnotification() {
-        val LogIntent = Intent(this, AppSettings::class.java).apply {
+    private fun loggedOnNotification() {
+        val logIntent = Intent(this, AppSettings::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val settingsIntent =
-            PendingIntent.getActivity(this, 0, LogIntent, PendingIntent.FLAG_MUTABLE)
+            PendingIntent.getActivity(this, 0, logIntent, PendingIntent.FLAG_MUTABLE)
 
         val user = FirebaseAuth.getInstance().currentUser?.email
         val channelId = "login"
@@ -536,8 +533,8 @@ class Home : AppCompatActivity() {
         val importance = NotificationManager.IMPORTANCE_HIGH
         val notificationChannel = NotificationChannel(channelId, channelName, importance)
 
-        val TempusManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        TempusManager.createNotificationChannel(notificationChannel)
+        val tempusManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        tempusManager.createNotificationChannel(notificationChannel)
 
         val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.imageuser)
@@ -549,7 +546,7 @@ class Home : AppCompatActivity() {
             .setAutoCancel(true)
 
 
-        val unverifiedbuilder = NotificationCompat.Builder(this, channelId)
+        val unverifiedBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.imageuser)
             .setContentTitle("$user logged in")
             .setContentText("welcome to tempus new $user please verify your account")
@@ -564,22 +561,17 @@ class Home : AppCompatActivity() {
         val myRef = database.getReference("UserDetails")
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var matchFound = false
+
                 for (ds in dataSnapshot.children) {
                     val documentName = ds.key
-                    Log.d("MyTag", "${AppSettings.preloads.usersname}")
-                    Log.d("MyTag", "documentName: $documentName")
+
                     if (documentName == userid.toString().trim()) {
-                        TempusManager.notify(0, builder.build())
+                        tempusManager.notify(0, builder.build())
 
-                        Log.d("MyTag", "Condition 2 met")
 
-                        matchFound = true
+                    } else if (AppSettings.Preloads.userSName.isNullOrEmpty()) {
 
-                    } else if (AppSettings.preloads.usersname.isNullOrEmpty()) {
-                        Log.d("MyTag", "${AppSettings.preloads.usersname}")
-                        Log.d("MyTag", "Condition 3 met")
-                        TempusManager.notify(1, unverifiedbuilder.build())
+                        tempusManager.notify(1, unverifiedBuilder.build())
                     }
 
                 }
@@ -592,7 +584,7 @@ class Home : AppCompatActivity() {
 
     }
 
-    fun populatefields() {
+    private fun populateFields() {
 
 
         val userid = FirebaseAuth.getInstance().currentUser?.uid
@@ -603,22 +595,21 @@ class Home : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (data in dataSnapshot.children) {
                     val userId = data.child("userid").getValue(String::class.java)
-                    Log.d("check2", "${userId.toString()}")
+
                     if (userId.toString().trim() == userid.toString().trim()) {
-                        AppSettings.preloads.names =
+                        AppSettings.Preloads.names =
                             data.child("firstname").getValue(String::class.java).toString()
-                        AppSettings.preloads.emails =
+                        AppSettings.Preloads.emails =
                             data.child("emailaddress").getValue(String::class.java).toString()
-                        AppSettings.preloads.surname =
+                        AppSettings.Preloads.surname =
                             data.child("surname").getValue(String::class.java).toString()
-                        AppSettings.preloads.usersname =
+                        AppSettings.Preloads.userSName =
                             data.child("displayname").getValue(String::class.java).toString()
-                        AppSettings.preloads.conpass =
+                        AppSettings.Preloads.conPass =
                             data.child("confirmkey").getValue(String::class.java).toString()
-                        AppSettings.preloads.pass =
+                        AppSettings.Preloads.pass =
                             data.child("password").getValue(String::class.java).toString()
-                        Log.d("check1", "${AppSettings.preloads.names}")
-                        Log.d("check3", "${userid.toString()}")
+
 
                     }
 
@@ -627,6 +618,7 @@ class Home : AppCompatActivity() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
+                // stuff to do
 
             }
 

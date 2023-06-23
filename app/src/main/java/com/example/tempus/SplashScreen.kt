@@ -19,7 +19,7 @@ class SplashScreen : AppCompatActivity() {
     private lateinit var percentageText: TextView
     private lateinit var progressText: TextView
 
-    private val SPLASH_DELAY: Long = 5000 // 3 seconds delay
+    private val splashDelay: Long = 5000 // 3 seconds delay
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,7 @@ class SplashScreen : AppCompatActivity() {
 
                     finish()
 
-                }, SPLASH_DELAY)
+                }, splashDelay)
             } else {
                 updateBar(progressBar, progressText, 50)
                 val splashImageView = findViewById<ImageView>(R.id.splashImageView)
@@ -72,20 +72,20 @@ class SplashScreen : AppCompatActivity() {
                     startActivity(loginpage)
                     finish()
 
-                }, SPLASH_DELAY)
+                }, splashDelay)
                 updateBar(progressBar, progressText, 100)
             }
         } catch (E: Exception) {
-            val mesage = Exception()
-            Log.d("myapp", "${mesage}")
+            val message = Exception()
+            Log.d("myapp", "$message")
         }
     }
 
     private fun updateBar(progressBar: ProgressBar, progressText: TextView, progress: Int) {
-        val Animator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, progress)
-        Animator.duration = 4900
-        Animator.interpolator = LinearInterpolator()
-        Animator.addUpdateListener {
+        val animator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, progress)
+        animator.duration = 4900
+        animator.interpolator = LinearInterpolator()
+        animator.addUpdateListener {
             val currentProgress = it.animatedValue as Int
             percentageText.text = "${currentProgress}%"
             when (currentProgress) {
@@ -95,7 +95,7 @@ class SplashScreen : AppCompatActivity() {
                 in 76..100 -> progressText.text = "And Here we GO!"
             }
         }
-        Animator.start()
+        animator.start()
     }
 
 }
