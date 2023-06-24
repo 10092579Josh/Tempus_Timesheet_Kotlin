@@ -376,8 +376,7 @@ class AppSettings : AppCompatActivity() {
                             }
                         }
                         isDialogOpen = false
-                    }catch (E:DatabaseException)
-                    {
+                    } catch (E: DatabaseException) {
                         emailType.show()
                     }
                 }.create()

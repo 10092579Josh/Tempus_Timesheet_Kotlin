@@ -309,13 +309,13 @@ class Home : AppCompatActivity() {
                             .addOnSuccessListener {
                                 Toast.makeText(
                                     this@Home,
-                                    "Removed succesfully",
+                                    "Removed successfully",
                                     Toast.LENGTH_SHORT
 
                                 ).show()
                                 recreate()
                             }
-                            .addOnFailureListener{e ->
+                            .addOnFailureListener { e ->
                                 Toast.makeText(
                                     this@Home,
                                     "Failed to remove: ${e.message}",
@@ -351,7 +351,10 @@ class Home : AppCompatActivity() {
                                     dX > 300 -> {
                                         // Swiping to the right (edit action)
                                         val editIcon =
-                                            ContextCompat.getDrawable(this@Home, R.drawable.edit_icon)
+                                            ContextCompat.getDrawable(
+                                                this@Home,
+                                                R.drawable.edit_icon
+                                            )
                                         val editIconMargin =
                                             (itemView.height - editIcon?.intrinsicHeight!!) / 2
                                         val editIconTop = itemView.top + editIconMargin
@@ -383,7 +386,8 @@ class Home : AppCompatActivity() {
                                 }
 
                             }
-                            dX <- 500 -> {
+
+                            dX < -500 -> {
                                 // Swiping to the left (delete action)
                                 val deleteIcon =
                                     ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)
@@ -420,7 +424,6 @@ class Home : AppCompatActivity() {
                 }
 
 
-
                 val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
                 itemTouchHelper.attachToRecyclerView(recyclerview)
             } catch (e: Exception) {
@@ -434,8 +437,7 @@ class Home : AppCompatActivity() {
 
     data class ItemsViewModel(val text: String, val hours: String)
 
-    fun progressnotifs()
-    {
+    fun progressNotify() {
         val checkTime = 300000L // Update progress every 300000 milliseconds (5 minutes)
 
         val completionBar = findViewById<ProgressBar>(R.id.progress_category)
@@ -444,19 +446,22 @@ class Home : AppCompatActivity() {
         val updater = object : Runnable {
             override fun run() {
                 // Update the progress of the ProgressBar
-               // progressBar.progress = newValue
+                // progressBar.progress = newValue
 
                 // Check if the progress has reached a certain value
                 when (completionBar.progress) {
                     completionBar.max / 4 -> {
                         // Perform action when progress reaches 25%
                     }
+
                     completionBar.max / 2 -> {
                         // Perform action when progress reaches 50%
                     }
+
                     completionBar.max * 3 / 4 -> {
                         // Perform action when progress reaches 75%
                     }
+
                     completionBar.max -> {
                         // Perform action when progress reaches 100%
                     }
@@ -471,6 +476,7 @@ class Home : AppCompatActivity() {
         loop.post(updater)
 
     }
+
     class CustomAdapter(private val catList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
@@ -520,7 +526,7 @@ class Home : AppCompatActivity() {
             val textView: TextView = this.itemView.findViewById(R.id.mTitle)
             val textView2: TextView = this.itemView.findViewById(R.id.mHours_category)
             val tasksLayout: LinearLayout = this.itemView.findViewById(R.id.tasksLayout)
-            val progressBar:ProgressBar = this.itemView.findViewById(R.id.progress_category)
+            val progressBar: ProgressBar = this.itemView.findViewById(R.id.progress_category)
         }
 
         private fun populateTasks(holder: ViewHolder, categoryTask: String) {
@@ -737,5 +743,5 @@ class Home : AppCompatActivity() {
 
             }
         })
-   }
+    }
 }

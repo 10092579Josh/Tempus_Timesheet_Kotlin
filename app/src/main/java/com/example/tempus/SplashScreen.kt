@@ -56,6 +56,7 @@ class SplashScreen : AppCompatActivity() {
 
                     }, splashDelay)
                 }
+
                 else -> {
                     updateBar(progressBar, progressText, 50)
                     val splashImageView = findViewById<ImageView>(R.id.splashImageView)
@@ -72,7 +73,7 @@ class SplashScreen : AppCompatActivity() {
 
 
                         startActivity(loginpage)
-                         finish()
+                        finish()
 
                     }, splashDelay)
                     updateBar(progressBar, progressText, 100)
@@ -101,9 +102,9 @@ class SplashScreen : AppCompatActivity() {
                 }
             }
             animator.start()
-        } catch (E:Exception)
-        {
-            Log.d("exceptionss","${Exception()}")
+        } catch (E: Exception) {
+            //stuff to do
+
         }
     }
 }

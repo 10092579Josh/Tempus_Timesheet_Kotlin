@@ -49,16 +49,12 @@ class TaskPage : AppCompatActivity() {
     private var mTimeLeftInMillis: Long = 0
     private var mEndTime: Long = 0
 
-    companion object {
-        const val NOTIFICATION_CHANNEL_ID = "your_channel_id"
-        const val NOTIFICATION_ID = 1
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.task_page)
-            val TasksBack = object : OnBackPressedCallback(true) {
+            val tasksBack = object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     val intent = Intent(this@TaskPage, Tasks::class.java)
                     intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
@@ -69,7 +65,7 @@ class TaskPage : AppCompatActivity() {
 
                 }
             }
-            onBackPressedDispatcher.addCallback(this, TasksBack)
+            onBackPressedDispatcher.addCallback(this, tasksBack)
             security()
             FirebaseApp.initializeApp(this)
             taskPopulation()
@@ -499,7 +495,6 @@ class TaskPage : AppCompatActivity() {
                         val hours = durationParts[0].toLong()
                         val minutes = durationParts[1].toLong()
                         val durationInMillis = hours * 60 * 60 * 1000 + minutes * 60 * 1000
-                        Log.d("YourTag", "Duration: " + durationInMillis)
                         setTime(durationInMillis)
 
                         Glide.with(this)

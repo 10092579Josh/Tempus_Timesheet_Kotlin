@@ -38,7 +38,6 @@ class Registration : AppCompatActivity() {
     private val hashCharacter = Crouton.makeText(this, e.illegalCharacterHash, Style.ALERT)
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration)
@@ -92,6 +91,7 @@ class Registration : AppCompatActivity() {
 
 
                     }
+
                     else -> {
 
                         when {
@@ -110,9 +110,23 @@ class Registration : AppCompatActivity() {
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {// stuff to do
+            }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) { // stuff to do
+
+
+            }
 
         })
 
@@ -129,7 +143,6 @@ class Registration : AppCompatActivity() {
     fun check(str: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(str).matches()
     }
-
 
 
     fun input() { //variables
@@ -168,34 +181,41 @@ class Registration : AppCompatActivity() {
                 names?.text.toString().isNullOrEmpty() -> {
                     noFName.show()
                 }
+
                 surnames?.text.toString().isEmpty() -> {
                     noSName.show()
                 }
+
                 user2?.text.toString().isEmpty() -> {
                     noUserName.show()
                 }
+
                 pass?.text.toString().length < 7 -> {
                     passTooShort.show()
                 }
+
                 pass2?.text.toString().length < 7 -> {
                     confirmPassTooShort.show()
 
                 }
+
                 emails?.text.toString().isEmpty() -> {
                     emptyEmail.show()
                 }
+
                 pass?.text.toString() != pass2?.text.toString() -> {
                     noMatchPass.show()
 
                 }
+
                 else -> { // move to the next screen if filled
 
                     val database = FirebaseDatabase.getInstance()
                     val myRef = database.getReference("UserDetails")
-        //stuff
+                    //stuff
 
                     val auth = Firebase.auth
-        // Capture user details
+                    // Capture user details
                     val name = names?.text.toString().replace("\\s".toRegex(), "")
                     val surname = surnames?.text.toString().replace("\\s".toRegex(), "")
                     val usersName = user2?.text.toString().replace("\\s".toRegex(), "")
@@ -227,33 +247,37 @@ class Registration : AppCompatActivity() {
                                     )
                                     myRef.child(usersName + password).setValue(users)
                                     val message = "USER ${user2?.text} HAS REGISTERED "
-                                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                        .show()
 
 
                                     val homepage = Intent(this, Home::class.java)
                                     homepage.putExtra("home", R.layout.home)
                                     startActivity(homepage)
-                                    overridePendingTransition(0,0)
+                                    overridePendingTransition(0, 0)
                                     finish()
 
 
                                 }
+
                                 task.isSuccessful && currentUser == null -> {
 
 
                                     val loginpage = Intent(this, Login::class.java)
                                     loginpage.putExtra("login", R.layout.login)
 
-overridePendingTransition(0,0)
+                                    overridePendingTransition(0, 0)
                                     startActivity(loginpage)
                                     finish()
 
                                 }
+
                                 exception is FirebaseAuthException && exception.errorCode == "ERROR_EMAIL_ALREADY_IN_USE" -> {
                                     emailRegAlready.show()
 
 
                                 }
+
                                 else -> {
                                     // STUFF TO DO
 
