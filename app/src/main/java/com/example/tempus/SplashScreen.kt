@@ -72,7 +72,7 @@ class SplashScreen : AppCompatActivity() {
 
 
                         startActivity(loginpage)
-                        finish()
+                         finish()
 
                     }, splashDelay)
                     updateBar(progressBar, progressText, 100)
@@ -85,20 +85,25 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun updateBar(progressBar: ProgressBar, progressText: TextView, progress: Int) {
-        val animator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, progress)
-        animator.duration = 4900
-        animator.interpolator = LinearInterpolator()
-        animator.addUpdateListener {
-            val currentProgress = it.animatedValue as Int
-            percentageText.text = "${currentProgress}%"
-            when (currentProgress) {
-                in 0..25 -> progressText.text = "Downloading data..."
-                in 26..50 -> progressText.text = "Optimizing layouts..."
-                in 51..75 -> progressText.text = "Organising Your Life ;)..."
-                in 76..100 -> progressText.text = "And Here we GO!"
+        try {
+            val animator =
+                ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, progress)
+            animator.duration = 4900
+            animator.interpolator = LinearInterpolator()
+            animator.addUpdateListener {
+                val currentProgress = it.animatedValue as Int
+                percentageText.text = "${currentProgress}%"
+                when (currentProgress) {
+                    in 0..25 -> progressText.text = "Downloading data..."
+                    in 26..50 -> progressText.text = "Optimizing layouts..."
+                    in 51..75 -> progressText.text = "Organising Your Life ;)..."
+                    in 76..100 -> progressText.text = "And Here we GO!"
+                }
             }
+            animator.start()
+        } catch (E:Exception)
+        {
+            Log.d("exceptionss","${Exception()}")
         }
-        animator.start()
     }
-
 }

@@ -28,197 +28,252 @@
             android:text="TASK PAGE"
             android:textColor="@color/black"
             android:textSize="50sp" />
+        <EditText
+            android:id="@+id/edit_text_input"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_above="@+id/text_view_countdown"
+            android:layout_centerHorizontal="true"
+            android:hint="Minutes"
+            android:inputType="number"
+            android:maxLength="4" />
 
+        <Button
+            android:id="@+id/button_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/edit_text_input"
+            android:layout_toEndOf="@+id/edit_text_input"
+            android:text="Set" />
+
+        <TextView
+            android:id="@+id/text_view_countdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="00:00"
+            android:textColor="@android:color/black"
+            android:textSize="60sp" />
+
+        <Button
+            android:id="@+id/button_start_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view_countdown"
+            android:layout_centerHorizontal="true"
+            android:text="start" />
+
+        <Button
+            android:id="@+id/button_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view_countdown"
+            android:layout_marginStart="11dp"
+            android:layout_toEndOf="@+id/button_start_pause"
+            android:text="reset"
+            android:visibility="invisible"
+            tools:visibility="visible" />
     </RelativeLayout>
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_menu"
         android:layout_below="@id/top_menu">
-
-        <FrameLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#D6D6D6"
-            android:padding="20dp">
+            android:layout_height="match_parent">
 
-            <androidx.cardview.widget.CardView
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="20dp">
+                android:background="#D6D6D6"
+                android:padding="20dp">
 
-                <RelativeLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="5dp">
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="20dp">
 
-                    <TextView
-                        android:id="@+id/date_display"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Date goes here "
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp">
 
-                    <ImageView
-                        android:id="@+id/task_image"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_centerHorizontal="true"
-                        android:clickable="true"
+                        <TextView
+                            android:id="@+id/date_display"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Date goes here "
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
 
-                        />
+                        <ImageView
+                            android:id="@+id/task_image"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_centerHorizontal="true"
+                            android:clickable="true"
 
-                    <TextView
-                        android:id="@+id/task_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_below="@id/task_image"
-                        android:layout_centerHorizontal="true"
-                        android:text="Task Name"
-                        android:textColor="@color/black"
-                        android:textSize="30sp" />
+                            />
 
-                    <TextView
-                        android:id="@+id/category_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_below="@id/task_name"
-                        android:layout_centerHorizontal="true"
-                        android:text="category name"
-                        android:textColor="#949494"
-                        android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/task_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_below="@id/task_image"
+                            android:layout_centerHorizontal="true"
+                            android:text="Task Name"
+                            android:textColor="@color/black"
+                            android:textSize="30sp" />
 
-                    <TextView
-                        android:id="@+id/description_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/category_name"
-                        android:text="Description:"
-                        android:textColor="@color/black"
-                        android:textSize="17sp" />
+                        <TextView
+                            android:id="@+id/category_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:layout_below="@id/task_name"
+                            android:layout_centerHorizontal="true"
+                            android:text="category name"
+                            android:textColor="#949494"
+                            android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/description_text"
-                        android:layout_width="350dp"
-                        android:layout_height="100dp"
-                        android:layout_below="@+id/description_title"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/description_rectangle"
-                        android:text="The description goes here... "
-                        android:textColor="#949494"
-                        android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/description_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/category_name"
+                            android:text="Description:"
+                            android:textColor="@color/black"
+                            android:textSize="17sp" />
 
-                    <TextView
-                        android:id="@+id/start_date"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:layout_below="@id/description_text"
-                        android:text="Start Time:"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/description_text"
+                            android:layout_width="350dp"
+                            android:layout_height="100dp"
+                            android:layout_below="@+id/description_title"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/description_rectangle"
+                            android:text="The description goes here... "
+                            android:textColor="#949494"
+                            android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/start_date_display"
-                        android:layout_width="100dp"
-                        android:layout_height="30dp"
-                        android:layout_below="@id/description_text"
-                        android:layout_marginTop="2dp"
-                        android:layout_toRightOf="@id/start_date"
-                        android:background="@drawable/description_rectangle"
-                        android:gravity="center"
-                        android:text="2002/07/16"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/start_date"
+                            android:layout_width="120dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@id/description_text"
+                            android:text="Start Time:"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/end_date"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:layout_below="@id/start_date"
-                        android:text="End Time:"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/start_date_display"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_below="@id/description_text"
+                            android:layout_marginTop="2dp"
+                            android:layout_toRightOf="@id/start_date"
+                            android:background="@drawable/description_rectangle"
+                            android:gravity="center"
+                            android:text="2002/07/16"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/end_date_display"
-                        android:layout_width="100dp"
-                        android:layout_height="30dp"
-                        android:layout_below="@id/start_date"
-                        android:layout_marginTop="2dp"
-                        android:layout_toRightOf="@id/end_date"
-                        android:background="@drawable/description_rectangle"
-                        android:gravity="center"
-                        android:text="2002/07/20"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/end_date"
+                            android:layout_width="120dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@id/start_date"
+                            android:text="End Time:"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/max_title"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:layout_below="@id/end_date"
-                        android:paddingTop="4dp"
-                        android:text="Max Daily Goal:"
-                        android:textColor="@color/black" />
+                        <TextView
+                            android:id="@+id/end_date_display"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_below="@id/start_date"
+                            android:layout_marginTop="2dp"
+                            android:layout_toRightOf="@id/end_date"
+                            android:background="@drawable/description_rectangle"
+                            android:gravity="center"
+                            android:text="2002/07/20"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/max_text"
-                        android:layout_width="100dp"
-                        android:layout_height="30dp"
-                        android:layout_below="@id/end_date"
-                        android:layout_marginTop="2dp"
-                        android:layout_toRightOf="@id/max_title"
-                        android:background="@drawable/description_rectangle"
-                        android:gravity="center" />
+                        <TextView
+                            android:id="@+id/max_title"
+                            android:layout_width="120dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@id/end_date"
+                            android:paddingTop="4dp"
+                            android:text="Max Daily Goal:"
+                            android:textColor="@color/black" />
 
-                    <TextView
-                        android:id="@+id/min_title"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:layout_below="@id/max_title"
-                        android:paddingTop="4dp"
-                        android:text="Min Daily Goal:"
-                        android:textColor="@color/black" />
+                        <TextView
+                            android:id="@+id/max_text"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_below="@id/end_date"
+                            android:layout_marginTop="2dp"
+                            android:layout_toRightOf="@id/max_title"
+                            android:background="@drawable/description_rectangle"
+                            android:gravity="center" />
 
-                    <TextView
-                        android:id="@+id/min_text"
-                        android:layout_width="100dp"
-                        android:layout_height="30dp"
-                        android:layout_below="@id/max_title"
-                        android:layout_marginTop="2dp"
-                        android:layout_toRightOf="@id/min_title"
-                        android:background="@drawable/description_rectangle"
-                        android:gravity="center" />
+                        <TextView
+                            android:id="@+id/min_title"
+                            android:layout_width="120dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@id/max_title"
+                            android:paddingTop="4dp"
+                            android:text="Min Daily Goal:"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/min_text"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_below="@id/max_title"
+                            android:layout_marginTop="2dp"
+                            android:layout_toRightOf="@id/min_title"
+                            android:background="@drawable/description_rectangle"
+                            android:gravity="center" />
 
 
-                    <TextView
-                        android:id="@+id/hour_title"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:layout_below="@id/min_text"
-                        android:gravity="center_vertical"
-                        android:paddingTop="4dp"
-                        android:text="Total Hours:"
-                        android:textColor="@color/black" />
+                        <TextView
+                            android:id="@+id/hour_title"
+                            android:layout_width="120dp"
+                            android:layout_height="40dp"
+                            android:layout_below="@id/min_text"
+                            android:gravity="center_vertical"
+                            android:paddingTop="4dp"
+                            android:text="Total Hours:"
+                            android:textColor="@color/black" />
 
-                    <TextView
-                        android:id="@+id/hour_text"
-                        android:layout_width="100dp"
-                        android:layout_height="30dp"
-                        android:layout_below="@id/min_title"
-                        android:layout_marginTop="2dp"
-                        android:layout_toEndOf="@id/hour_title"
-                        android:background="@drawable/description_rectangle"
-                        android:gravity="center" />
+                        <TextView
+                            android:id="@+id/hour_text"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_below="@id/min_title"
+                            android:layout_marginTop="2dp"
+                            android:layout_toEndOf="@id/hour_title"
+                            android:background="@drawable/description_rectangle"
+                            android:gravity="center" />
 
-                </RelativeLayout>
 
-            </androidx.cardview.widget.CardView>
 
-        </FrameLayout>
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+            </FrameLayout>
+
+        </ScrollView>
 
     </RelativeLayout>
 

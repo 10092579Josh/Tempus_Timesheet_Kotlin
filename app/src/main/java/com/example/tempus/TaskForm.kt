@@ -17,6 +17,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -41,8 +42,7 @@ class TaskForm : AppCompatActivity() {
     private lateinit var selectedDateText: TextView
     private lateinit var selectedStartTimeText: TextView
     private lateinit var selectedEndTimeText: TextView
-    private lateinit var uploadPictureBtn: Button
-    private lateinit var imgGallery: ImageView
+
     private val catEmpty = Crouton.makeText(this, e.emptyCat, Style.ALERT)
     private val taskEmpty = Crouton.makeText(this, e.emptyTaskName, Style.ALERT)
     private val noMing = Crouton.makeText(this, e.noMinGoal, Style.ALERT)
@@ -58,13 +58,26 @@ class TaskForm : AppCompatActivity() {
             security()
             super.onCreate(savedInstanceState)
             setContentView(R.layout.task_form)
+            val tasksBack = object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val intent = Intent(this@TaskForm, Tasks::class.java)
+                    intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+
+
+                }
+            }
+            onBackPressedDispatcher.addCallback(this, tasksBack)
+
             selectedDateText = findViewById(R.id.selectedDateText)
             selectedStartTimeText = findViewById(R.id.selectedStartTimeText)
             selectedEndTimeText = findViewById(R.id.selectedEndTimeText)
-            uploadPictureBtn = findViewById(R.id.uploadPicturetbtn)
-            imgGallery = findViewById(R.id.imgGallery)
+
 
             tasks()
+            val uploadImage = findViewById<ImageView>(R.id.imgGallery)
             val homebtn = findViewById<ImageButton>(R.id.hometbtn)
             val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
             val statsbtn = findViewById<ImageButton>(R.id.statstbtn)
@@ -72,7 +85,7 @@ class TaskForm : AppCompatActivity() {
 
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
 
-            uploadPictureBtn.setOnClickListener {
+            uploadImage.setOnClickListener {
                 val task = findViewById<EditText>(R.id.taskNameInput)
                 if (task.text.toString().isEmpty()) {
 
@@ -398,31 +411,39 @@ class TaskForm : AppCompatActivity() {
                         task.text.toString().isEmpty() -> {
                             taskEmpty.show()
                         }
+
                         description.text.toString().isEmpty() -> {
                             emptyBody.show()
                         }
+
                         start.text.toString().isEmpty() -> {
 
                             sTime.show()
                         }
+
                         end.text.toString().isEmpty() -> {
                             eTime.show()
 
                         }
+
                         dates.text.toString().isEmpty() -> {
                             sDate.show()
 
                         }
+
                         selectedItem.isEmpty() -> {
                             catEmpty.show()
 
                         }
+
                         max.isEmpty() -> {
                             noMx.show()
                         }
+
                         min.isEmpty() -> {
                             noMing.show()
                         }
+
                         else -> {
                             var picture: String
 
@@ -462,7 +483,8 @@ class TaskForm : AppCompatActivity() {
                                 val endTotalMinutes = endHours * 60 + endMinutes
 
 
-                                val diffMinutes = (endTotalMinutes - startTotalMinutes).absoluteValue
+                                val diffMinutes =
+                                    (endTotalMinutes - startTotalMinutes).absoluteValue
 
                                 val diffHours = diffMinutes / 60
                                 val diffRemainingMinutes = diffMinutes % 60
@@ -485,7 +507,10 @@ class TaskForm : AppCompatActivity() {
                                         val newRemainingMinutesValue = newTotalMinutes % 60
                                         categoryRef.update(
                                             "totalHours",
-                                            "%02d:%02d".format(newHoursValue, newRemainingMinutesValue)
+                                            "%02d:%02d".format(
+                                                newHoursValue,
+                                                newRemainingMinutesValue
+                                            )
                                         )
                                     }
 
@@ -496,9 +521,14 @@ class TaskForm : AppCompatActivity() {
                                 when {
                                     picture.isEmpty() -> {
                                         val message = "ERROR NO IMAGE CHOSEN"
-                                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                        Toast.makeText(
+                                            applicationContext,
+                                            message,
+                                            Toast.LENGTH_SHORT
+                                        )
                                             .show()
                                     }
+
                                     else -> {
                                         val tasksAdd = TaskStorage(
                                             taskName,
@@ -520,7 +550,11 @@ class TaskForm : AppCompatActivity() {
 
 
                                         val message = "TASK ${task.text} ADDED "
-                                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                        Toast.makeText(
+                                            applicationContext,
+                                            message,
+                                            Toast.LENGTH_SHORT
+                                        )
                                             .show()
 
 
@@ -529,7 +563,8 @@ class TaskForm : AppCompatActivity() {
 
                             }.addOnFailureListener {
                                 val message = "ERROR NO IMAGE CHOSEN"
-                                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                    .show()
                             }
 
                         }

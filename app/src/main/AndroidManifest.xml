@@ -8,16 +8,15 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
-
-
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -27,54 +26,51 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tempus"
         tools:targetApi="31">
+        <activity
+            android:name=".EditTaskActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryForm"
+            android:exported="false" />
+        <activity
+            android:name=".Home"
+            android:exported="true" />
+        <activity
+            android:name=".Registration"
+            android:exported="true" />
+        <activity
+            android:name=".UserDetails"
+            android:exported="true" />
+        <activity
+            android:name=".TaskForm"
+            android:exported="true" />
+        <activity
+            android:name=".AppSettings"
+            android:exported="true" />
+        <activity
+            android:name=".Statistics"
+            android:exported="true" />
+        <activity
+            android:name=".Breaks"
+            android:exported="true" />
+        <activity
+            android:name=".Tasks"
+            android:exported="true" />
+        <activity
+            android:name=".TaskPage"
+            android:exported="true" />
+        <activity
+            android:name=".Login"
+            android:exported="true" />
+        <activity
+            android:name=".SplashScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-    <activity
-        android:name=".CategoryForm"
-        android:exported="false" />
-    <activity
-        android:name=".Home"
-        android:exported="true" />
-    <activity
-        android:name=".Registration"
-        android:exported="true" />
-    <activity
-        android:name=".UserDetails"
-        android:exported="true" />
-    <activity
-        android:name=".TaskForm"
-        android:exported="true" />
-    <activity
-        android:name=".AppSettings"
-        android:exported="true" />
-    <activity
-        android:name=".Statistics"
-        android:exported="true" />
-    <activity
-        android:name=".Breaks"
-        android:exported="true" />
-    <activity
-        android:name=".Tasks"
-        android:exported="true" />
-    <activity
-        android:name=".TaskPage"
-        android:exported="true" />
-    <activity
-        android:name=".Login"
-        android:exported="true" />
-    <activity
-        android:name=".SplashScreen"
-        android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-</application>
-
-
-
-
-        />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>

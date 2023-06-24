@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -23,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseException
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
@@ -44,6 +46,18 @@ class AppSettings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.app_settings)
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@AppSettings, Home::class.java)
+                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
+
+
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         security()
         populateFields()
         FirebaseApp.initializeApp(this)
@@ -300,67 +314,74 @@ class AppSettings : AppCompatActivity() {
                         context, R.drawable.baseline_check_box_24
                     )
                 ).setPositiveButton("SUBMIT") { _, _ ->
-                    val username = usernameInput.text.toString().trim()
-                    val password = passwordInput.text.toString().trim()
-                    val verify = username + password
-                    val database = Firebase.database
-                    val userid = FirebaseAuth.getInstance().currentUser?.uid
-                    val myRef = database.getReference("UserDetails")
-                    val oldRef = FirebaseDatabase.getInstance().getReference("UserDetails/$verify")
-                    val newRef = FirebaseDatabase.getInstance()
-                        .getReference("UserDetails/${userid.toString()}")
+                    try {
+                        val username = usernameInput.text.toString().trim()
+                        val password = passwordInput.text.toString().trim()
+                        val verify = username + password
+                        val database = Firebase.database
+                        val userid = FirebaseAuth.getInstance().currentUser?.uid
+                        val myRef = database.getReference("UserDetails")
+                        val oldRef =
+                            FirebaseDatabase.getInstance().getReference("UserDetails/$verify")
+                        val newRef = FirebaseDatabase.getInstance()
+                            .getReference("UserDetails/${userid.toString()}")
 
-                    when {
-                        usernameInput.text.isNullOrEmpty() -> {
-                            usernameEmpty.show()
+                        when {
+                            usernameInput.text.isNullOrEmpty() -> {
+                                usernameEmpty.show()
 
-                        }
+                            }
 
-                        emailCheck(username) -> {
-                            emailType.show()
+                            emailCheck(username) -> {
+                                emailType.show()
 
-                        }
+                            }
 
-                        passwordInput.text.isNullOrEmpty() -> {
-                            passwordEmpty.show()
+                            passwordInput.text.isNullOrEmpty() -> {
+                                passwordEmpty.show()
 
-                        }
+                            }
 
-                        usernameInput.text.isNullOrEmpty() && passwordInput.text.isNullOrEmpty() -> {
-                            noDetails.show()
+                            usernameInput.text.isNullOrEmpty() && passwordInput.text.isNullOrEmpty() -> {
+                                noDetails.show()
 
-                        }
+                            }
 
-                        else -> {
+                            else -> {
 
-                            oldRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                    val data = dataSnapshot.value as? Map<*, *>
-                                    if (dataSnapshot.exists()) {
-                                        if (data != null) {
-                                            newRef.setValue(data) { error, _ ->
-                                                if (error == null) {
-                                                    oldRef.removeValue()
-                                                    myRef.child(userid.toString()).child("userid")
-                                                        .setValue(userid)
+                                oldRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                        val data = dataSnapshot.value as? Map<*, *>
+                                        if (dataSnapshot.exists()) {
+                                            if (data != null) {
+                                                newRef.setValue(data) { error, _ ->
+                                                    if (error == null) {
+                                                        oldRef.removeValue()
+                                                        myRef.child(userid.toString())
+                                                            .child("userid")
+                                                            .setValue(userid)
+                                                        recreate()
+                                                    }
                                                 }
+                                            } else {
+                                                validerror(Errors())
                                             }
-                                        } else {
-                                            validerror(Errors())
                                         }
                                     }
-                                }
 
-                                override fun onCancelled(databaseError: DatabaseError) {
-                                    // Handle error
-                                }
-                            })
+                                    override fun onCancelled(databaseError: DatabaseError) {
+                                        // Handle error
+                                    }
+                                })
+                            }
                         }
+                        isDialogOpen = false
+                    }catch (E:DatabaseException)
+                    {
+                        emailType.show()
                     }
-                    isDialogOpen = false
-                }
-            }.create()
-
+                }.create()
+            }
             val alertDialog = builder.create()
             alertDialog.show()
             val button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)

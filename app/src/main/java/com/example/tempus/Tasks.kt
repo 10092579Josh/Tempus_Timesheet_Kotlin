@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +34,18 @@ class Tasks : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tasks_display)
+        val homeBack = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@Tasks, Home::class.java)
+                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
+
+
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, homeBack)
         security()
         print()
 

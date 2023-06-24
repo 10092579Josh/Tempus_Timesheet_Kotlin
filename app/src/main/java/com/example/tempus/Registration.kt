@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -41,6 +42,18 @@ class Registration : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration)
+        val loginBack = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@Registration, Login::class.java)
+                intent.putExtra("login", R.layout.login)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
+
+
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, loginBack)
         notifications()
         input()
         FirebaseApp.initializeApp(this)
@@ -220,7 +233,7 @@ class Registration : AppCompatActivity() {
                                     val homepage = Intent(this, Home::class.java)
                                     homepage.putExtra("home", R.layout.home)
                                     startActivity(homepage)
-
+                                    overridePendingTransition(0,0)
                                     finish()
 
 
@@ -231,7 +244,7 @@ class Registration : AppCompatActivity() {
                                     val loginpage = Intent(this, Login::class.java)
                                     loginpage.putExtra("login", R.layout.login)
 
-
+overridePendingTransition(0,0)
                                     startActivity(loginpage)
                                     finish()
 

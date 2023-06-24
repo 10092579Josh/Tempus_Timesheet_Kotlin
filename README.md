@@ -163,3 +163,17 @@ added swipe to delete
 added breaks on top of allocated hours bar 
 added final customisation for graph
 added timer code
+added fixed timer code
+added back button code 
+added progress bar category code 
+added interval code
+added new form code
+added privacy policy resources 
+added edit task file 
+added updated timer code
+moved timer to task page
+fixed verified database crash 
+fixed swipe to delete 
+
+Patch 6: 
+to be done implement the above pages 

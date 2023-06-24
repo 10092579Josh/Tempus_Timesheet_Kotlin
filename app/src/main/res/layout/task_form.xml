@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -34,327 +35,373 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/create_task_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/top_menu"
-        android:padding="16dp"
-        android:text="Create Task"
-        android:textColor="@color/black"
-        android:textSize="28sp"
-        android:fontFamily="serif"
-        android:textStyle="bold" />
-
-
-
-    <androidx.core.widget.NestedScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_menu"
-        android:layout_below="@id/create_task_title">
+        android:background="#D6D6D6"
+        android:padding="15dp"
+        android:layout_below="@id/top_menu"
+        android:layout_above="@id/bottom_menu">
 
-        <RelativeLayout
-            android:id="@+id/create_task_layout"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:layout_height="match_parent"
+            android:background="@drawable/frame_background">
 
-            <TextView
-                android:id="@+id/uploadTaskImage"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="Upload Task Image"
-                android:textColor="@color/purple_700"
-                android:textSize="20sp" />
-
-
-            <View
-                android:layout_width="104dp"
-                android:layout_height="104dp"
-                android:layout_below="@id/uploadTaskImage"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/image_background" />
-
-            <ImageView
-                android:id="@+id/imgGallery"
-                android:layout_width="99dp"
-                android:layout_height="99dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
-                android:scaleType="fitXY" />
-
-            <Button
-                android:id="@+id/uploadPicturetbtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/uploadTaskImage"
-                android:layout_toLeftOf="@id/imgGallery"
-                android:background="@drawable/camera_icon"
-                android:contentDescription="Home"
-                android:scaleType="fitCenter" />
-
-            <TextView
-                android:id="@+id/taskNameLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/imgGallery"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="78dp"
-                android:layout_marginBottom="8dp"
-                android:text="Task Name"
-
-                android:textColor="@color/purple_700"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/taskNameInput"
-                android:layout_width="250dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/taskNameLabel"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/rounded_square_background"
-                android:gravity="top|start"
-                android:hint="    Enter task name"
-                android:paddingStart="20dp"
-                android:paddingRight="5dp" />
-
-            <TextView
-                android:id="@+id/taskDescriptionLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/taskNameInput"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="8dp"
-                android:text="Task Description"
-                android:textColor="@color/purple_700"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/taskDescriptionInput"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_below="@id/taskDescriptionLabel"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/rounded_square_background"
-                android:gravity="top|start"
-                android:hint="    Enter Task description"
-                android:inputType="textMultiLine"
-                android:maxLines="10"
-                android:paddingStart="20dp"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/taskDescriptionInput">
+                android:orientation="vertical"
+                android:padding="0dp">
 
                 <TextView
-                    android:id="@+id/dateLabel"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/title_task_form"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Date:"
-                    android:textColor="@color/purple_700"
-                    android:textSize="20sp" />
+                    android:gravity="center"
+                    android:text="Create Task "
+                    android:fontFamily="serif"
+                    android:textColor="@color/black"
+                    android:textSize="35sp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"/>
 
-                <TextView
-                    android:id="@+id/selectedDateText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_toLeftOf="@+id/selectDateButton"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/warning_cardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/black"
+                    android:padding="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginTop="20dp">
 
-                <Button
-                    android:id="@+id/selectDateButton"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginEnd="0dp"
-                    android:layout_toRightOf="@id/dateView"
-                    android:background="@drawable/calendar"
-                    android:drawablePadding="8dp"
-                    android:onClick="selectDate" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFEFD1">
 
-                <View
-                    android:id="@+id/dateView"
-                    android:layout_width="200dp"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/dateLabel"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@android:color/darker_gray" />
+                        <TextView
+                            android:id="@+id/line_one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginBottom="10dp"
+                            android:text="Please create a category"
+                            android:textColor="#D00000"
+                            android:textSize="20sp"/>
+                        <TextView
+                            android:id="@+id/line_two"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_below="@id/line_one"
+                            android:text="before proceeding with your task."
+                            android:textSize="20sp"
+                            android:textColor="#D00000"/>
 
-                <TextView
-                    android:id="@+id/startTimeLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/dateLabel"
-                    android:layout_marginTop="15dp"
-                    android:text="Start Time:"
-                    android:textColor="@color/purple_700"
-                    android:textSize="20sp" />
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="25dp"
+                            android:src="@drawable/warning"
+                            android:layout_above="@id/line_two"/>
 
-                <TextView
-                    android:id="@+id/selectedStartTimeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/dateView"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_toLeftOf="@+id/selectStartTimeButton"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
+                    </RelativeLayout>
 
-                <Button
-                    android:id="@+id/selectStartTimeButton"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_below="@id/selectDateButton"
+                </androidx.cardview.widget.CardView>
 
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_toRightOf="@id/endTimeView"
-                    android:background="@drawable/clock"
-                    android:onClick="selectTime" />
+                <RelativeLayout
+                    android:id="@+id/create_task_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <View
-                    android:id="@+id/startTimeView"
-                    android:layout_width="200dp"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/startTimeLabel"
-                    android:background="@android:color/darker_gray" />
+                    <ImageView
+                        android:id="@+id/imgGallery"
+                        android:layout_width="60dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="6dp"
+                        android:layout_toLeftOf="@id/taskNameInput"
+                        android:src="@drawable/baseline_photo_camera_24"
+                        android:layout_below="@id/taskNameLabel"
+                        android:background="@drawable/circle"
+                        android:layout_marginLeft="5dp"
+                        android:scaleType="fitXY" />
 
-                <TextView
-                    android:id="@+id/endTimeLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/startTimeLabel"
-                    android:layout_marginTop="15dp"
-                    android:text="End Time:"
-                    android:textColor="@color/purple_700"
-                    android:textSize="20sp" />
+                    <TextView
+                        android:id="@+id/taskNameLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="8dp"
+                        android:text="Task Name"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"/>
 
-                <TextView
-                    android:id="@+id/selectedEndTimeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/startTimeView"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_toLeftOf="@+id/selectEndTimeButton"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
+                    <EditText
+                        android:id="@+id/taskNameInput"
+                        android:layout_width="250dp"
+                        android:layout_height="60dp"
+                        android:layout_below="@id/taskNameLabel"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/description_rectangle"
+                        android:gravity="top|start"
+                        android:hint="  Enter task name"
+                        android:paddingStart="20dp"
+                        android:paddingRight="5dp" />
 
-                <Button
-                    android:id="@+id/selectEndTimeButton"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_below="@id/selectDateButton"
+                    <TextView
+                        android:id="@+id/taskDescriptionLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/taskNameInput"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="8dp"
+                        android:text="Task Description"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
 
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_toRightOf="@id/endTimeView"
-                    android:background="@drawable/clock"
-                    android:onClick="selectEndTime" />
+                    <EditText
+                        android:id="@+id/taskDescriptionInput"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:layout_below="@id/taskDescriptionLabel"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="top|start"
+                        android:hint="  Enter Task description"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/description_rectangle"
+                        android:maxLines="10"
+                        android:paddingStart="20dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
-                <View
-                    android:id="@+id/endTimeView"
-                    android:layout_width="200dp"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/endTimeLabel"
-                    android:background="@android:color/darker_gray" />
+                    <TextView
+                        android:id="@+id/dateLabel"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/taskDescriptionInput"
+                        android:layout_marginTop="8dp"
+                        android:text="Date:"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
 
-                <TextView
+                    <TextView
+                        android:id="@+id/selectedDateText"
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/dateLabel"
+                        android:background="@drawable/description_rectangle"
+                        android:layout_below="@id/taskDescriptionInput"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
 
-                    android:id="@+id/minimumGoalLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/endTimeView"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:text="Minimum Goal"
-                    android:textColor="@color/purple_700"
-                    android:textSize="20sp" />
+                    <Button
+                        android:id="@+id/selectDateButton"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_below="@id/taskDescriptionInput"
+                        android:layout_marginTop="12dp"
+                        android:layout_toRightOf="@id/selectedDateText"
+                        android:background="@drawable/calendar"
+                        android:drawablePadding="8dp"
+                        android:onClick="selectDate" />
 
-                <Spinner
-                    android:id="@+id/minimumGoalSpinner"
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/minimumGoalLabel"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/spinner_background"
-                    android:spinnerMode="dropdown" />
+                    <View
+                        android:id="@+id/dateView"
+                        android:layout_width="200dp"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/dateLabel"
+                        android:layout_marginBottom="8dp"
+                      />
 
-                <TextView
-                    android:id="@+id/maximumGoalLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/minimumGoalSpinner"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
-                    android:text="Maximum Goal"
-                    android:textColor="@color/purple_700"
-                    android:textSize="20sp" />
+                    <TextView
+                        android:id="@+id/startTimeLabel"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/dateLabel"
+                        android:layout_marginTop="15dp"
+                        android:text="Start Time:"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
 
-                <Spinner
-                    android:id="@+id/maximumGoalSpinner"
-                    android:layout_width="200dp"
-                    android:layout_height="45dp"
-                    android:layout_below="@id/maximumGoalLabel"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/spinner_background"
-                    android:spinnerMode="dropdown" />
+                    <TextView
+                        android:id="@+id/selectedStartTimeText"
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/dateView"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_toRightOf="@+id/startTimeLabel"
+                        android:background="@drawable/description_rectangle"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/category_spinnerName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/maximumGoalSpinner"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="19dp"
-                    android:layout_marginEnd="147dp"
-                    android:text="Category"
-                    android:textColor="@color/purple_700"
-                    android:textSize="20sp" />
+                    <View
+                        android:id="@+id/startTimeView"
+                        android:layout_width="200dp"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/startTimeLabel"
+                        android:layout_marginBottom="8dp" />
 
-                <Spinner
-                    android:id="@+id/category_spinner"
-                    android:layout_width="200dp"
-                    android:layout_height="45dp"
-                    android:layout_below="@id/category_spinnerName"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/spinner_background"
-                    android:spinnerMode="dropdown" />
+                    <Button
+                        android:id="@+id/selectStartTimeButton"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_below="@id/selectedDateText"
+                        android:layout_marginTop="14dp"
+                        android:layout_toRightOf="@id/selectedStartTimeText"
+                        android:background="@drawable/clock"
+                        android:onClick="selectTime" />
 
-                <Button
-                    android:id="@+id/createTask"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/category_spinner"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="35dp"
-                    android:text="Create" />
-            </RelativeLayout>
-        </RelativeLayout>
-    </androidx.core.widget.NestedScrollView>
+
+
+                    <TextView
+                        android:id="@+id/endTimeLabel"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/startTimeLabel"
+                        android:layout_marginTop="15dp"
+                        android:text="End Time:"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/selectedEndTimeText"
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/startTimeLabel"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/endTimeLabel"
+                        android:background="@drawable/description_rectangle"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/selectEndTimeButton"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_below="@id/selectedStartTimeText"
+                        android:layout_toRightOf="@id/selectedEndTimeText"
+                        android:background="@drawable/clock"
+                        android:onClick="selectEndTime" />
+
+                    <View
+                        android:id="@+id/endTimeView"
+                        android:layout_width="200dp"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/endTimeLabel" />
+
+                    <TextView
+
+                        android:id="@+id/minimumGoalLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/endTimeView"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:text="Minimum Goal"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <Spinner
+                        android:id="@+id/minimumGoalSpinner"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/minimumGoalLabel"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:spinnerMode="dropdown" />
+
+                    <TextView
+                        android:id="@+id/maximumGoalLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/minimumGoalSpinner"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="16dp"
+                        android:text="Maximum Goal"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <Spinner
+                        android:id="@+id/maximumGoalSpinner"
+                        android:layout_width="200dp"
+                        android:layout_height="45dp"
+                        android:layout_below="@id/maximumGoalLabel"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:spinnerMode="dropdown" />
+
+                    <TextView
+                        android:id="@+id/breaks_spinnerName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/maximumGoalSpinner"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="19dp"
+                        android:layout_marginEnd="147dp"
+                        android:text="Breaks"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <Spinner
+                        android:id="@+id/breaks_spinner"
+                        android:layout_width="200dp"
+                        android:layout_height="45dp"
+                        android:layout_below="@id/breaks_spinnerName"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:spinnerMode="dropdown" />
+
+                    <TextView
+                        android:id="@+id/category_spinnerName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/breaks_spinner"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="19dp"
+                        android:layout_marginEnd="147dp"
+                        android:text="Category"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <Spinner
+                        android:id="@+id/category_spinner"
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/category_spinnerName"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:spinnerMode="dropdown" />
+
+                    <Button
+                        android:id="@+id/createTask"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/category_spinner"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="25dp"
+                        android:text="Create"
+                        android:textSize="17sp"/>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+
+    </RelativeLayout>
 
 
     <RelativeLayout

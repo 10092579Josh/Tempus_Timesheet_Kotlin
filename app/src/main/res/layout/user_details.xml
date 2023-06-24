@@ -53,12 +53,13 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
 
                     <TextView
                         android:id="@+id/account_settings"
                         android:layout_width="match_parent"
-                        android:layout_height="70dp"
+                        android:layout_height="50dp"
 
                         android:gravity="center"
                         android:text="Profile Settings"
@@ -71,18 +72,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/account_settings"
-                        android:layout_centerHorizontal="true"
-                        android:text="Name"
+                        android:layout_centerHorizontal="false"
+                        android:text="Name: "
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/nameEditText"
-                        android:layout_width="160dp"
-                        android:layout_height="35dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
                         android:layout_below="@id/nameTextview"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/border_color"
                         android:inputType="text"
                         android:textAlignment="center"></EditText>
 
@@ -91,18 +90,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/nameEditText"
-                        android:layout_centerHorizontal="true"
-                        android:text="Surname"
+                        android:text="Surname:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/surnameEditText"
-                        android:layout_width="160dp"
+                        android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:layout_below="@id/surnameView"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/border_color"
                         android:inputType="text"
                         android:textAlignment="center"></EditText>
 
@@ -111,18 +107,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/surnameEditText"
-                        android:layout_centerHorizontal="true"
-                        android:text="Email Address"
+                        android:text="Email Address:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/emailEditText"
-                        android:layout_width="160dp"
-                        android:layout_height="35dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
                         android:layout_below="@id/emailView"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/border_color"
                         android:inputType="textEmailAddress"
                         android:textAlignment="center"
                         tools:ignore="SpeakableTextPresentCheck"></EditText>
@@ -132,18 +125,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/emailEditText"
-                        android:layout_centerHorizontal="true"
-                        android:text="Username"
+                        android:text="Username:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/userName_text"
-                        android:layout_width="160dp"
-                        android:layout_height="35dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
                         android:layout_below="@id/userName"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/border_color"
                         android:inputType="textEmailAddress"
                         android:textAlignment="center"></EditText>
 
@@ -152,40 +142,33 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/userName_text"
-                        android:layout_centerHorizontal="true"
-                        android:text="Password"
+                        android:text="Password:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/passwordEditText"
-                        android:layout_width="160dp"
+                        android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:layout_below="@id/passwordView"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/border_color"
                         android:contentDescription="accPassword"
                         android:inputType="textPassword"
                         android:textAlignment="center"></EditText>
-
 
                     <TextView
                         android:id="@+id/confirmPasswordView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/passwordEditText"
-                        android:layout_centerHorizontal="true"
-                        android:text=" Confirm Password"
+                        android:text=" Confirm Password:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/confirmPasswordEditText"
-                        android:layout_width="160dp"
+                        android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:layout_below="@id/confirmPasswordView"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/border_color"
                         android:inputType="text"
                         android:textAlignment="center"></EditText>
 
@@ -195,7 +178,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/confirmPasswordEditText"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="21dp"
+                        android:layout_marginTop="15dp"
                         android:backgroundTint="#5954F6"
                         android:text="Confirm" />
 

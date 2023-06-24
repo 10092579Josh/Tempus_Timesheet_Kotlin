@@ -8,14 +8,18 @@ import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -40,9 +44,22 @@ class Home : AppCompatActivity() {
     private var selectedTabIndex = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val homeID = intent.getIntExtra("home", 0)
         val homeLayout = layoutInflater.inflate(homeID, null)
         setContentView(homeLayout)
+        val refresh = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@Home, Home::class.java)
+                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
+
+
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, refresh)
         securGuard()
         populateFields()
 // Set up the ViewPager and the TabLayout
@@ -256,7 +273,7 @@ class Home : AppCompatActivity() {
                 items.add(item)
             }
 
-            val sortedItems = items.sortedBy { it.text }
+            var sortedItems = items.sortedBy { it.text }
             try {
                 val adapter = CustomAdapter(sortedItems as MutableList<ItemsViewModel>)
                 adapter.onTaskClickListener = { _ ->
@@ -279,14 +296,32 @@ class Home : AppCompatActivity() {
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                         val position = viewHolder.adapterPosition
                         val item = sortedItems[position]
+                        val mutableItems = sortedItems.toMutableList()
 
                         // Remove the item from the RecyclerView
-                        sortedItems.removeAt(position)
+                        mutableItems.removeAt(position)
+                        sortedItems = mutableItems
                         adapter.notifyItemRemoved(position)
 
                         // Delete the item from the database
                         val databaseRef = itemsRef.document(item.text)
                         databaseRef.delete()
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    this@Home,
+                                    "Removed succesfully",
+                                    Toast.LENGTH_SHORT
+
+                                ).show()
+                                recreate()
+                            }
+                            .addOnFailureListener{e ->
+                                Toast.makeText(
+                                    this@Home,
+                                    "Failed to remove: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                     }
 
                     // Add swipe action buttons
@@ -310,42 +345,45 @@ class Home : AppCompatActivity() {
                         )
 
                         val itemView = viewHolder.itemView
-
                         when {
-                            dX > 0 -> {
-                                // Swiping to the right (edit action)
-                                val editIcon =
-                                    ContextCompat.getDrawable(this@Home, R.drawable.edit_icon)
-                                val editIconMargin =
-                                    (itemView.height - editIcon?.intrinsicHeight!!) / 2
-                                val editIconTop = itemView.top + editIconMargin
-                                val editIconBottom = editIconTop + editIcon.intrinsicHeight
-                                val editIconLeft = itemView.left + editIconMargin
-                                val editIconRight =
-                                    itemView.left + editIconMargin + editIcon.intrinsicWidth
+                            dX > 300f -> {
+                                when {
+                                    dX > 300 -> {
+                                        // Swiping to the right (edit action)
+                                        val editIcon =
+                                            ContextCompat.getDrawable(this@Home, R.drawable.edit_icon)
+                                        val editIconMargin =
+                                            (itemView.height - editIcon?.intrinsicHeight!!) / 2
+                                        val editIconTop = itemView.top + editIconMargin
+                                        val editIconBottom = editIconTop + editIcon.intrinsicHeight
+                                        val editIconLeft = itemView.left + editIconMargin
+                                        val editIconRight =
+                                            itemView.left + editIconMargin + editIcon.intrinsicWidth
 
-                                editIcon.setBounds(
-                                    editIconLeft,
-                                    editIconTop,
-                                    editIconRight,
-                                    editIconBottom
-                                )
+                                        editIcon.setBounds(
+                                            editIconLeft,
+                                            editIconTop,
+                                            editIconRight,
+                                            editIconBottom
+                                        )
 
-                                val editBackground = ContextCompat.getDrawable(
-                                    this@Home,
-                                    R.drawable.edit_button_background
-                                )
-                                editBackground?.setBounds(
-                                    itemView.left,
-                                    itemView.top,
-                                    itemView.left + dX.toInt(),
-                                    itemView.bottom
-                                )
-                                editBackground?.draw(c)
-                                editIcon.draw(c)
+                                        val editBackground = ContextCompat.getDrawable(
+                                            this@Home,
+                                            R.drawable.edit_button_background
+                                        )
+                                        editBackground?.setBounds(
+                                            itemView.left,
+                                            itemView.top,
+                                            itemView.left + dX.toInt(),
+                                            itemView.bottom
+                                        )
+                                        editBackground?.draw(c)
+                                        editIcon.draw(c)
+                                    }
+                                }
+
                             }
-
-                            else -> {
+                            dX <- 500 -> {
                                 // Swiping to the left (delete action)
                                 val deleteIcon =
                                     ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)
@@ -381,6 +419,8 @@ class Home : AppCompatActivity() {
                     }
                 }
 
+
+
                 val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
                 itemTouchHelper.attachToRecyclerView(recyclerview)
             } catch (e: Exception) {
@@ -394,6 +434,43 @@ class Home : AppCompatActivity() {
 
     data class ItemsViewModel(val text: String, val hours: String)
 
+    fun progressnotifs()
+    {
+        val checkTime = 300000L // Update progress every 300000 milliseconds (5 minutes)
+
+        val completionBar = findViewById<ProgressBar>(R.id.progress_category)
+        val loop = Handler(Looper.getMainLooper())
+
+        val updater = object : Runnable {
+            override fun run() {
+                // Update the progress of the ProgressBar
+               // progressBar.progress = newValue
+
+                // Check if the progress has reached a certain value
+                when (completionBar.progress) {
+                    completionBar.max / 4 -> {
+                        // Perform action when progress reaches 25%
+                    }
+                    completionBar.max / 2 -> {
+                        // Perform action when progress reaches 50%
+                    }
+                    completionBar.max * 3 / 4 -> {
+                        // Perform action when progress reaches 75%
+                    }
+                    completionBar.max -> {
+                        // Perform action when progress reaches 100%
+                    }
+                }
+
+                // Schedule the next update
+                loop.postDelayed(this, checkTime)
+            }
+        }
+
+// Start updating the progress
+        loop.post(updater)
+
+    }
     class CustomAdapter(private val catList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
@@ -410,6 +487,13 @@ class Home : AppCompatActivity() {
             val itemsViewModel = catList[position]
             holder.textView.text = itemsViewModel.text
             holder.textView2.text = itemsViewModel.hours
+            val timeComponents = itemsViewModel.hours.split(":")
+            val hours = timeComponents[0].toInt()
+            val minutes = timeComponents[1].toInt()
+            val totalMinutes = hours * 60 + minutes
+
+            holder.progressBar.max = totalMinutes
+            holder.progressBar.progress = 240
 
             holder.itemView.setOnClickListener {
 
@@ -436,6 +520,7 @@ class Home : AppCompatActivity() {
             val textView: TextView = this.itemView.findViewById(R.id.mTitle)
             val textView2: TextView = this.itemView.findViewById(R.id.mHours_category)
             val tasksLayout: LinearLayout = this.itemView.findViewById(R.id.tasksLayout)
+            val progressBar:ProgressBar = this.itemView.findViewById(R.id.progress_category)
         }
 
         private fun populateTasks(holder: ViewHolder, categoryTask: String) {
@@ -651,9 +736,6 @@ class Home : AppCompatActivity() {
                 // stuff to do
 
             }
-
         })
-
-
-    }
+   }
 }

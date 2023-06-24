@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +41,18 @@ class Breaks : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.breaks)
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@Breaks, Home::class.java)
+                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
+
+
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         security()
         val home = findViewById<ImageButton>(R.id.hometbtn)
         val breaks = findViewById<ImageButton>(R.id.breakstbtn)
