@@ -49,6 +49,10 @@ class TaskPage : AppCompatActivity() {
     private var mTimeLeftInMillis: Long = 0
     private var mEndTime: Long = 0
 
+    companion object {
+        const val NOTIFICATION_CHANNEL_ID = "your_channel_id"
+        const val NOTIFICATION_ID = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
@@ -190,7 +194,7 @@ class TaskPage : AppCompatActivity() {
         createNotificationChannel()
 
         // Build the initial notification without the timer countdown
-        val notificationBuilder = NotificationCompat.Builder(this, Breaks.NOTIFICATION_CHANNEL_ID)
+        val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Timer Running")
             .setContentText("The timer is currently running.")
             .setSmallIcon(R.drawable.imageuser)
@@ -199,7 +203,7 @@ class TaskPage : AppCompatActivity() {
 
         // Show the initial notification
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(Breaks.NOTIFICATION_ID, notificationBuilder.build())
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
 
         // Set the end time for the timer
         mEndTime = System.currentTimeMillis() + mTimeLeftInMillis
@@ -216,7 +220,7 @@ class TaskPage : AppCompatActivity() {
                         notificationBuilder.setContentText(getFormattedTimeLeft())
 
                     notificationManager.notify(
-                        Breaks.NOTIFICATION_ID,
+                        NOTIFICATION_ID,
                         updatedNotificationBuilder.build()
                     )
                 }
@@ -233,7 +237,7 @@ class TaskPage : AppCompatActivity() {
                 val updatedNotificationBuilder =
                     notificationBuilder.setContentText("Timer finished")
                 notificationManager.notify(
-                    Breaks.NOTIFICATION_ID,
+                    NOTIFICATION_ID,
                     updatedNotificationBuilder.build()
                 )
             }
@@ -246,14 +250,14 @@ class TaskPage : AppCompatActivity() {
     private fun updateNotification(contentText: String) {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-        val builder = NotificationCompat.Builder(this, Breaks.NOTIFICATION_CHANNEL_ID)
+        val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Timer Running")
             .setContentText(contentText)
             .setSmallIcon(R.drawable.imageuser)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         // Disable vibration
 
-        notificationManager.notify(Breaks.NOTIFICATION_ID, builder.build())
+        notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
 
@@ -270,7 +274,7 @@ class TaskPage : AppCompatActivity() {
         val channelDescription = "Channel for displaying timer notifications"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
 
-        val channel = NotificationChannel(Breaks.NOTIFICATION_CHANNEL_ID, channelName, importance)
+        val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, importance)
         channel.description = channelDescription
 
 
