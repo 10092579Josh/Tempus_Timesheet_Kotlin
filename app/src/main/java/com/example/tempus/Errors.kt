@@ -27,6 +27,7 @@ data class Errors(
     val noMaxGoal: String = "Please enter a Max Goal",
     val noFName: String = " no First Name Entered",
     val noSName: String = "No Surname Entered",
+    val InvalidCharacter:String = "Invalid Character in password or username!"
 
 
     )

@@ -2,11 +2,10 @@ package com.example.tempus
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 
-class PrivacyPolicy:AppCompatActivity(){
+class PrivacyPolicy : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -25,4 +24,4 @@ class PrivacyPolicy:AppCompatActivity(){
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
-    }
+}

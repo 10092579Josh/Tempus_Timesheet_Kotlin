@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +18,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseException
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import de.keyboardsurfer.android.widget.crouton.Crouton
@@ -36,6 +36,7 @@ class Registration : AppCompatActivity() {
     private val noFName = Crouton.makeText(this, e.noFName, Style.ALERT)
     private val emailRegAlready = Crouton.makeText(this, e.regEmailError, Style.ALERT)
     private val hashCharacter = Crouton.makeText(this, e.illegalCharacterHash, Style.ALERT)
+    private val invalidCharacter = Crouton.makeText(this, e.InvalidCharacter, Style.ALERT)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -178,7 +179,7 @@ class Registration : AppCompatActivity() {
 
             //action statements tp check fields if empty
             when {
-                names?.text.toString().isNullOrEmpty() -> {
+                names?.text.toString().isEmpty() -> {
                     noFName.show()
                 }
 
@@ -229,34 +230,42 @@ class Registration : AppCompatActivity() {
                         .addOnCompleteListener(this) { task ->
                             val auth = FirebaseAuth.getInstance()
                             val currentUser = auth.currentUser
-                            Log.d("MyApp", "$currentUser")
+
                             val exception = task.exception
                             when {
+
                                 task.isSuccessful && currentUser != null -> {
+                                    try {
+                                        auth.currentUser
 
-                                    auth.currentUser
+                                        val users = User(
+                                            name,
+                                            surname,
+                                            usersName,
+                                            email,
+                                            password,
+                                            confirm,
+                                            userId
+                                        )
+                                        myRef.child(usersName + password).setValue(users)
+                                        val message = "USER ${user2?.text} HAS REGISTERED "
+                                        Toast.makeText(
+                                            applicationContext,
+                                            message,
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
 
-                                    val users = User(
-                                        name,
-                                        surname,
-                                        usersName,
-                                        email,
-                                        password,
-                                        confirm,
-                                        userId
-                                    )
-                                    myRef.child(usersName + password).setValue(users)
-                                    val message = "USER ${user2?.text} HAS REGISTERED "
-                                    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
-                                        .show()
 
+                                        val homepage = Intent(this, Home::class.java)
+                                        homepage.putExtra("home", R.layout.home)
+                                        startActivity(homepage)
+                                        overridePendingTransition(0, 0)
+                                        finish()
+                                    } catch (E: DatabaseException) {
+                                        invalidCharacter.show()
 
-                                    val homepage = Intent(this, Home::class.java)
-                                    homepage.putExtra("home", R.layout.home)
-                                    startActivity(homepage)
-                                    overridePendingTransition(0, 0)
-                                    finish()
-
+                                    }
 
                                 }
 

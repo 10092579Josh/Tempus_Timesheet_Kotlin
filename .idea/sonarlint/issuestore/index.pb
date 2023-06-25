@@ -1795,8 +1795,6 @@ w
 G.idea/sonarlint/issuestore/d/0/d01a8f931276c0d36345a176800c596743a42696,0\4\043b17654453ad5b870b078270f303c931557c3f
 _
 /app/src/main/java/com/example/tempus/Storage.kt,3\a\3a26f21834c45c91c05c9da5dddf15fa938fae34
-^
-.app/src/main/java/com/example/tempus/Errors.kt,f\c\fc837ed61b22d047e121f3b3bf182a554df84078
 ?
 settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
 w
@@ -1819,7 +1817,5 @@ h
 8app/src/main/java/com/example/tempus/EditTaskActivity.kt,9\1\91e1a2d74ea38616bdea80416ceabb294e4054ed
 \
 ,app/src/main/java/com/example/tempus/Home.kt,3\e\3eca00a9d6c22ff409761b482a660c6117f14a29
-]
--app/src/main/java/com/example/tempus/Login.kt,4\b\4bded21f387cd4797d12f08f004d161932e81561
 d
 4app/src/main/java/com/example/tempus/SplashScreen.kt,7\e\7e89f39c0ae53f0621d1acf587e9dfd33dc8c90b
