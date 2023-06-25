@@ -383,20 +383,25 @@ class TaskForm : AppCompatActivity() {
             val start = findViewById<TextView>(R.id.selectedStartTimeText)
             val end = findViewById<TextView>(R.id.selectedEndTimeText)
             val minimum = findViewById<Spinner>(R.id.minimumGoalSpinner)
+            val breaks = findViewById<Spinner>(R.id.breaks_spinner)
 
 
-// get the download URL of the uploaded imageURL
+            val breaksArray = (1..6).toList()
+            val breaksAdapter =
+                ArrayAdapter(this, android.R.layout.simple_spinner_item, breaksArray)
+            breaksAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            breaks.adapter = breaksAdapter
 
             val maximumGoalSpinner = findViewById<Spinner>(R.id.maximumGoalSpinner)
-            val spinnerArray = (1..24).toList()
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerArray)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            maximumGoalSpinner.adapter = adapter
+            val maxArray = (1..24).toList()
+            val maxAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, maxArray)
+            maxAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            maximumGoalSpinner.adapter = maxAdapter
 
 
-            val adapter2 = ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerArray)
-            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            minimum.adapter = adapter2
+            val minAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, maxArray)
+            minAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            minimum.adapter = minAdapter
 
 
 

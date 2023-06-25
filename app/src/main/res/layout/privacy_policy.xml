@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="370dp"
     android:layout_height="550dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="20dp">
 
     <LinearLayout
@@ -13,24 +13,24 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:gravity="center"
             android:text="Privacy Policy"
-            android:textSize="30sp"
             android:textColor="@color/black"
-            android:gravity="center"/>
+            android:textSize="30sp" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="15dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="15dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="This Notice explains how we obtain, use and disclose your personal information, in accordance with the requirements of the Protection of Personal Information Act (“POPIA”).\n\n
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="This Notice explains how we obtain, use and disclose your personal information, in accordance with the requirements of the Protection of Personal Information Act (“POPIA”).\n\n
 
 This privacy policy (Policy) discloses the privacy practices for any software Services (including any applications developed for Android) owned by Tempus. Each of the services covered by this Policy are referred to as a site or sites.\n\n
 
@@ -74,11 +74,11 @@ We provide an open API that gives you access to all data stored in Tempus. We li
 In case of a security breach all affected customers will be notified by email and directly in the app within 72 hours of first having become aware of the breach. Tempus designs and develops all systems with Privacy in mind and follows best practices such as data minimisation and limiting the access to personal data to those needing to act out the processing (our technical support team).\n\n\n
 
 
-Last updated on June 17th, 2023"/>
+Last updated on June 17th, 2023" />
 
-    </RelativeLayout>
+            </RelativeLayout>
 
-    </ScrollView>
+        </ScrollView>
 
     </LinearLayout>
 

@@ -71,7 +71,15 @@ class AppSettings : AppCompatActivity() {
         val deleteappdata = findViewById<CardView>(R.id.delete_data)
         val deleteuser = findViewById<CardView>(R.id.delete_user)
         val appcache = findViewById<CardView>(R.id.delete_cache)
+        val privacyPolicy = findViewById<CardView>(R.id.privacy)
 
+        privacyPolicy.setOnClickListener()
+        {
+            val breakspage = Intent(this, PrivacyPolicy::class.java)
+            startActivity(breakspage)
+            overridePendingTransition(0, 0)
+            finish()
+        }
         appcache.setOnClickListener()
         {
             val clearCache = AlertDialog.Builder(this)
