@@ -3,11 +3,17 @@ package com.example.tempus
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Spinner
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 
 class Breaks : AppCompatActivity() {
 
@@ -15,6 +21,7 @@ class Breaks : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.breaks)
+        input()
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val intent = Intent(this@Breaks, Home::class.java)
@@ -22,6 +29,7 @@ class Breaks : AppCompatActivity() {
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 finish()
+
 
 
             }
@@ -128,4 +136,38 @@ class Breaks : AppCompatActivity() {
         }
 
     }
+    fun input() {
+        val addButton = findViewById<Button>(R.id.add)
+        val spinner = findViewById<Spinner>(R.id.breaks_spinner)
+        val userid = Firebase.auth.currentUser?.uid
+        val db = FirebaseFirestore.getInstance()
+        val spinnerList = mutableListOf<String>()
+
+
+        db.collection("TaskStorage")
+            .whereEqualTo("userIdTask", userid)
+            .get()
+
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val value =
+                        document.getString("taskName")
+                    if (value != null) {
+                        spinnerList.add(value)
+                    }
+                }
+
+            }
+        val spinnerAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerList)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = spinnerAdapter
+
+        addButton.setOnClickListener()
+        {
+            
+        }
+    }
+
+
 }

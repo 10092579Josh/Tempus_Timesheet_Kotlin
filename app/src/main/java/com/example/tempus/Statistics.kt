@@ -11,6 +11,7 @@ import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -137,12 +138,7 @@ class Statistics : AppCompatActivity() {
                 val resultNoted = initialNoteHours + initialNoteMin
                 val graphPointsNoted = resultNoted / 60.0f
 
-                val breakup3 = breakHours.split(":")
-                val initialBreakHours = breakup3[0].toInt() * 60
-                val initialBreakMin = breakup3[1].toInt()
-                val resultBreaks = initialBreakHours + initialBreakMin
-                val graphPointsBreaks = resultBreaks/ 60.0f
-
+val point = breakHours.toFloat() * 0.01
 
                 min.add(tempusMingoal.toFloat())
                 mags.add(tempusMaxGoal.toFloat())
@@ -150,8 +146,7 @@ class Statistics : AppCompatActivity() {
                 dateDatabase.add(whenAdded)
                 compList.add(graphPointsNoted)
                 durationList.add(graphPoints)
-                breakHour.add(graphPointsBreaks)
-
+                breakHour.add(point.toFloat())
             }
 
 
@@ -259,7 +254,7 @@ class Statistics : AppCompatActivity() {
                     Float.NaN,
                     Float.NaN,
                     null,
-                    Color.MAGENTA
+                    Color.LTGRAY
                 )
             )
             tempuStats.legend.setCustom(legendEntries)
@@ -293,7 +288,11 @@ class Statistics : AppCompatActivity() {
 
                 }
             }
+
+
             val yAxis = tempuStats.axisLeft
+
+            yAxis.yOffset = 10f
             yAxis.setDrawGridLines(false) // Hide the grid lines
             yAxis.setDrawZeroLine(true) // Draw a zero line
             yAxis.axisMinimum = 0f // Set the minimum value to zero

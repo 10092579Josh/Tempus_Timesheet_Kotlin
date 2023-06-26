@@ -128,7 +128,8 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="#7445DD"
-                        android:text="ADD" />
+                        android:text="ADD"
+                        android:id="@+id/add"/>
 
                 </RelativeLayout>
 
