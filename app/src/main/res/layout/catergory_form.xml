@@ -51,7 +51,7 @@
                 android:id="@+id/title_cat_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="serif"
+                android:fontFamily="@font/baloo_bhai_2"
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingTop="5px"

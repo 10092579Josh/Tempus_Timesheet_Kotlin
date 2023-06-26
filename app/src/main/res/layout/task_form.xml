@@ -58,7 +58,7 @@
                     android:id="@+id/title_task_form"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="serif"
+                    android:fontFamily="@font/baloo_bhai_2"
                     android:gravity="center"
                     android:paddingLeft="10dp"
                     android:paddingTop="5px"
@@ -345,31 +345,10 @@
                         android:spinnerMode="dropdown" />
 
                     <TextView
-                        android:id="@+id/breaks_spinnerName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_below="@id/maximumGoalSpinner"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="19dp"
-                        android:layout_marginEnd="147dp"
-                        android:text="Breaks"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-
-                    <Spinner
-                        android:id="@+id/breaks_spinner"
-                        android:layout_width="650px"
-                        android:layout_height="45dp"
-                        android:layout_below="@id/breaks_spinnerName"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="8dp"
-                        android:spinnerMode="dropdown" />
-
-                    <TextView
                         android:id="@+id/category_spinnerName"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/breaks_spinner"
+                        android:layout_below="@id/maximumGoalSpinner"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="19dp"
                         android:layout_marginEnd="147dp"

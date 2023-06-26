@@ -239,7 +239,7 @@ class TaskPage : AppCompatActivity() {
             .setContentText(contentText)
             .setSmallIcon(R.drawable.imageuser)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        // Disable vibration
+
 
         notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
@@ -267,12 +267,78 @@ class TaskPage : AppCompatActivity() {
         notificationManager.createNotificationChannel(channel)
     }
 
-
+   // Stark Code
     private fun pauseTimer() {
         mCountDownTimer!!.cancel()
         mTimerRunning = false
         updateWatchInterface()
+        val currentTime = mTimeLeftInMillis
+        val currentTimeFormatted = getFormattedTimeLeft()
+        Log.d("YourTag", "PauseDuration Retrieved: $currentTimeFormatted")
+        val currentTimeWithoutSeconds = currentTimeFormatted.substringBeforeLast(":")
+        Log.d("YourTag", "currentTimeWithoutSeconds: $currentTimeWithoutSeconds")
+
+        val itemId = intent.getStringExtra("itemId")
+
+        val db = FirebaseFirestore.getInstance()
+
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+        db.collection("TaskStorage")
+            .whereEqualTo("userIdTask", userid.toString().trim())
+            .whereEqualTo("taskName", itemId)
+            .get()
+            .addOnSuccessListener { queryResult ->
+                // Get the document object
+                val document = queryResult.documents.lastOrNull()
+                if (document != null) {
+                    val durationVar = document.getString("duration")
+                    Log.d("YourTag", "PauseDuration Retrieved: $durationVar")
+
+                    // Split the duration string into hours and minutes
+                    val parts = durationVar?.split(":")
+                    val hours = parts?.getOrNull(0)?.toIntOrNull() ?: 0
+                    val minutes = parts?.getOrNull(1)?.toIntOrNull() ?: 0
+
+                    // Calculate the total duration in milliseconds
+                    val durationMillis = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000)
+
+                    val currentTimeMillis = currentTimeWithoutSeconds.toMillis()
+                    Log.d("YourTag", "Hours done: $currentTimeMillis")
+                    val differenceMillis = durationMillis - currentTimeMillis
+                    val differenceFormatted = formatTime(differenceMillis)
+
+                    // Store the result in a variable
+                    val result = differenceFormatted
+                    Log.d("YourTag", "Completed Time: $differenceFormatted")
+
+                    // Update the value of completedHours to result using update()
+                    document.reference.update("timeRemaining",currentTimeFormatted)
+                    document.reference.update("completedHours", result)
+                }
+            }
     }
+
+    // Stark Code
+    private fun String.toMillis(): Long {
+        val parts = this.split(":")
+        val hours = parts.getOrNull(0)?.toLongOrNull() ?: 0
+        val minutes = parts.getOrNull(1)?.toLongOrNull() ?: 0
+
+        return ((hours * 3600) + (minutes * 60)) * 1000
+    }
+
+
+
+    // Extension function to format milliseconds as a time string
+    //Stark Code
+    private fun formatTime(millis: Long): String {
+        val minutes = (millis / (1000 * 60)) % 60
+        val hours = (millis / (1000 * 60 * 60)) % 24
+
+        return String.format("%02d:%02d", hours, minutes)
+    }
+
+
 
     private fun resetTimer() {
         mTimeLeftInMillis = mStartTimeInMillis

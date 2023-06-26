@@ -105,6 +105,7 @@ class Statistics : AppCompatActivity() {
         val compList = mutableListOf<Float>()
         val min = mutableListOf<Float>()
         val mags = mutableListOf<Float>()
+        val breakHour = mutableListOf<Float>()
         val dateDatabase = mutableListOf<String>()
         val userid = FirebaseAuth.getInstance().currentUser?.uid
         val accreditedHours = mutableListOf<BarEntry>()
@@ -113,6 +114,7 @@ class Statistics : AppCompatActivity() {
         val maxGoals = mutableListOf<Entry>()
         val tempuStats = findViewById<CombinedChart>(R.id.statsChart)
         val userTasks = mutableListOf<String>()
+
         tasksRef.whereEqualTo("userIdTask", userid).get().addOnSuccessListener { documents ->
             for (document in documents) {
                 val data = document.data
@@ -121,18 +123,34 @@ class Statistics : AppCompatActivity() {
                 val tempusMaxGoal = data["maxGoal"] as String
                 val whenAdded = data["dateAdded"] as String
                 val initialHours = data["duration"] as String
+                val notedHours:String = data["completedHours"] as String
+                val breakHours:String = data["breakHours"] as String
                 val breakup = initialHours.split(":")
                 val initialTime = breakup[0].toInt() * 60
                 val initialMin = breakup[1].toInt()
                 val result = initialTime + initialMin
                 val graphPoints = result / 60.0f
 
+                val breakup2 = notedHours.split(":")
+                val initialNoteHours = breakup2[0].toInt() * 60
+                val initialNoteMin = breakup[1].toInt()
+                val resultNoted = initialNoteHours + initialNoteMin
+                val graphPointsNoted = resultNoted / 60.0f
+
+                val breakup3 = breakHours.split(":")
+                val initialBreakHours = breakup3[0].toInt() * 60
+                val initialBreakMin = breakup3[1].toInt()
+                val resultBreaks = initialBreakHours + initialBreakMin
+                val graphPointsBreaks = resultBreaks/ 60.0f
+
+
                 min.add(tempusMingoal.toFloat())
                 mags.add(tempusMaxGoal.toFloat())
                 userTasks.add(task)
                 dateDatabase.add(whenAdded)
-                compList.add(3.0f)
+                compList.add(graphPointsNoted)
                 durationList.add(graphPoints)
+                breakHour.add(graphPointsBreaks)
 
             }
 
@@ -142,9 +160,9 @@ class Statistics : AppCompatActivity() {
                 val task = userTasks[h]
                 val taskIndex = userTasks.indexOf(task)
                 val barEntry =
-                    BarEntry(taskIndex.toFloat(), floatArrayOf(compList[h], durationList[h]))
+                    BarEntry(taskIndex.toFloat(), floatArrayOf(breakHour[h], durationList[h]))
                 accreditedHours.add(barEntry)
-                finishedHours.add(Entry(taskIndex.toFloat(), durationList[h]))
+                finishedHours.add(Entry(taskIndex.toFloat(), compList[h]))
                 lowGoals.add(Entry(taskIndex.toFloat(), min[h]))
                 maxGoals.add(Entry(taskIndex.toFloat(), mags[h]))
 

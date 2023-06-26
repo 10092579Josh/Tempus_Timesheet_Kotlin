@@ -384,14 +384,9 @@ class TaskForm : AppCompatActivity() {
             val start = findViewById<TextView>(R.id.selectedStartTimeText)
             val end = findViewById<TextView>(R.id.selectedEndTimeText)
             val minimum = findViewById<Spinner>(R.id.minimumGoalSpinner)
-            val breaks = findViewById<Spinner>(R.id.breaks_spinner)
 
 
-            val breaksArray = (1..6).toList()
-            val breaksAdapter =
-                ArrayAdapter(this, android.R.layout.simple_spinner_item, breaksArray)
-            breaksAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            breaks.adapter = breaksAdapter
+
 
             val maximumGoalSpinner = findViewById<Spinner>(R.id.maximumGoalSpinner)
             val maxArray = (1..24).toList()

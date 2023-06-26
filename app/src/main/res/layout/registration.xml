@@ -123,6 +123,22 @@
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true">
+
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/enterPassword"
@@ -158,26 +174,44 @@
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:id="@+id/breaks_spinnerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/duration_input"
+                android:layout_marginTop="19px"
+                android:layout_marginLeft="15px"
+                android:text="Select Security Question: "
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+
+            <Spinner
+                android:id="@+id/breaks_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_below="@id/breaks_spinnerName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:spinnerMode="dropdown" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/email"
+                android:id="@+id/security_answer"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-
                 android:layout_height="wrap_content"
-                android:hint="Email">
+                android:hint="Security Answer">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    android:singleLine="true"
-
-                    >
+                    android:inputType="text"
+                    android:singleLine="true">
 
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
+
 
             <Button
                 android:id="@+id/sub"
