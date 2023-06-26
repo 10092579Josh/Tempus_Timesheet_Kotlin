@@ -13,16 +13,21 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="190px"
+            android:layout_height="190px"
             android:src="@drawable/logo" />
 
-        <ImageView
+        <TextView
             android:id="@+id/tempus"
-            android:layout_width="290dp"
-            android:layout_height="100dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_toRightOf="@id/logo"
-            android:src="@drawable/tempus_title" />
+            android:fontFamily="serif"
+            android:text="TEMPUS"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="50sp" />
 
         <ImageButton
             android:id="@+id/search_btn"
@@ -121,20 +126,65 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/bottom_menu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/hometbtn"
+            android:layout_width="230px"
+            android:layout_height="200px"
+            android:layout_centerVertical="true"
+            android:background="@drawable/rectangle"
+            android:contentDescription="Home"
+            android:padding="5dp"
+            android:src="@drawable/home_icon" />
+
+        <ImageButton
+            android:id="@+id/breakstbtn"
+            android:layout_width="230px"
+            android:layout_height="200px"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/hometbtn"
+            android:background="@drawable/rectangle"
+            android:contentDescription="Breaks"
+            android:padding="5dp"
+            android:src="@drawable/break_icon" />
 
         <ImageButton
             android:id="@+id/addbtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/breakstbtn"
             android:background="@drawable/gradient_add"
             android:contentDescription="Add"
             android:padding="5dp"
             android:src="@drawable/add_icon" />
+
+        <ImageButton
+            android:id="@+id/statstbtn"
+            android:layout_width="230px"
+            android:layout_height="200px"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/addbtn"
+            android:background="@drawable/rectangle"
+            android:contentDescription="Stats"
+            android:padding="5dp"
+            android:src="@drawable/stats_icon" />
+
+        <ImageButton
+            android:id="@+id/settingstbtn"
+            android:layout_width="230px"
+            android:layout_height="200px"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/statstbtn"
+            android:background="@drawable/rectangle"
+            android:contentDescription="Setting"
+            android:padding="5dp"
+            android:src="@drawable/settings_icon" />
 
     </RelativeLayout>
 

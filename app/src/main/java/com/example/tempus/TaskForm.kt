@@ -472,6 +472,8 @@ class TaskForm : AppCompatActivity() {
                                 val mingoal = minimum.selectedItem.toString().trim()
                                 val date = dates.text.toString().trim()
 
+                                val completedHours = 0
+                                val breaksHours = 0
                                 val userid = Firebase.auth.currentUser?.uid
                                 val start = start.text.toString().replace(Regex("[^\\w\\s:]"), "")
                                 val end = end.text.toString().replace(Regex("[^\\w\\s:]"), "")
@@ -547,6 +549,8 @@ class TaskForm : AppCompatActivity() {
                                             date,
                                             picture,
                                             tabName,
+                                            breaksHours.toString(),
+                                            completedHours.toString(),
                                             userid.toString().trim()
                                         )
 

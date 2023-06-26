@@ -265,8 +265,8 @@
 
         <ImageButton
             android:id="@+id/hometbtn"
-            android:layout_width="86dp"
-            android:layout_height="50dp"
+            android:layout_width="230px"
+            android:layout_height="200px"
             android:layout_centerVertical="true"
             android:background="@drawable/rectangle"
             android:contentDescription="Home"
@@ -275,8 +275,8 @@
 
         <ImageButton
             android:id="@+id/breakstbtn"
-            android:layout_width="86dp"
-            android:layout_height="50dp"
+            android:layout_width="230px"
+            android:layout_height="200px"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/hometbtn"
             android:background="@drawable/rectangle"
@@ -288,6 +288,7 @@
             android:id="@+id/addbtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/breakstbtn"
             android:background="@drawable/gradient_add"
@@ -297,8 +298,8 @@
 
         <ImageButton
             android:id="@+id/statstbtn"
-            android:layout_width="86dp"
-            android:layout_height="50dp"
+            android:layout_width="230px"
+            android:layout_height="200px"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/addbtn"
             android:background="@drawable/rectangle"
@@ -308,8 +309,8 @@
 
         <ImageButton
             android:id="@+id/settingstbtn"
-            android:layout_width="86dp"
-            android:layout_height="50dp"
+            android:layout_width="230px"
+            android:layout_height="200px"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/statstbtn"
             android:background="@drawable/rectangle"

@@ -17,18 +17,21 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="190px"
+            android:layout_height="190px"
             android:src="@drawable/logo" />
 
-        <ImageView
+        <TextView
             android:id="@+id/tempus"
             android:layout_width="300dp"
-            android:layout_height="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginRight="190px"
             android:layout_toRightOf="@id/logo"
-
-            android:src="@drawable/tempus_title" />
-
+            android:fontFamily="serif"
+            android:text="Login"
+            android:textColor="@color/black"
+            android:textSize="50sp" />
     </RelativeLayout>
 
     <TextView
@@ -69,7 +72,7 @@
             android:layout_width="match_parent"
 
             android:layout_height="wrap_content"
-            android:hint="usernames">
+            android:hint="email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"

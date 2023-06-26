@@ -13,7 +13,9 @@ data class TaskStorage(
     val dateAdded: String,
     val imageURL: String,
     val tabID: String,
-    val userIdTask: String
+    val userIdTask: String,
+    val completedHours:String,
+    val breakHours:String
 
 )
 

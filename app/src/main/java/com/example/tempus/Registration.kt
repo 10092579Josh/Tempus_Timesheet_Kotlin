@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
+import java.lang.Exception
 
 
 class Registration : AppCompatActivity() {
@@ -266,7 +267,10 @@ class Registration : AppCompatActivity() {
                                         invalidCharacter.show()
 
                                     }
+                                    catch (e:Exception)
+                                    {// stuff to do  
 
+                                    }
                                 }
 
                                 task.isSuccessful && currentUser == null -> {
