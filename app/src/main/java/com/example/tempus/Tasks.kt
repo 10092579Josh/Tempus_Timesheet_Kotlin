@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
@@ -49,13 +50,109 @@ class Tasks : AppCompatActivity() {
         security()
         print()
 
-        val addbtn = findViewById<ImageButton>(R.id.addbtn)
-
-
-        val cat = findViewById<Button>(R.id.category_selected)
 
         val cats = findViewById<Button>(R.id.task_selected)
         val date = findViewById<Button>(R.id.filterDates_btn)
+        val addbtn = findViewById<ImageButton>(R.id.addbtn)
+        val homebtn = findViewById<ImageButton>(R.id.hometbtn)
+        val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
+        val statsbtn = findViewById<ImageButton>(R.id.statstbtn)
+        val settingsbtn = findViewById<ImageButton>(R.id.settingstbtn)
+
+        val cat = findViewById<Button>(R.id.category_selected)
+        val task = findViewById<Button>(R.id.task_selected)
+        task.setOnClickListener()
+        {
+            val intent = Intent(this, Home::class.java)
+            intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+
+        }
+        cat.setOnClickListener()
+        {
+            val tasks = Intent(this, Tasks::class.java)
+            startActivity(tasks)
+            overridePendingTransition(0, 0)
+            finish()
+
+        }
+        homebtn.setOnClickListener {
+
+            val intent = Intent(this, Home::class.java)
+            intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+
+
+        }
+
+        breaksbtn.setOnClickListener {
+            val breakspage = Intent(this, Breaks::class.java)
+            startActivity(breakspage)
+            overridePendingTransition(0, 0)
+            finish()
+
+        }
+
+        statsbtn.setOnClickListener {
+            val statspage = Intent(this, Statistics::class.java)
+            startActivity(statspage)
+            overridePendingTransition(0, 0)
+            finish()
+
+        }
+
+        settingsbtn.setOnClickListener {
+            val settingspage = Intent(this, AppSettings::class.java)
+            startActivity(settingspage)
+            overridePendingTransition(0, 0)
+            finish()
+
+        }
+
+        addbtn.setOnClickListener()
+        {
+
+
+            val shortcut = BottomSheetDialog(this)
+            val shortcutView = layoutInflater.inflate(R.layout.shortcut, null)
+
+            shortcut.setContentView(shortcutView)
+
+            shortcut.show()
+
+            val createNewCat = shortcutView.findViewById<Button>(R.id.add_category)
+
+            createNewCat.setOnClickListener {
+                val newForm = Intent(this, CategoryForm::class.java)
+                startActivity(newForm)
+                overridePendingTransition(0, 0)
+                finish()
+
+                shortcut.dismiss()
+            }
+
+            val createNewTask = shortcutView.findViewById<Button>(R.id.add_task)
+            createNewTask.setOnClickListener {
+
+                val newTask = Intent(this, TaskForm::class.java)
+                startActivity(newTask)
+                overridePendingTransition(0, 0)
+                finish()
+
+                shortcut.dismiss()
+            }
+
+            val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
+            addNewGoals.setOnClickListener {
+                // to be implemented
+
+                shortcut.dismiss()
+            }
+        }
 
         date.setOnClickListener {
             val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)

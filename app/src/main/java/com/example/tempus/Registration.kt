@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
@@ -80,6 +82,23 @@ class Registration : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+        val submitting: Button = findViewById(R.id.sub)
+        val name1: com.google.android.material.textfield.TextInputLayout =
+            findViewById(R.id.firstName)
+        val names = name1.editText
+
+        val surname1: com.google.android.material.textfield.TextInputLayout =
+            findViewById(R.id.surname)
+        val surnames = surname1.editText
+        val username1: com.google.android.material.textfield.TextInputLayout =
+            findViewById(R.id.usernames)
+        val user2 = username1.editText
+        val password1: com.google.android.material.textfield.TextInputLayout =
+            findViewById(R.id.enterPassword)
+        val pass = password1.editText
+        val confirmPassword: com.google.android.material.textfield.TextInputLayout =
+            findViewById(R.id.confirm_password)
+        val pass2 = confirmPassword.editText
 
         val email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
         email1.editText?.addTextChangedListener(object : TextWatcher {
@@ -103,7 +122,9 @@ class Registration : AppCompatActivity() {
                         }
                         when {
                             email.contains("#") -> {
-                                hashCharacter.show()
+                                Log.d("TAG", "hashCharacter.show() called")
+
+                                Snackbar.make(email1, e.illegalCharacterHash, Snackbar.LENGTH_SHORT).show()
 
                             }
                         }

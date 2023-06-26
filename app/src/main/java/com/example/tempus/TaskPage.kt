@@ -38,11 +38,10 @@ import java.util.Locale
 // THIS PAGE HANDLES THE DISPLAY OF THE TASKS WHEN A SPECIFIC TASK IS CLICKED
 class TaskPage : AppCompatActivity() {
 
-    private var mEditTextInput: EditText? = null
     private var mTextViewCountDown: TextView? = null
-    private var mButtonSet: Button? = null
-    private var mButtonStartPause: Button? = null
-    private var mButtonReset: Button? = null
+    private var mButtonSet: ImageView? = null
+    private var mButtonStartPause: ImageView? = null
+    private var mButtonReset: ImageView? = null
     private var mCountDownTimer: CountDownTimer? = null
     private var mTimerRunning = false
     private var mStartTimeInMillis: Long = 0
@@ -81,29 +80,14 @@ class TaskPage : AppCompatActivity() {
             val settingsbtn = findViewById<ImageButton>(R.id.settingstbtn)
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
 
-            mEditTextInput = findViewById(R.id.edit_text_input)
             mTextViewCountDown = findViewById(R.id.text_view_countdown)
-            mButtonSet = findViewById(R.id.button_set)
-            mButtonStartPause = findViewById(R.id.button_start_pause)
-            mButtonReset = findViewById(R.id.button_reset)
+            mButtonSet = findViewById(R.id.task_set)
+            mButtonStartPause = findViewById(R.id.task_start_pause)
+            mButtonReset = findViewById(R.id.task_reset)
             mButtonSet!!.setOnClickListener {
-                val input = mEditTextInput!!.text.toString()
-                if (input.isEmpty()) {
-                    Toast.makeText(this@TaskPage, "Field can't be empty", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                val millisInput = input.toLong() * 60000
-                if (millisInput == 0L) {
-                    Toast.makeText(
-                        this@TaskPage,
-                        "Please enter a positive number",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                    return@setOnClickListener
-                }
-                setTime(millisInput)
-                mEditTextInput!!.setText("")
+                mButtonStartPause!!.visibility = View.GONE
+                mButtonReset!!.visibility = View.GONE
+
             }
             mButtonStartPause!!.setOnClickListener {
                 if (mTimerRunning) {
@@ -312,16 +296,16 @@ class TaskPage : AppCompatActivity() {
     private fun updateWatchInterface() {
         when {
             mTimerRunning -> {
-                mEditTextInput!!.visibility = View.INVISIBLE
+
                 mButtonSet!!.visibility = View.INVISIBLE
                 mButtonReset!!.visibility = View.INVISIBLE
-                mButtonStartPause!!.text = "Pause"
+
             }
 
             else -> {
-                mEditTextInput!!.visibility = View.VISIBLE
+
                 mButtonSet!!.visibility = View.VISIBLE
-                mButtonStartPause!!.text = "Start"
+
                 when {
                     mTimeLeftInMillis < 1000 -> {
                         mButtonStartPause!!.visibility = View.INVISIBLE

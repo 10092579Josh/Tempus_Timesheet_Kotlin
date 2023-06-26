@@ -16,6 +16,7 @@ data class Errors(
     val notYourUsername: String = "no username detected , please enter a valid username",
     val emptyUserName: String = "Username Field is empty!",
     val emptyCat: String = "Category Field is empty!",
+    val noCat: String = "No categories have been made!",
     val noDetailsEntered: String = "Please Enter your Details",
     val emptyTaskName: String = " Please enter a Task name",
     val emptyDesc: String = " Please enter a description",

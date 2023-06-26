@@ -1783,15 +1783,7 @@ Q.idea/sonarlint/securityhotspotstore/3/a/3a26f21834c45c91c05c9da5dddf15fa938fae
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 c
 3app/src/main/java/com/example/tempus/UserDetails.kt,8\b\8b96ef95b26177964def010b1bf7d9c695f26ae7
-]
--app/src/main/java/com/example/tempus/Tasks.kt,0\9\0965774405117665572dffada535525ef52255ca
-d
-4app/src/main/java/com/example/tempus/CategoryForm.kt,2\5\253306b2f13e30da05eb1c0dd62796ea93c89b61
 h
 8app/src/main/java/com/example/tempus/EditTaskActivity.kt,9\1\91e1a2d74ea38616bdea80416ceabb294e4054ed
-\
-,app/src/main/java/com/example/tempus/Home.kt,3\e\3eca00a9d6c22ff409761b482a660c6117f14a29
 d
 4app/src/main/java/com/example/tempus/SplashScreen.kt,7\e\7e89f39c0ae53f0621d1acf587e9dfd33dc8c90b
-b
-2app/src/main/java/com/example/tempus/Statistics.kt,b\f\bf7c80de1130a6c8d0d0a21ebf760cc3520f53cb

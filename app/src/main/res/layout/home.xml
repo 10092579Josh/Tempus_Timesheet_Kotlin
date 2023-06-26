@@ -22,23 +22,12 @@
             android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/logo"
-            android:fontFamily="serif"
+            android:fontFamily="@font/baloo_bhai_2"
             android:gravity="center"
             android:src="@drawable/tempus_title"
             android:text="TEMPUS"
             android:textColor="@color/black"
             android:textSize="50sp" />
-
-        <ImageButton
-            android:id="@+id/back_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@id/tempus"
-            android:background="@drawable/search_icon"
-            android:contentDescription="Search"
-            android:paddingRight="100dp" />
 
     </RelativeLayout>
 
@@ -90,7 +79,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="49dp"
-            android:layout_marginBottom="0dp" />
+            android:layout_marginBottom="0dp"
+            android:background="#D6D6D6"/>
 
 
     </RelativeLayout>

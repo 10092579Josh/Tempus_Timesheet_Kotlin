@@ -24,56 +24,11 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_toRightOf="@id/logo"
-            android:fontFamily="serif"
+            android:fontFamily="@font/baloo_bhai_2"
             android:text="TASK PAGE"
             android:textColor="@color/black"
             android:textSize="50sp" />
-        <EditText
-            android:id="@+id/edit_text_input"
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:layout_above="@+id/text_view_countdown"
-            android:layout_centerHorizontal="true"
-            android:hint="Minutes"
-            android:inputType="number"
-            android:maxLength="4" />
 
-        <Button
-            android:id="@+id/button_set"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/edit_text_input"
-            android:layout_toEndOf="@+id/edit_text_input"
-            android:text="Set" />
-
-        <TextView
-            android:id="@+id/text_view_countdown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="00:00"
-            android:textColor="@android:color/black"
-            android:textSize="60sp" />
-
-        <Button
-            android:id="@+id/button_start_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_view_countdown"
-            android:layout_centerHorizontal="true"
-            android:text="start" />
-
-        <Button
-            android:id="@+id/button_reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_view_countdown"
-            android:layout_marginStart="11dp"
-            android:layout_toEndOf="@+id/button_start_pause"
-            android:text="reset"
-            android:visibility="invisible"
-            tools:visibility="visible" />
     </RelativeLayout>
 
 
@@ -87,13 +42,160 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#D6D6D6"
                 android:padding="20dp">
 
+                <RelativeLayout
+                    android:id="@+id/timer_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/task_timer"
+                    android:layout_width="450px"
+                    android:layout_height="350px"
+                    app:cardCornerRadius="20dp"
+                    android:layout_alignParentStart="true">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/task_view_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Task Timer"
+                            android:textColor="@android:color/black"
+                            android:textSize="70px" />
+
+                        <TextView
+                            android:id="@+id/text_view_countdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@id/task_view_title"
+                            android:text="00:00"
+                            android:textColor="@android:color/black"
+                            android:textSize="80px" />
+
+                        <ImageButton
+                            android:id="@+id/task_set"
+                            android:layout_width="150px"
+                            android:layout_height="100px"
+                            android:layout_alignParentLeft="true"
+                            android:text="Set"
+                            android:textSize="25px"
+                            android:background="#B596F8"
+                            android:src="@drawable/stop_icon"
+                            android:layout_alignParentBottom="true"/>
+
+
+
+                        <ImageButton
+                            android:id="@+id/task_start_pause"
+                            android:layout_width="150px"
+                            android:layout_height="100px"
+                            android:layout_centerHorizontal="true"
+                            android:text="start"
+                            android:textSize="25px"
+                            android:background="#B596F8"
+                            android:src="@drawable/play_icon"
+                            android:layout_alignParentBottom="true"/>
+
+                        <ImageButton
+                            android:id="@+id/task_reset"
+                            android:layout_width="150px"
+                            android:layout_height="100px"
+                            android:layout_alignParentRight="true"
+                            android:text="reset"
+                            android:textSize="25px"
+                            android:background="#B596F8"
+                            android:src="@drawable/reset_icon"
+                            android:layout_alignParentBottom="true"/>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/braeks_timer"
+                    android:layout_width="450px"
+                    android:layout_height="350px"
+                    app:cardCornerRadius="20dp"
+                    android:layout_alignParentEnd="true">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/break_view_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Break Timer"
+                            android:textColor="@android:color/black"
+                            android:textSize="70px" />
+
+                        <TextView
+                            android:id="@+id/break_view_countdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@id/break_view_title"
+                            android:text="00:00"
+                            android:textColor="@android:color/black"
+                            android:textSize="80px" />
+
+                        <ImageButton
+                            android:id="@+id/break_set"
+                            android:layout_width="150px"
+                            android:layout_height="100px"
+                            android:layout_alignParentLeft="true"
+                            android:text="Set"
+                            android:textSize="25px"
+                            android:background="#B596F8"
+                            android:src="@drawable/stop_icon"
+                            android:layout_alignParentBottom="true"/>
+
+
+
+                        <ImageButton
+                            android:id="@+id/break_start_pause"
+                            android:layout_width="150px"
+                            android:layout_height="100px"
+                            android:layout_centerHorizontal="true"
+                            android:text="start"
+                            android:textSize="25px"
+                            android:background="#B596F8"
+                            android:src="@drawable/play_icon"
+                            android:layout_alignParentBottom="true"/>
+
+                        <ImageButton
+                            android:id="@+id/break_reset"
+                            android:layout_width="150px"
+                            android:layout_height="100px"
+                            android:layout_alignParentRight="true"
+                            android:text="reset"
+                            android:textSize="25px"
+                            android:background="#B596F8"
+                            android:src="@drawable/reset_icon"
+                            android:layout_alignParentBottom="true"/>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_below="@id/timer_view"
+                    android:layout_marginTop="50px"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:cardCornerRadius="10dp"
@@ -271,7 +373,7 @@
                 </androidx.cardview.widget.CardView>
 
 
-            </FrameLayout>
+            </RelativeLayout>
 
         </ScrollView>
 
@@ -281,6 +383,7 @@
         android:id="@+id/bottom_menu"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:background="@color/white"
         android:layout_alignParentBottom="true">
 
         <ImageButton

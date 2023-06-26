@@ -94,7 +94,7 @@ class CategoryForm : AppCompatActivity() {
             }
             try {
                 create.setOnClickListener {
-                    val catNames: EditText = findViewById(R.id.categoryNameInput)
+                    val catNames: EditText = findViewById(R.id.catNameInput)
                     if (catNames.text.toString().isEmpty()) {
                         catEmpty.show()
 

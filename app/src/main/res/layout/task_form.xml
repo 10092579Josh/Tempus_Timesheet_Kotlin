@@ -22,14 +22,14 @@
             android:id="@+id/tempus"
             android:layout_width="300dp"
             android:layout_height="70dp"
-            android:text="TEMPUS"
-            android:fontFamily="serif"
-
             android:layout_toRightOf="@id/logo"
-            android:textSize="140px"
-            android:textColor="@color/black"
+            android:fontFamily="@font/baloo_bhai_2"
+
             android:gravity="center"
-            android:src="@drawable/tempus_title" />
+            android:src="@drawable/tempus_title"
+            android:text="TEMPUS"
+            android:textColor="@color/black"
+            android:textSize="140px" />
 
 
 
@@ -393,6 +393,7 @@
                         android:layout_below="@id/category_spinner"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="25px"
+                        android:backgroundTint="#7445DD"
                         android:text="Create"
                         android:textSize="17sp" />
 

@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="370dp"
-    android:layout_height="550dp"
-    app:cardCornerRadius="20dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="20dp"
+    android:background="@drawable/transparent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="900px"
+        android:layout_height="1700px"
+        app:cardCornerRadius="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/frame_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,6 +39,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:textSize="45px"
                     android:text="This Notice explains how we obtain, use and disclose your personal information, in accordance with the requirements of the Protection of Personal Information Act (“POPIA”).\n\n
 
 This privacy policy (Policy) discloses the privacy practices for any software Services (including any applications developed for Android) owned by Tempus. Each of the services covered by this Policy are referred to as a site or sites.\n\n
@@ -82,4 +93,6 @@ Last updated on June 17th, 2023" />
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

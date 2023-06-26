@@ -22,10 +22,10 @@
             android:id="@+id/tempus"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginRight="230px"
             android:layout_toRightOf="@id/logo"
-            android:fontFamily="serif"
+            android:fontFamily="@font/baloo_bhai_2"
+            android:gravity="center"
             android:text="TEMPUS"
             android:textColor="@color/black"
             android:textSize="50sp" />
@@ -182,7 +182,7 @@
                         android:layout_below="@id/confirmPasswordEditText"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
-                        android:backgroundTint="#5954F6"
+                        android:backgroundTint="#7445DD"
                         android:text="Confirm" />
 
 

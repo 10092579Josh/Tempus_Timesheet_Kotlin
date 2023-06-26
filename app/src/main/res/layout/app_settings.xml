@@ -23,13 +23,19 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_toRightOf="@id/logo"
-            android:fontFamily="serif"
+            android:fontFamily="@font/baloo_bhai_2"
             android:text="SETTINGS"
             android:textColor="@color/black"
             android:textSize="45sp" />
 
     </RelativeLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_menu"
+        android:layout_above="@id/bottom_menu"
+        android:background="#D6D6D6">
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,17 +43,17 @@
         android:layout_below="@id/top_menu"
         android:background="#D6D6D6"
         android:columnCount="2"
-        android:rowCount="3">
+        android:rowCount="3"
+        android:layout_centerHorizontal="true">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/account_setting"
-            android:layout_width="170dp"
-            android:layout_height="120dp"
+            android:layout_width="440px"
+            android:layout_height="310px"
             android:layout_row="0"
             android:layout_column="0"
             android:layout_margin="15dp"
             android:layout_marginLeft="22dp"
-            android:layout_marginTop="70dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="50dp">
 
@@ -78,12 +84,11 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/delete_user"
-            android:layout_width="170dp"
-            android:layout_height="120dp"
+            android:layout_width="440px"
+            android:layout_height="310px"
             android:layout_row="0"
             android:layout_column="1"
             android:layout_margin="15dp"
-            android:layout_marginTop="70dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp">
 
@@ -114,8 +119,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/delete_data"
-            android:layout_width="170dp"
-            android:layout_height="120dp"
+            android:layout_width="440px"
+            android:layout_height="310px"
             android:layout_row="01"
             android:layout_column="0"
             android:layout_margin="15dp"
@@ -150,8 +155,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/delete_cache"
-            android:layout_width="170dp"
-            android:layout_height="120dp"
+            android:layout_width="440px"
+            android:layout_height="310px"
             android:layout_row="1"
             android:layout_column="1"
             android:layout_margin="15dp"
@@ -185,8 +190,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/privacy"
-            android:layout_width="170dp"
-            android:layout_height="120dp"
+            android:layout_width="440px"
+            android:layout_height="310px"
             android:layout_row="2"
             android:layout_column="0"
             android:layout_margin="15dp"
@@ -221,8 +226,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/logout"
-            android:layout_width="170dp"
-            android:layout_height="120dp"
+            android:layout_width="440px    "
+            android:layout_height="310px"
             android:layout_row="2"
             android:layout_column="1"
             android:layout_margin="15dp"
@@ -256,6 +261,7 @@
 
 
     </GridLayout>
+    </ScrollView>
 
     <RelativeLayout
         android:id="@+id/bottom_menu"

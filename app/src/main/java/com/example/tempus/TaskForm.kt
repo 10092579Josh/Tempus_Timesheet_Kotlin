@@ -51,6 +51,7 @@ class TaskForm : AppCompatActivity() {
     private val sDate = Crouton.makeText(this, e.noStartDate, Style.ALERT)
     private val sTime = Crouton.makeText(this, e.startTimeNotChosen, Style.ALERT)
     private val eTime = Crouton.makeText(this, e.endTimeNotChosen, Style.ALERT)
+    private val noCat = Crouton.makeText(this, e.noCat, Style.ALERT)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
@@ -474,6 +475,7 @@ class TaskForm : AppCompatActivity() {
 
                                 val completedHours = 0
                                 val breaksHours = 0
+                                val timeRemain = 0
                                 val userid = Firebase.auth.currentUser?.uid
                                 val start = start.text.toString().replace(Regex("[^\\w\\s:]"), "")
                                 val end = end.text.toString().replace(Regex("[^\\w\\s:]"), "")
@@ -551,6 +553,7 @@ class TaskForm : AppCompatActivity() {
                                             tabName,
                                             breaksHours.toString(),
                                             completedHours.toString(),
+                                            timeRemain.toString(),
                                             userid.toString().trim()
                                         )
 
@@ -579,7 +582,8 @@ class TaskForm : AppCompatActivity() {
                         }
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
+                    noCat.show()
+
                 }
 
             }

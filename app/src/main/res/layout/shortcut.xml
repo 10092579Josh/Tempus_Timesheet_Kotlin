@@ -10,7 +10,7 @@
 
         <Button
             android:id="@+id/add_category"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="New Category"
@@ -18,14 +18,9 @@
             android:textSize="15sp"
             android:backgroundTint="@color/white"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Step 1"/>
-
         <Button
             android:id="@+id/add_task"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/add_category"
             android:layout_centerHorizontal="true"

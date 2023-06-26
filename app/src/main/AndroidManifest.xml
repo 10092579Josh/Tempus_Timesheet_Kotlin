@@ -27,6 +27,9 @@
         android:theme="@style/Theme.Tempus"
         tools:targetApi="31">
         <activity
+            android:name=".PrivacyPolicy"
+            android:exported="false" />
+        <activity
             android:name=".EditTaskActivity"
             android:exported="false" />
         <activity
