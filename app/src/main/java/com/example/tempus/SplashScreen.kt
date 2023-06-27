@@ -112,20 +112,19 @@ class SplashScreen : AppCompatActivity() {
         }
     }
 
-    fun withq ()
-    {
+    fun withq() {
         val firestore = Firebase.firestore
         val userid = Firebase.auth.currentUser?.uid
         val itemAdd = firestore.collection("SecurityQuestions")
 
         val q1 = "YOUR MOTHERS MAIDEN NAME?"
-        val q2 =  "YOUR FAVORITE PETS NAME?"
+        val q2 = "YOUR FAVORITE PETS NAME?"
         val q3 = "WHAT HIGH SCHOOL DID YOU ATTEND?"
         val q4 = "YOUR FAVORITE MOVIE?"
         val q5 = "YOUR FIRST GIRLFRIEND?"
 
-        val breaks = SecurityQuestions(q1, q2, q3,q4,q5)
-val b = "securityQuestions"
+        val breaks = SecurityQuestions(q1, q2, q3, q4, q5)
+        val b = "securityQuestions"
         val docRef = itemAdd.document(b)
         docRef.set(breaks)
     }

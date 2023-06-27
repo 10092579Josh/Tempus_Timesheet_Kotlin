@@ -21,9 +21,9 @@
             android:id="@+id/tempus"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_toRightOf="@id/logo"
             android:fontFamily="@font/baloo_bhai_2"
+            android:gravity="center"
             android:text="TEMPUS"
             android:textColor="@color/black"
             android:textSize="50sp" />
@@ -34,11 +34,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/top_menu"
         android:layout_above="@id/bottom_menu"
+        android:layout_below="@+id/top_menu"
         android:background="#D6D6D6"
         android:padding="30px">
-
 
 
         <RelativeLayout
@@ -63,9 +62,9 @@
                 android:id="@+id/catNameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@id/title_cat_form"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30px"
                 android:text="Category Name"
                 android:textColor="@color/black"
                 android:textSize="50px" />

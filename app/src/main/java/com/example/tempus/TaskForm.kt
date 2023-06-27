@@ -422,8 +422,6 @@ class TaskForm : AppCompatActivity() {
             val minimum = findViewById<Spinner>(R.id.minimumGoalSpinner)
 
 
-
-
             val maximumGoalSpinner = findViewById<Spinner>(R.id.maximumGoalSpinner)
             val maxArray = (1..24).toList()
             val maxAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, maxArray)

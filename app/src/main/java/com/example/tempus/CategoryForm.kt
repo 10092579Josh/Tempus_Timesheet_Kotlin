@@ -148,7 +148,8 @@ class CategoryForm : AppCompatActivity() {
                         val total = 0
 
 
-                        val cat = CategoryStorage(catname, totalHours,total, userid.toString().trim())
+                        val cat =
+                            CategoryStorage(catname, totalHours, total, userid.toString().trim())
 
                         val docRef = itemAdd.document(catname)
                         docRef.set(cat)

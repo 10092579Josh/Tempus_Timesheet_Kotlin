@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -38,10 +37,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#D6D6D6"
-        android:padding="15dp"
+        android:layout_above="@id/bottom_menu"
         android:layout_below="@id/top_menu"
-        android:layout_above="@id/bottom_menu">
+        android:background="#D6D6D6"
+        android:padding="15dp">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -58,14 +57,13 @@
                     android:id="@+id/title_task_form"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Edit Task "
                     android:fontFamily="serif"
-                    android:textColor="@color/black"
-                    android:textSize="35sp"
+                    android:gravity="center"
                     android:paddingLeft="10dp"
-                    android:paddingTop="5dp"/>
-
+                    android:paddingTop="5dp"
+                    android:text="Edit Task "
+                    android:textColor="@color/black"
+                    android:textSize="35sp" />
 
 
                 <RelativeLayout
@@ -77,14 +75,14 @@
                         android:id="@+id/imgGallery"
                         android:layout_width="60dp"
                         android:layout_height="50dp"
+                        android:layout_below="@id/taskNameLabel"
                         android:layout_alignParentStart="true"
+                        android:layout_marginLeft="5dp"
                         android:layout_marginTop="6dp"
                         android:layout_toLeftOf="@id/taskNameInput"
-                        android:src="@drawable/baseline_photo_camera_24"
-                        android:layout_below="@id/taskNameLabel"
                         android:background="@drawable/circle"
-                        android:layout_marginLeft="5dp"
-                        android:scaleType="fitXY" />
+                        android:scaleType="fitXY"
+                        android:src="@drawable/baseline_photo_camera_24" />
 
                     <TextView
                         android:id="@+id/taskNameLabel"
@@ -94,7 +92,7 @@
                         android:layout_marginBottom="8dp"
                         android:text="Task Name"
                         android:textColor="@color/black"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/taskNameInput"
@@ -102,8 +100,8 @@
                         android:layout_height="60dp"
                         android:layout_below="@id/taskNameLabel"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="12dp"
                         android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="12dp"
                         android:background="@drawable/description_rectangle"
                         android:gravity="top|start"
                         android:hint="  Enter task name"
@@ -128,10 +126,10 @@
                         android:layout_below="@id/taskDescriptionLabel"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="12dp"
+                        android:background="@drawable/description_rectangle"
                         android:gravity="top|start"
                         android:hint="  Enter Task description"
                         android:inputType="textMultiLine"
-                        android:background="@drawable/description_rectangle"
                         android:maxLines="10"
                         android:paddingStart="20dp"
                         android:textColor="@color/black"
@@ -151,10 +149,10 @@
                         android:id="@+id/selectedDateText"
                         android:layout_width="200dp"
                         android:layout_height="50dp"
+                        android:layout_below="@id/taskDescriptionInput"
                         android:layout_marginTop="8dp"
                         android:layout_toRightOf="@+id/dateLabel"
                         android:background="@drawable/description_rectangle"
-                        android:layout_below="@id/taskDescriptionInput"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
@@ -174,8 +172,7 @@
                         android:layout_width="200dp"
                         android:layout_height="1dp"
                         android:layout_below="@id/dateLabel"
-                        android:layout_marginBottom="8dp"
-                        />
+                        android:layout_marginBottom="8dp" />
 
                     <TextView
                         android:id="@+id/startTimeLabel"
@@ -215,7 +212,6 @@
                         android:layout_toRightOf="@id/selectedStartTimeText"
                         android:background="@drawable/clock"
                         android:onClick="selectTime" />
-
 
 
                     <TextView
@@ -345,7 +341,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="25dp"
                         android:text="Confirm"
-                        android:textSize="17sp"/>
+                        android:textSize="17sp" />
 
                 </RelativeLayout>
 

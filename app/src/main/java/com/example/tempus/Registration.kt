@@ -28,7 +28,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
-import java.lang.Exception
 
 
 class Registration : AppCompatActivity() {
@@ -129,7 +128,8 @@ class Registration : AppCompatActivity() {
                             email.contains("#") -> {
                                 Log.d("TAG", "hashCharacter.show() called")
 
-                                Snackbar.make(email1, e.illegalCharacterHash, Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(email1, e.illegalCharacterHash, Snackbar.LENGTH_SHORT)
+                                    .show()
 
                             }
                         }
@@ -195,7 +195,8 @@ class Registration : AppCompatActivity() {
         val pass2 = confirmPassword.editText
         val email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
         val emails = email1.editText
-        val answer : com.google.android.material.textfield.TextInputLayout = findViewById(R.id.security_answer)
+        val answer: com.google.android.material.textfield.TextInputLayout =
+            findViewById(R.id.security_answer)
         val answers = answer.editText
 
         val spinner = findViewById<Spinner>(R.id.secure_spinner)
@@ -317,9 +318,7 @@ class Registration : AppCompatActivity() {
                                     } catch (E: DatabaseException) {
                                         invalidCharacter.show()
 
-                                    }
-                                    catch (e:Exception)
-                                    {// stuff to do  
+                                    } catch (e: Exception) {// stuff to do
 
                                     }
                                 }

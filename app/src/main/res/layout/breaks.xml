@@ -20,10 +20,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_marginRight="190px"
             android:layout_toRightOf="@id/logo"
             android:fontFamily="@font/baloo_bhai_2"
-            android:layout_marginRight="190px"
+            android:gravity="center"
             android:text="Breaks"
             android:textColor="@color/black"
             android:textSize="45sp" />
@@ -67,7 +67,6 @@
                         android:textSize="20dp" />
 
 
-
                     <EditText
                         android:id="@+id/break_tb"
                         android:layout_width="match_parent"
@@ -75,8 +74,8 @@
                         android:layout_below="@id/break_name"
                         android:background="@drawable/description_rectangle"
                         android:hint="Break name"
-                        android:padding="5dp"
-                        android:inputType="text"/>
+                        android:inputType="text"
+                        android:padding="5dp" />
 
                     <TextView
                         android:id="@+id/duration"
@@ -98,16 +97,16 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15px"
                         android:background="@drawable/description_rectangle"
-                        android:padding="5dp"
                         android:hint="In minutes..."
-                        android:inputType="number"/>
+                        android:inputType="number"
+                        android:padding="5dp" />
 
                     <TextView
                         android:id="@+id/breaks_spinnerName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
                         android:layout_below="@+id/duration_input"
+                        android:layout_centerHorizontal="true"
                         android:layout_marginTop="19dp"
                         android:text="Select Task: "
                         android:textColor="@color/black"
@@ -123,13 +122,13 @@
                         android:spinnerMode="dropdown" />
 
                     <Button
+                        android:id="@+id/add"
                         android:layout_width="70dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="#7445DD"
-                        android:text="ADD"
-                        android:id="@+id/add"/>
+                        android:text="ADD" />
 
                 </RelativeLayout>
 

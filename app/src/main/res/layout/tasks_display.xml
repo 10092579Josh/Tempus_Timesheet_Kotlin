@@ -76,12 +76,12 @@
 
         </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/mRecycler_task"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/filterDates_btn"
-                android:background="#D6D6D6"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mRecycler_task"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/filterDates_btn"
+            android:background="#D6D6D6" />
 
 
         <ImageButton
@@ -123,8 +123,8 @@
         android:id="@+id/bottom_menu"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/white"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
 
         <ImageButton
             android:id="@+id/hometbtn"

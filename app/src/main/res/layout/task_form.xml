@@ -31,17 +31,15 @@
             android:textSize="140px" />
 
 
-
-
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#D6D6D6"
-        android:padding="50px"
+        android:layout_above="@id/bottom_menu"
         android:layout_below="@id/top_menu"
-        android:layout_above="@id/bottom_menu">
+        android:background="#D6D6D6"
+        android:padding="50px">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -188,8 +186,8 @@
                         android:layout_width="270px"
                         android:layout_height="100px"
                         android:layout_below="@id/taskDescriptionInput"
-                        android:layout_marginTop="8dp"
                         android:layout_marginLeft="10px"
+                        android:layout_marginTop="8dp"
                         android:text="Date:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
@@ -228,8 +226,8 @@
                         android:layout_width="270px"
                         android:layout_height="50dp"
                         android:layout_below="@id/dateLabel"
-                        android:layout_marginTop="15dp"
                         android:layout_marginLeft="10px"
+                        android:layout_marginTop="15dp"
                         android:text="Start Time:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
@@ -269,8 +267,8 @@
                         android:layout_width="270px"
                         android:layout_height="100px"
                         android:layout_below="@id/startTimeLabel"
-                        android:layout_marginTop="15dp"
                         android:layout_marginLeft="10px"
+                        android:layout_marginTop="15dp"
                         android:text="End Time:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />

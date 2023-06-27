@@ -295,34 +295,34 @@ class Home : AppCompatActivity() {
                     }
 
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                   /*     val position = viewHolder.adapterPosition
-                        val item = sortedItems[position]
-                        val mutableItems = sortedItems.toMutableList()
+                        /*     val position = viewHolder.adapterPosition
+                             val item = sortedItems[position]
+                             val mutableItems = sortedItems.toMutableList()
 
-                        // Remove the item from the RecyclerView
-                        mutableItems.removeAt(position)
-                        sortedItems = mutableItems
-                        adapter.notifyItemRemoved(position)
+                             // Remove the item from the RecyclerView
+                             mutableItems.removeAt(position)
+                             sortedItems = mutableItems
+                             adapter.notifyItemRemoved(position)
 
-                        // Delete the item from the database
-                        val databaseRef = itemsRef.document(item.text)
-                        databaseRef.delete()
-                            .addOnSuccessListener {
-                                Toast.makeText(
-                                    this@Home,
-                                    "Removed successfully",
-                                    Toast.LENGTH_SHORT
+                             // Delete the item from the database
+                             val databaseRef = itemsRef.document(item.text)
+                             databaseRef.delete()
+                                 .addOnSuccessListener {
+                                     Toast.makeText(
+                                         this@Home,
+                                         "Removed successfully",
+                                         Toast.LENGTH_SHORT
 
-                                ).show()
-                                recreate()
-                            }
-                            .addOnFailureListener { e ->
-                                Toast.makeText(
-                                    this@Home,
-                                    "Failed to remove: ${e.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }*/
+                                     ).show()
+                                     recreate()
+                                 }
+                                 .addOnFailureListener { e ->
+                                     Toast.makeText(
+                                         this@Home,
+                                         "Failed to remove: ${e.message}",
+                                         Toast.LENGTH_SHORT
+                                     ).show()
+                                 }*/
                     }
 
                     // Add swipe action buttons
@@ -438,17 +438,15 @@ class Home : AppCompatActivity() {
     data class ItemsViewModel(val text: String, val hours: String)
 
 
-
-
-    fun notifs(context: Context)
-    {
+    fun notifs(context: Context) {
 
         Toast.makeText(
             context,
             "Removed successfully",
             Toast.LENGTH_SHORT
 
-        ).show()}
+        ).show()
+    }
 
     class CustomAdapter(private val catList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
@@ -604,7 +602,6 @@ class Home : AppCompatActivity() {
             }
 
         }
-
 
 
     }

@@ -59,8 +59,7 @@ class Statistics : AppCompatActivity() {
 
         // Onclick listener
 
-        addbtn.setOnClickListener()
-        {
+        addbtn.setOnClickListener() {
 
 
             val shortcut = BottomSheetDialog(this)
@@ -257,12 +256,7 @@ class Statistics : AppCompatActivity() {
             )
             legendEntries.add(
                 LegendEntry(
-                    "max goals",
-                    Legend.LegendForm.DEFAULT,
-                    Float.NaN,
-                    Float.NaN,
-                    null,
-                    Color.GREEN
+                    "max goals", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, Color.GREEN
                 )
             )
             legendEntries.add(
@@ -287,12 +281,7 @@ class Statistics : AppCompatActivity() {
             )
             legendEntries.add(
                 LegendEntry(
-                    "breaks",
-                    Legend.LegendForm.DEFAULT,
-                    Float.NaN,
-                    Float.NaN,
-                    null,
-                    Color.LTGRAY
+                    "breaks", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, Color.LTGRAY
                 )
             )
             tempuStats.legend.setCustom(legendEntries)

@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -80,8 +81,7 @@ class Breaks : AppCompatActivity() {
             finish()
         }
 
-        add.setOnClickListener()
-        {
+        add.setOnClickListener() {
 
 
             val shortcut = BottomSheetDialog(this)
@@ -187,14 +187,11 @@ class Breaks : AppCompatActivity() {
         val bname = findViewById<EditText>(R.id.break_tb)
         val minutes = findViewById<EditText>(R.id.duration_input)
 
-        db.collection("TaskStorage")
-            .whereEqualTo("userIdTask", userid)
-            .get()
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
 
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    val value =
-                        document.getString("taskName")
+                    val value = document.getString("taskName")
                     if (value != null) {
                         spinnerList.add(value)
                     }
@@ -207,8 +204,7 @@ class Breaks : AppCompatActivity() {
 
             }
 
-        addButton.setOnClickListener()
-        {
+        addButton.setOnClickListener() {
             if (bname.text.isNullOrEmpty()) {
                 breakEmpty.show()
 
@@ -231,13 +227,16 @@ class Breaks : AppCompatActivity() {
                     val docRef = itemAdd.document(b)
                     docRef.set(breaks)
 
-                    db.collection("TaskStorage")
-                        .whereEqualTo("taskName", t)
-                        .whereEqualTo("userIdTask", userid)
-                        .get()
+                    db.collection("TaskStorage").whereEqualTo("taskName", t)
+                        .whereEqualTo("userIdTask", userid).get()
                         .addOnSuccessListener { documents ->
                             for (document in documents) {
                                 document.reference.update("breakDurations", m.toInt())
+
+                                val message = "Break $b ADDED "
+                                Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                                    .show()
+
                             }
                         }
                 } catch (E: Exception) {

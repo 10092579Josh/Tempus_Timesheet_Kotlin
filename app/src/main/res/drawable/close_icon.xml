@@ -2,7 +2,6 @@
     <item
         android:width="50dp"
         android:height="40dp"
-        android:drawable="@drawable/close_buttons"
-        />
+        android:drawable="@drawable/close_buttons" />
 
 </layer-list>

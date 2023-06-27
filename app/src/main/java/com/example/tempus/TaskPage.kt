@@ -135,11 +135,13 @@ class TaskPage : AppCompatActivity() {
 
             mButtonReset!!.setOnClickListener {
                 resetTimer()
+                recreate()
             }
 
 
             mButtonResetBreak!!.setOnClickListener {
                 resetTimerBreak()
+                recreate()
             }
 
             taskImage.isEnabled = true
@@ -368,8 +370,7 @@ class TaskPage : AppCompatActivity() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun pauseTimerBreak()
-    {
+    private fun pauseTimerBreak() {
         mCountDownTimerBreaks!!.cancel()
         mTimerRunningBreak = false
         updateWatchInterfaceBreak()
@@ -387,7 +388,8 @@ class TaskPage : AppCompatActivity() {
             .addOnSuccessListener { queryResult ->
                 // Get the document object
                 val document = queryResult.documents.lastOrNull()
-                if (document != null) { val breakdurationVar = document.get("breakDurations")
+                if (document != null) {
+                    val breakdurationVar = document.get("breakDurations")
                     Log.d("YourTag", "PauseDuration Retrieved: $breakdurationVar")
                     val minutes = currentTime / 60000
                     val seconds = (currentTime % 60000) / 1000
@@ -399,7 +401,6 @@ class TaskPage : AppCompatActivity() {
                     val roundedMinutes = if (seconds >= 30) minutes + 1 else minutes
                     document.reference.update("breakDurations", roundedMinutes.toInt())
                     Log.d("YourTag", "Timer converted to mins $roundedMinutes")
-                    recreate()
 
                 }
             }
@@ -450,7 +451,7 @@ class TaskPage : AppCompatActivity() {
                     Log.d("YourTag", "Completed Time: $differenceFormatted")
 
                     // Update the value of completedHours to result using update()
-                    document.reference.update("timeRemaining",currentTimeFormatted)
+                    document.reference.update("timeRemaining", currentTimeFormatted)
                     document.reference.update("completedHours", result)
 
                     val catname = findViewById<TextView>(R.id.category_name)
@@ -465,7 +466,7 @@ class TaskPage : AppCompatActivity() {
                             val minutes = timeComponents[1].toInt()
                             val totalMinutes = hours * 60 + minutes
                             categoryRef.update(
-                                "totalTimeCompleted",totalMinutes
+                                "totalTimeCompleted", totalMinutes
 
                             )
                         }
@@ -484,7 +485,6 @@ class TaskPage : AppCompatActivity() {
     }
 
 
-
     // Extension function to format milliseconds as a time string
     //Stark Code
     private fun formatTime(millis: Long): String {
@@ -494,12 +494,12 @@ class TaskPage : AppCompatActivity() {
     }
 
 
-
     private fun resetTimer() {
         mTimeLeftInMillis = mStartTimeInMillis
         updateCountDownText()
         updateWatchInterface()
     }
+
     private fun resetTimerBreak() {
         mTimeLeftInMillisBreaks = mStartTimeInMillisBreaks
         updateCountDownTextBreaks()
@@ -518,6 +518,7 @@ class TaskPage : AppCompatActivity() {
         }
         mTextViewCountDown!!.text = timeLeftFormatted
     }
+
     private fun updateCountDownTextBreaks() {
         val hours = (mTimeLeftInMillisBreaks / 1000).toInt() / 3600
         val minutes = ((mTimeLeftInMillisBreaks / 1000) % 3600).toInt() / 60
@@ -565,6 +566,7 @@ class TaskPage : AppCompatActivity() {
             }
         }
     }
+
     private fun updateWatchInterfaceBreak() {
         when {
             mTimerRunningBreak -> {
@@ -572,6 +574,7 @@ class TaskPage : AppCompatActivity() {
                 mButtonResetBreak!!.visibility = View.INVISIBLE
                 mButtonStartPauseBreak?.setImageResource(R.drawable.pause_icon)
             }
+
             else -> {
                 mButtonSetBreak!!.visibility = View.VISIBLE
                 mButtonStartPauseBreak?.setImageResource(R.drawable.play_icon)
@@ -596,7 +599,6 @@ class TaskPage : AppCompatActivity() {
             }
         }
     }
-
 
 
     override fun onStop() {
@@ -658,6 +660,7 @@ class TaskPage : AppCompatActivity() {
             }
         }
     }
+
     fun onStartBreak() {
 
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
@@ -735,8 +738,8 @@ class TaskPage : AppCompatActivity() {
         }
 
     }
-    private fun GetBreaks()
-    {
+
+    private fun GetBreaks() {
         val itemId = intent.getStringExtra("itemId")
         Log.d("YourTag", "ItemID: " + itemId)
         //THIS INDEX LETS THE FOR LOOP SORT THE SPECIFIC INDEX WHICH WONT CHANGE AS PER THE POSITION WHICH WILL CHANGE
@@ -754,7 +757,7 @@ class TaskPage : AppCompatActivity() {
                 if (document != null) {
                     // Get the data for the clicked item from the document
                     // Use the data from Firestore to populate the fields in your form
-                    val  breakVal = document.getLong("breakDurations")
+                    val breakVal = document.getLong("breakDurations")
                     Log.d("YourTag", "BreakVal: " + breakVal)
                     val breakValInMilliseconds = breakVal?.times(60000)
                     Log.d("YourTag", "BreakVal: " + breakValInMilliseconds)

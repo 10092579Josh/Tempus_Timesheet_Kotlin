@@ -47,8 +47,8 @@
                 android:id="@+id/tab_nav"
                 android:layout_width="210dp"
                 android:layout_height="50dp"
-                android:background="@drawable/home_nav"
                 android:layout_marginBottom="0dp"
+                android:background="@drawable/home_nav"
                 android:orientation="horizontal">
 
                 <Button
@@ -81,7 +81,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="65dp"
             android:layout_marginBottom="0dp"
-            android:background="#D6D6D6"/>
+            android:background="#D6D6D6" />
 
 
     </RelativeLayout>
