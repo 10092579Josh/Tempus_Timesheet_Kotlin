@@ -182,7 +182,7 @@ class TaskPage : AppCompatActivity() {
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Timer Running")
             .setContentText("The timer is currently running.")
-            .setSmallIcon(R.drawable.imageuser)
+            .setSmallIcon(R.drawable.clock)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
 
@@ -238,7 +238,7 @@ class TaskPage : AppCompatActivity() {
         val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Timer Running")
             .setContentText(contentText)
-            .setSmallIcon(R.drawable.imageuser)
+            .setSmallIcon(R.drawable.clock)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
 
@@ -385,12 +385,14 @@ class TaskPage : AppCompatActivity() {
 
                 mButtonSet!!.visibility = View.INVISIBLE
                 mButtonReset!!.visibility = View.INVISIBLE
+                mButtonStartPause?.setImageResource(R.drawable.pause_icon)
 
             }
 
             else -> {
 
                 mButtonSet!!.visibility = View.VISIBLE
+                mButtonStartPause?.setImageResource(R.drawable.play_icon)
 
                 when {
                     mTimeLeftInMillis < 1000 -> {

@@ -819,15 +819,5 @@ G.idea/sonarlint/issuestore/2/b/2b8ce565720bbd3ec2dfc5db0e5660ff10f0c893,b\5\b5
 app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-c
-3app/src/main/java/com/example/tempus/UserDetails.kt,8\b\8b96ef95b26177964def010b1bf7d9c695f26ae7
-h
-8app/src/main/java/com/example/tempus/EditTaskActivity.kt,9\1\91e1a2d74ea38616bdea80416ceabb294e4054ed
-]
--app/src/main/java/com/example/tempus/Login.kt,4\b\4bded21f387cd4797d12f08f004d161932e81561
-c
-3app/src/main/java/com/example/tempus/AppSettings.kt,f\5\f5cbe409350da07321fa52d07f60f4ab8bea7659
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
-]
--app/src/main/java/com/example/tempus/Tasks.kt,0\9\0965774405117665572dffada535525ef52255ca

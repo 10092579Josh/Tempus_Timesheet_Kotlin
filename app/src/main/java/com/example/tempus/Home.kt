@@ -295,7 +295,7 @@ class Home : AppCompatActivity() {
                     }
 
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                        val position = viewHolder.adapterPosition
+                   /*     val position = viewHolder.adapterPosition
                         val item = sortedItems[position]
                         val mutableItems = sortedItems.toMutableList()
 
@@ -322,7 +322,7 @@ class Home : AppCompatActivity() {
                                     "Failed to remove: ${e.message}",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                            }
+                            }*/
                     }
 
                     // Add swipe action buttons
@@ -437,45 +437,18 @@ class Home : AppCompatActivity() {
 
     data class ItemsViewModel(val text: String, val hours: String)
 
-    fun progressNotify() {
-        val checkTime = 300000L // Update progress every 300000 milliseconds (5 minutes)
-
-        val completionBar = findViewById<ProgressBar>(R.id.progress_category)
-        val loop = Handler(Looper.getMainLooper())
-
-        val updater = object : Runnable {
-            override fun run() {
-                // Update the progress of the ProgressBar
-                // progressBar.progress = newValue
-
-                // Check if the progress has reached a certain value
-                when (completionBar.progress) {
-                    completionBar.max / 4 -> {
-                        // Perform action when progress reaches 25%
-                    }
-
-                    completionBar.max / 2 -> {
-                        // Perform action when progress reaches 50%
-                    }
-
-                    completionBar.max * 3 / 4 -> {
-                        // Perform action when progress reaches 75%
-                    }
-
-                    completionBar.max -> {
-                        // Perform action when progress reaches 100%
-                    }
-                }
-
-                // Schedule the next update
-                loop.postDelayed(this, checkTime)
-            }
-        }
-
-// Start updating the progress
 
 
-    }
+
+    fun notifs(context: Context)
+    {
+
+        Toast.makeText(
+            context,
+            "Removed successfully",
+            Toast.LENGTH_SHORT
+
+        ).show()}
 
     class CustomAdapter(private val catList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
@@ -497,7 +470,6 @@ class Home : AppCompatActivity() {
             val hours = timeComponents[0].toInt()
             val minutes = timeComponents[1].toInt()
             val totalMinutes = hours * 60 + minutes
-            val userid = FirebaseAuth.getInstance().currentUser?.uid
             holder.progressBar.max = totalMinutes
 
             val checkTime = 300000L // Update progress every 300000 milliseconds (5 minutes)
@@ -518,7 +490,13 @@ class Home : AppCompatActivity() {
 
                             when (holder.progressBar.progress) {
                                 holder.progressBar.max / 4 -> {
-                                    // Perform action when progress reaches 25%
+                                    val context = holder.itemView.context
+                                    Toast.makeText(
+                                        context,
+                                        "Removed successfully",
+                                        Toast.LENGTH_SHORT
+
+                                    ).show()
                                 }
 
                                 holder.progressBar.max / 2 -> {
@@ -628,7 +606,9 @@ class Home : AppCompatActivity() {
         }
 
 
+
     }
+
 
     class SubTasksAdapter(private val tasks: List<Task>) :
         RecyclerView.Adapter<SubTasksAdapter.ViewHolder>() {
@@ -694,7 +674,7 @@ class Home : AppCompatActivity() {
         tempusManager.createNotificationChannel(notificationChannel)
 
         val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.imageuser)
+            .setSmallIcon(R.drawable.user)
             .setContentTitle("$user logged in")
             .setContentText("welcome to tempus $user")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -704,7 +684,7 @@ class Home : AppCompatActivity() {
 
 
         val unverifiedBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.imageuser)
+            .setSmallIcon(R.drawable.user)
             .setContentTitle("$user logged in")
             .setContentText("welcome to tempus new $user please verify your account")
             .setPriority(NotificationCompat.PRIORITY_HIGH)

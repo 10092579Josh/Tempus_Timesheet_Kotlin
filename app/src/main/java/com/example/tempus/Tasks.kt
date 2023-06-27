@@ -152,6 +152,8 @@ class Tasks : AppCompatActivity() {
 
                 shortcut.dismiss()
             }
+
+
         }
 
         date.setOnClickListener {
@@ -233,12 +235,7 @@ class Tasks : AppCompatActivity() {
 
         }
 
-        addbtn.setOnClickListener {
-            val tform = Intent(this, TaskForm::class.java)
-            overridePendingTransition(0, 0)
-            startActivity(tform)
-            finish()
-        }
+
     }
 
 

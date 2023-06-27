@@ -3,6 +3,7 @@ package com.example.tempus
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -56,11 +58,47 @@ class Statistics : AppCompatActivity() {
 
 
         // Onclick listener
-        addbtn.setOnClickListener {
-            val tform = Intent(this, TaskForm::class.java)
-            overridePendingTransition(0, 0)
-            startActivity(tform)
-            finish()
+
+        addbtn.setOnClickListener()
+        {
+
+
+            val shortcut = BottomSheetDialog(this)
+            val shortcutView = layoutInflater.inflate(R.layout.shortcut, null)
+
+            shortcut.setContentView(shortcutView)
+
+            shortcut.show()
+
+            val createNewCat = shortcutView.findViewById<Button>(R.id.add_category)
+
+            createNewCat.setOnClickListener {
+                val newForm = Intent(this, CategoryForm::class.java)
+                startActivity(newForm)
+                overridePendingTransition(0, 0)
+                finish()
+
+                shortcut.dismiss()
+            }
+
+            val createNewTask = shortcutView.findViewById<Button>(R.id.add_task)
+            createNewTask.setOnClickListener {
+
+                val newTask = Intent(this, TaskForm::class.java)
+                startActivity(newTask)
+                overridePendingTransition(0, 0)
+                finish()
+
+                shortcut.dismiss()
+            }
+
+            val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
+            addNewGoals.setOnClickListener {
+                // to be implemented
+
+                shortcut.dismiss()
+            }
+
 
         }
         homebtn.setOnClickListener {

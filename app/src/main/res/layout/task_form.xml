@@ -26,7 +26,6 @@
             android:fontFamily="@font/baloo_bhai_2"
 
             android:gravity="center"
-            android:src="@drawable/tempus_title"
             android:text="TEMPUS"
             android:textColor="@color/black"
             android:textSize="140px" />

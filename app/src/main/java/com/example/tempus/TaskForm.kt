@@ -21,6 +21,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -112,12 +113,47 @@ class TaskForm : AppCompatActivity() {
             }
 
             // this creates a vertical layout Manager
+
             addbtn.setOnClickListener()
             {
-                val homepage = Intent(this, TaskForm::class.java)
-                startActivity(homepage)
-                overridePendingTransition(0, 0)
-                finish()
+
+
+                val shortcut = BottomSheetDialog(this)
+                val shortcutView = layoutInflater.inflate(R.layout.shortcut, null)
+
+                shortcut.setContentView(shortcutView)
+
+                shortcut.show()
+
+                val createNewCat = shortcutView.findViewById<Button>(R.id.add_category)
+
+                createNewCat.setOnClickListener {
+                    val newForm = Intent(this, CategoryForm::class.java)
+                    startActivity(newForm)
+                    overridePendingTransition(0, 0)
+                    finish()
+
+                    shortcut.dismiss()
+                }
+
+                val createNewTask = shortcutView.findViewById<Button>(R.id.add_task)
+                createNewTask.setOnClickListener {
+
+                    val newTask = Intent(this, TaskForm::class.java)
+                    startActivity(newTask)
+                    overridePendingTransition(0, 0)
+                    finish()
+
+                    shortcut.dismiss()
+                }
+
+                val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
+                addNewGoals.setOnClickListener {
+                    // to be implemented
+
+                    shortcut.dismiss()
+                }
+
 
             }
 

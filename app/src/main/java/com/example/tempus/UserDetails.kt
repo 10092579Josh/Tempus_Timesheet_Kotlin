@@ -495,7 +495,7 @@ class UserDetails : AppCompatActivity() {
         tempusManager.createNotificationChannel(notificationChannel)
 
         val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.imageuser)
+            .setSmallIcon(R.drawable.user)
             .setContentTitle("$user Account details")
             .setContentText("Email has been changed and Details captured $user")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -528,7 +528,7 @@ class UserDetails : AppCompatActivity() {
 
 
         val unverifiedBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.imageuser)
+            .setSmallIcon(R.drawable.user)
             .setContentTitle("$user logged in")
             .setContentText("welcome to tempus new $user please verify your account")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
