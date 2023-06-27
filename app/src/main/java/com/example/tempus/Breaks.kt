@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
 import androidx.activity.OnBackPressedCallback
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class Breaks : AppCompatActivity() {
@@ -142,7 +144,8 @@ class Breaks : AppCompatActivity() {
         val userid = Firebase.auth.currentUser?.uid
         val db = FirebaseFirestore.getInstance()
         val spinnerList = mutableListOf<String>()
-
+        val bname = findViewById<EditText>(R.id.break_tb)
+        val minutes = findViewById<EditText>(R.id.duration_input)
 
         db.collection("TaskStorage")
             .whereEqualTo("userIdTask", userid)
@@ -156,16 +159,47 @@ class Breaks : AppCompatActivity() {
                         spinnerList.add(value)
                     }
                 }
+                val spinnerAdapter =
+                    ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerList)
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = spinnerAdapter
+
 
             }
-        val spinnerAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerList)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = spinnerAdapter
 
         addButton.setOnClickListener()
         {
-            
+            if(bname.text.isNullOrEmpty())
+            {
+
+            }
+            else if(minutes.text.isNullOrEmpty())
+            {}
+            else {
+                val firestore = Firebase.firestore
+                val userid = Firebase.auth.currentUser?.uid
+                val itemAdd = firestore.collection("BreakStorage")
+
+                val b = bname.text.toString()
+                val t = spinner.selectedItem.toString()
+                val m = minutes.text.toString().toInt()
+
+                val breaks = BreakStorage(b, t, m, userid.toString().trim())
+
+                val docRef = itemAdd.document(b)
+                docRef.set(breaks)
+
+                db.collection("TaskStorage")
+                    .whereEqualTo("taskName", t)
+                    .whereEqualTo("userIdTask",userid)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                           document.reference.update("breakDurations",m.toString())
+                        }
+                    }
+            }
+
         }
     }
 

@@ -13,9 +13,9 @@ data class TaskStorage(
     val dateAdded: String,
     val imageURL: String,
     val tabID: String,
-    val completedHours:String,
-    val breakHours:String,
-    val timeRemaining:String,
+    val completedHours: String,
+    val breakDurations: String,
+    val timeRemaining: String,
     val userIdTask: String
 
 )
@@ -35,5 +35,13 @@ data class User(
     val password: String,
     val confirmkey: String,
     val userid: String
+
+)
+
+data class BreakStorage(
+    val breakName:String,
+    val breakTask:String,
+    val breakDuration:Int,
+    val userIdBreaks:String
 
 )

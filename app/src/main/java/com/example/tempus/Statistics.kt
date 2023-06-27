@@ -125,12 +125,13 @@ class Statistics : AppCompatActivity() {
                 val whenAdded = data["dateAdded"] as String
                 val initialHours = data["duration"] as String
                 val notedHours:String = data["completedHours"] as String
-                val breakHours:String = data["breakHours"] as String
+                val breakHours:String = data["breakDurations"] as String
                 val breakup = initialHours.split(":")
                 val initialTime = breakup[0].toInt() * 60
                 val initialMin = breakup[1].toInt()
                 val result = initialTime + initialMin
                 val graphPoints = result / 60.0f
+
 
                 val breakup2 = notedHours.split(":")
                 val initialNoteHours = breakup2[0].toInt() * 60
@@ -138,15 +139,15 @@ class Statistics : AppCompatActivity() {
                 val resultNoted = initialNoteHours + initialNoteMin
                 val graphPointsNoted = resultNoted / 60.0f
 
-val point = breakHours.toFloat() * 0.01
-
+val point = breakHours.toFloat() /60f
+      val total  =     graphPoints - point
                 min.add(tempusMingoal.toFloat())
                 mags.add(tempusMaxGoal.toFloat())
                 userTasks.add(task)
                 dateDatabase.add(whenAdded)
                 compList.add(graphPointsNoted)
-                durationList.add(graphPoints)
-                breakHour.add(point.toFloat())
+                durationList.add(total)
+                breakHour.add(point)
             }
 
 
