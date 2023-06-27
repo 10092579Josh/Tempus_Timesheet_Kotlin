@@ -12,6 +12,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class SplashScreen : AppCompatActivity() {
@@ -24,6 +27,7 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.load_screen)
+        withq()
         try {
             progressBar = findViewById(R.id.progressBar)
             percentageText = findViewById(R.id.percentageText)
@@ -106,5 +110,23 @@ class SplashScreen : AppCompatActivity() {
             //stuff to do
 
         }
+    }
+
+    fun withq ()
+    {
+        val firestore = Firebase.firestore
+        val userid = Firebase.auth.currentUser?.uid
+        val itemAdd = firestore.collection("SecurityQuestions")
+
+        val q1 = "YOUR MOTHERS MAIDEN NAME?"
+        val q2 =  "YOUR FAVORITE PETS NAME?"
+        val q3 = "WHAT HIGH SCHOOL DID YOU ATTEND?"
+        val q4 = "YOUR FAVORITE MOVIE?"
+        val q5 = "YOUR FIRST GIRLFRIEND?"
+
+        val breaks = SecurityQuestions(q1, q2, q3,q4,q5)
+val b = "securityQuestions"
+        val docRef = itemAdd.document(b)
+        docRef.set(breaks)
     }
 }

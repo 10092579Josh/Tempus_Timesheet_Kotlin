@@ -35,6 +35,8 @@ data class User(
     val emailaddress: String,
     val password: String,
     val confirmkey: String,
+    val securityQ:String,
+    val securityAnswer:String,
     val userid: String
 
 )
@@ -44,5 +46,14 @@ data class BreakStorage(
     val breakTask:String,
     val breakDuration:Int,
     val userIdBreaks:String
+
+)
+data class SecurityQuestions(
+    val questionOne:String,
+    val questionTwo:String,
+    val questionThree:String,
+    val questionFour:String,
+    val questionFive:String
+
 
 )

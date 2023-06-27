@@ -823,10 +823,6 @@ c
 3app/src/main/java/com/example/tempus/UserDetails.kt,8\b\8b96ef95b26177964def010b1bf7d9c695f26ae7
 h
 8app/src/main/java/com/example/tempus/EditTaskActivity.kt,9\1\91e1a2d74ea38616bdea80416ceabb294e4054ed
-d
-4app/src/main/java/com/example/tempus/SplashScreen.kt,7\e\7e89f39c0ae53f0621d1acf587e9dfd33dc8c90b
-e
-5app/src/main/java/com/example/tempus/PrivacyPolicy.kt,3\5\35a2f4816dd9e10df70ecf27a83acd4039e5decc
 ]
 -app/src/main/java/com/example/tempus/Login.kt,4\b\4bded21f387cd4797d12f08f004d161932e81561
 c

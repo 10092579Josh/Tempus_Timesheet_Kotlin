@@ -9,9 +9,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.PopupWindow
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseException
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
@@ -45,6 +48,8 @@ class Registration : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration)
+
+
         val loginBack = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val intent = Intent(this@Registration, Login::class.java)
@@ -190,8 +195,29 @@ class Registration : AppCompatActivity() {
         val pass2 = confirmPassword.editText
         val email1: com.google.android.material.textfield.TextInputLayout = findViewById(R.id.email)
         val emails = email1.editText
+        val answer : com.google.android.material.textfield.TextInputLayout = findViewById(R.id.security_answer)
+        val answers = answer.editText
 
+        val spinner = findViewById<Spinner>(R.id.secure_spinner)
 
+        val db = FirebaseFirestore.getInstance()
+        val documentPath = "SecurityQuestions/securityQuestions"
+        val spinnerList = mutableListOf<String>()
+
+        db.document(documentPath)
+            .get()
+            .addOnSuccessListener { document ->
+                for (field in document.data?.entries ?: emptySet()) {
+                    val value = field.value as? String
+                    if (value != null) {
+                        spinnerList.add(value)
+                    }
+                }
+                val spinnerAdapter =
+                    ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerList)
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = spinnerAdapter
+            }
 
 
 
@@ -245,6 +271,8 @@ class Registration : AppCompatActivity() {
                     val email = emails?.text.toString().replace("\\s".toRegex(), "")
                     val password = pass?.text.toString().replace("\\s".toRegex(), "")
                     val confirm = pass2?.text.toString().replace("\\s".toRegex(), "")
+                    val secureQ = spinner.selectedItem.toString()
+                    val secureAnswer = answers?.text.toString().replace("\\s".toRegex(), "")
                     val userId = ""
 
 
@@ -267,6 +295,8 @@ class Registration : AppCompatActivity() {
                                             email,
                                             password,
                                             confirm,
+                                            secureQ,
+                                            secureAnswer,
                                             userId
                                         )
                                         myRef.child(usersName + password).setValue(users)
