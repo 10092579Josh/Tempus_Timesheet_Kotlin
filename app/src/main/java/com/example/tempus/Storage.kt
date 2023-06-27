@@ -24,6 +24,7 @@ data class CategoryStorage
     (
     val categoryID: String,
     val totalHours: String,
+    val totalTimeCompleted:Int,
     val userIdCat: String
 )
 

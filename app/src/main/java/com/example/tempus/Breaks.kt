@@ -16,10 +16,14 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import de.keyboardsurfer.android.widget.crouton.Crouton
+import de.keyboardsurfer.android.widget.crouton.Style
 
 class Breaks : AppCompatActivity() {
 
-
+    private val e = Errors()
+    private val breakEmpty = Crouton.makeText(this, e.EmptyBreakName, Style.ALERT)
+    private val minEmpty = Crouton.makeText(this, e.MinCantBeEmpty, Style.ALERT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.breaks)
@@ -31,7 +35,6 @@ class Breaks : AppCompatActivity() {
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 finish()
-
 
 
             }
@@ -138,6 +141,7 @@ class Breaks : AppCompatActivity() {
         }
 
     }
+
     fun input() {
         val addButton = findViewById<Button>(R.id.add)
         val spinner = findViewById<Spinner>(R.id.breaks_spinner)
@@ -169,35 +173,40 @@ class Breaks : AppCompatActivity() {
 
         addButton.setOnClickListener()
         {
-            if(bname.text.isNullOrEmpty())
-            {
+            if (bname.text.isNullOrEmpty()) {
+                breakEmpty.show()
 
-            }
-            else if(minutes.text.isNullOrEmpty())
-            {}
-            else {
-                val firestore = Firebase.firestore
-                val userid = Firebase.auth.currentUser?.uid
-                val itemAdd = firestore.collection("BreakStorage")
+            } else if (minutes.text.isNullOrEmpty()) {
+                minEmpty.show()
+            } else {
+                try {
 
-                val b = bname.text.toString()
-                val t = spinner.selectedItem.toString()
-                val m = minutes.text.toString().toInt()
 
-                val breaks = BreakStorage(b, t, m, userid.toString().trim())
+                    val firestore = Firebase.firestore
+                    val userid = Firebase.auth.currentUser?.uid
+                    val itemAdd = firestore.collection("BreakStorage")
 
-                val docRef = itemAdd.document(b)
-                docRef.set(breaks)
+                    val b = bname.text.toString()
+                    val t = spinner.selectedItem.toString()
+                    val m = minutes.text.toString().toInt()
 
-                db.collection("TaskStorage")
-                    .whereEqualTo("taskName", t)
-                    .whereEqualTo("userIdTask",userid)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        for (document in documents) {
-                           document.reference.update("breakDurations",m.toString())
+                    val breaks = BreakStorage(b, t, m, userid.toString().trim())
+
+                    val docRef = itemAdd.document(b)
+                    docRef.set(breaks)
+
+                    db.collection("TaskStorage")
+                        .whereEqualTo("taskName", t)
+                        .whereEqualTo("userIdTask", userid)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            for (document in documents) {
+                                document.reference.update("breakDurations", m.toString())
+                            }
                         }
-                    }
+                } catch (E: Exception) {
+
+                }
             }
 
         }

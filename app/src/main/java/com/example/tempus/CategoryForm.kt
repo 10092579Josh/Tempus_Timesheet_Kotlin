@@ -108,14 +108,20 @@ class CategoryForm : AppCompatActivity() {
 
                         val catname = catNames.text.toString().trim()
                         val totalHours = "00:00"
+                        val total = 0
 
 
-                        val cat = CategoryStorage(catname, totalHours, userid.toString().trim())
+                        val cat = CategoryStorage(catname, totalHours,total, userid.toString().trim())
 
                         val docRef = itemAdd.document(catname)
                         docRef.set(cat)
                         val message = "$catname added "
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, Home::class.java)
+                        intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                        finish()
                     }
 
 

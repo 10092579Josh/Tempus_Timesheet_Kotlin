@@ -831,11 +831,7 @@ e
 -app/src/main/java/com/example/tempus/Login.kt,4\b\4bded21f387cd4797d12f08f004d161932e81561
 c
 3app/src/main/java/com/example/tempus/AppSettings.kt,f\5\f5cbe409350da07321fa52d07f60f4ab8bea7659
-\
-,app/src/main/java/com/example/tempus/Home.kt,3\e\3eca00a9d6c22ff409761b482a660c6117f14a29
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
-^
-.app/src/main/java/com/example/tempus/Errors.kt,f\c\fc837ed61b22d047e121f3b3bf182a554df84078
 ]
 -app/src/main/java/com/example/tempus/Tasks.kt,0\9\0965774405117665572dffada535525ef52255ca

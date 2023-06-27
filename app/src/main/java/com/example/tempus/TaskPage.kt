@@ -28,6 +28,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
@@ -314,7 +315,26 @@ class TaskPage : AppCompatActivity() {
                     // Update the value of completedHours to result using update()
                     document.reference.update("timeRemaining",currentTimeFormatted)
                     document.reference.update("completedHours", result)
+
+                    val catname = findViewById<TextView>(R.id.category_name)
+
+                    val db = Firebase.firestore
+                    val categoryRef =
+                        db.collection("CategoryStorage").document(catname.text.toString())
+                    categoryRef.get()
+                        .addOnSuccessListener { document ->
+                            val timeComponents = result.split(":")
+                            val hours = timeComponents[0].toInt()
+                            val minutes = timeComponents[1].toInt()
+                            val totalMinutes = hours * 60 + minutes
+                            categoryRef.update(
+                                "totalTimeCompleted",totalMinutes
+
+                                )
+                        }
                 }
+
+
             }
     }
 

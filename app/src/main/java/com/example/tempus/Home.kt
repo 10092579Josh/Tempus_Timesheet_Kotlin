@@ -35,6 +35,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 
@@ -345,80 +346,79 @@ class Home : AppCompatActivity() {
                         )
 
                         val itemView = viewHolder.itemView
-                        when {
-                            dX > 300f -> {
-                                when {
-                                    dX > 300 -> {
-                                        // Swiping to the right (edit action)
-                                        val editIcon =
-                                            ContextCompat.getDrawable(
-                                                this@Home,
-                                                R.drawable.edit_icon
-                                            )
-                                        val editIconMargin =
-                                            (itemView.height - editIcon?.intrinsicHeight!!) / 2
-                                        val editIconTop = itemView.top + editIconMargin
-                                        val editIconBottom = editIconTop + editIcon.intrinsicHeight
-                                        val editIconLeft = itemView.left + editIconMargin
-                                        val editIconRight =
-                                            itemView.left + editIconMargin + editIcon.intrinsicWidth
+                        if (dX > 600) {
 
-                                        editIcon.setBounds(
-                                            editIconLeft,
-                                            editIconTop,
-                                            editIconRight,
-                                            editIconBottom
-                                        )
-
-                                        val editBackground = ContextCompat.getDrawable(
+                            when {
+                                dX > 0 -> {
+                                    // Swiping to the right (edit action)
+                                    val editIcon =
+                                        ContextCompat.getDrawable(
                                             this@Home,
-                                            R.drawable.edit_button_background
+                                            R.drawable.edit_icon
                                         )
-                                        editBackground?.setBounds(
-                                            itemView.left,
-                                            itemView.top,
-                                            itemView.left + dX.toInt(),
-                                            itemView.bottom
-                                        )
-                                        editBackground?.draw(c)
-                                        editIcon.draw(c)
-                                    }
+                                    val editIconMargin =
+                                        (itemView.height - editIcon?.intrinsicHeight!!) / 2
+                                    val editIconTop = itemView.top + editIconMargin
+                                    val editIconBottom = editIconTop + editIcon.intrinsicHeight
+                                    val editIconLeft = itemView.left + editIconMargin
+                                    val editIconRight =
+                                        itemView.left + editIconMargin + editIcon.intrinsicWidth
+
+                                    editIcon.setBounds(
+                                        editIconLeft,
+                                        editIconTop,
+                                        editIconRight,
+                                        editIconBottom
+                                    )
+
+                                    val editBackground = ContextCompat.getDrawable(
+                                        this@Home,
+                                        R.drawable.edit_button_background
+                                    )
+                                    editBackground?.setBounds(
+                                        itemView.left,
+                                        itemView.top,
+                                        itemView.left + dX.toInt(),
+                                        itemView.bottom
+                                    )
+                                    editBackground?.draw(c)
+                                    editIcon.draw(c)
                                 }
-
                             }
 
-                            dX < -500 -> {
-                                // Swiping to the left (delete action)
-                                val deleteIcon =
-                                    ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)
-                                val deleteIconMargin =
-                                    (itemView.height - deleteIcon?.intrinsicHeight!!) / 2
-                                val deleteIconTop = itemView.top + deleteIconMargin
-                                val deleteIconBottom = deleteIconTop + deleteIcon.intrinsicHeight
-                                val deleteIconLeft =
-                                    itemView.right - deleteIconMargin - deleteIcon.intrinsicWidth
-                                val deleteIconRight = itemView.right - deleteIconMargin
+                        } else if (dX < -600) {
 
-                                deleteIcon.setBounds(
-                                    deleteIconLeft,
-                                    deleteIconTop,
-                                    deleteIconRight,
-                                    deleteIconBottom
-                                )
 
-                                val deleteBackground = ContextCompat.getDrawable(
-                                    this@Home,
-                                    R.drawable.delete_button_background
-                                )
-                                deleteBackground?.setBounds(
-                                    itemView.right + dX.toInt(),
-                                    itemView.top,
-                                    itemView.right,
-                                    itemView.bottom
-                                )
-                                deleteBackground?.draw(c)
-                                deleteIcon.draw(c)
-                            }
+                            // Swiping to the left (delete action)
+                            val deleteIcon =
+                                ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)
+                            val deleteIconMargin =
+                                (itemView.height - deleteIcon?.intrinsicHeight!!) / 2
+                            val deleteIconTop = itemView.top + deleteIconMargin
+                            val deleteIconBottom = deleteIconTop + deleteIcon.intrinsicHeight
+                            val deleteIconLeft =
+                                itemView.right - deleteIconMargin - deleteIcon.intrinsicWidth
+                            val deleteIconRight = itemView.right - deleteIconMargin
+
+                            deleteIcon.setBounds(
+                                deleteIconLeft,
+                                deleteIconTop,
+                                deleteIconRight,
+                                deleteIconBottom
+                            )
+
+                            val deleteBackground = ContextCompat.getDrawable(
+                                this@Home,
+                                R.drawable.delete_button_background
+                            )
+                            deleteBackground?.setBounds(
+                                itemView.right + dX.toInt(),
+                                itemView.top,
+                                itemView.right,
+                                itemView.bottom
+                            )
+                            deleteBackground?.draw(c)
+                            deleteIcon.draw(c)
                         }
                     }
                 }
@@ -473,7 +473,7 @@ class Home : AppCompatActivity() {
         }
 
 // Start updating the progress
-        loop.post(updater)
+
 
     }
 
@@ -497,9 +497,51 @@ class Home : AppCompatActivity() {
             val hours = timeComponents[0].toInt()
             val minutes = timeComponents[1].toInt()
             val totalMinutes = hours * 60 + minutes
-
+            val userid = FirebaseAuth.getInstance().currentUser?.uid
             holder.progressBar.max = totalMinutes
-            holder.progressBar.progress = 240
+
+            val checkTime = 300000L // Update progress every 300000 milliseconds (5 minutes)
+
+            val db = Firebase.firestore
+            val categoryRef =
+                db.collection("CategoryStorage").document(itemsViewModel.text)
+            categoryRef.get()
+                .addOnSuccessListener { document ->
+                    val categoryHours = document.get("totalTimeCompleted").toString().toInt()
+
+                    val loop = Handler(Looper.getMainLooper())
+
+                    val updater = object : Runnable {
+                        override fun run() {
+
+                            holder.progressBar.progress = categoryHours
+
+                            when (holder.progressBar.progress) {
+                                holder.progressBar.max / 4 -> {
+                                    // Perform action when progress reaches 25%
+                                }
+
+                                holder.progressBar.max / 2 -> {
+                                    // Perform action when progress reaches 50%
+                                }
+
+                                holder.progressBar.max * 3 / 4 -> {
+                                    // Perform action when progress reaches 75%
+                                }
+
+                                holder.progressBar.max -> {
+                                    // Perform action when progress reaches 100%
+                                }
+                            }
+
+                            // Schedule the next update
+                            loop.postDelayed(this, checkTime)
+                        }
+                    }
+                    loop.post(updater)
+
+                }
+
 
             holder.itemView.setOnClickListener {
 
