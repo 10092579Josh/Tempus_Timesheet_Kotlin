@@ -506,7 +506,7 @@ class TaskForm : AppCompatActivity() {
 
                                 val completedHours = 0
                                 val breaksHours = 0
-                                val timeRemain = 0
+
                                 val userid = Firebase.auth.currentUser?.uid
                                 val start = start.text.toString().replace(Regex("[^\\w\\s:]"), "")
                                 val end = end.text.toString().replace(Regex("[^\\w\\s:]"), "")
@@ -556,7 +556,7 @@ class TaskForm : AppCompatActivity() {
 
 
                                 val hours = "%02d:%02d".format(diffHours, diffRemainingMinutes)
-
+                                val timeRemain = hours
 
                                 when {
                                     picture.isEmpty() -> {
@@ -582,8 +582,8 @@ class TaskForm : AppCompatActivity() {
                                             date,
                                             picture,
                                             tabName,
-                                            breaksHours.toString(),
                                             completedHours.toString(),
+                                            breaksHours,
                                             timeRemain.toString(),
                                             userid.toString().trim()
                                         )

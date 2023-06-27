@@ -224,9 +224,9 @@ class Breaks : AppCompatActivity() {
 
                     val b = bname.text.toString()
                     val t = spinner.selectedItem.toString()
-                    val m = minutes.text.toString().toInt()
+                    val m = minutes.text.toString()
 
-                    val breaks = BreakStorage(b, t, m, userid.toString().trim())
+                    val breaks = BreakStorage(b, t, m.toInt(), userid.toString().trim())
 
                     val docRef = itemAdd.document(b)
                     docRef.set(breaks)
@@ -237,7 +237,7 @@ class Breaks : AppCompatActivity() {
                         .get()
                         .addOnSuccessListener { documents ->
                             for (document in documents) {
-                                document.reference.update("breakDurations", m.toString())
+                                document.reference.update("breakDurations", m.toInt())
                             }
                         }
                 } catch (E: Exception) {

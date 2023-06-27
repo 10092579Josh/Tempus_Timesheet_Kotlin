@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_toRightOf="@id/logo"
+            android:gravity="center"
             android:fontFamily="@font/baloo_bhai_2"
             android:text="STATISTICS"
             android:textColor="@color/black"

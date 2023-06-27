@@ -35,6 +35,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_menu"
         android:layout_below="@id/top_menu">
 
         <LinearLayout
@@ -73,12 +74,15 @@
 
             </LinearLayout>
 
+        </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mRecycler_task"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@id/filterDates_btn"
                 android:background="#D6D6D6"/>
-        </LinearLayout>
+
 
         <ImageButton
             android:id="@+id/selectStartDate_cat"

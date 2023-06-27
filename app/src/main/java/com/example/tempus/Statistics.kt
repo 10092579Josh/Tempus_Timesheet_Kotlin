@@ -162,7 +162,7 @@ class Statistics : AppCompatActivity() {
                 val whenAdded = data["dateAdded"] as String
                 val initialHours = data["duration"] as String
                 val notedHours: String = data["completedHours"] as String
-                val breakHours: String = data["breakDurations"] as String
+                val breakHours: String = data["breakDurations"].toString()
                 val breakup = initialHours.split(":")
                 val initialTime = breakup[0].toInt() * 60
                 val initialMin = breakup[1].toInt()
