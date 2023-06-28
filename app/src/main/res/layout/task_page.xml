@@ -312,7 +312,7 @@
                             android:layout_height="40dp"
                             android:layout_below="@id/end_date"
                             android:paddingTop="4dp"
-                            android:text="Max Daily Goal:"
+                            android:text="Max Completed Hours:"
                             android:textColor="@color/black" />
 
                         <TextView
@@ -331,7 +331,7 @@
                             android:layout_height="40dp"
                             android:layout_below="@id/max_title"
                             android:paddingTop="4dp"
-                            android:text="Min Daily Goal:"
+                            android:text="Min Completed Hours:"
                             android:textColor="@color/black" />
 
                         <TextView

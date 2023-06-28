@@ -80,6 +80,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30px">
 
+                <Button
+                android:id="@+id/filterDates_btn"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/nav_unselected"
+                android:onClick="applyFilter"
+                android:text="Filter"
+                android:textColor="@color/black"
+                android:textSize="10dp" />
+
                 <ImageButton
                     android:id="@+id/selectStartDate_cat"
                     android:layout_width="35dp"
@@ -87,8 +98,9 @@
                     android:layout_marginEnd="0dp"
                     android:layout_toLeftOf="@id/selectEndDate_cat"
                     android:background="@drawable/home_nav"
+                    android:layout_below="@id/filterDates_btn"
                     android:onClick="selectStartDate"
-                    android:src="@drawable/calendar" />
+                    android:src="@drawable/calendar1" />
 
                 <ImageButton
                     android:id="@+id/selectEndDate_cat"
@@ -97,20 +109,11 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="0dp"
                     android:background="@drawable/home_nav"
+                    android:layout_below="@id/filterDates_btn"
                     android:onClick="selectEndDate"
-                    android:src="@drawable/calendar" />
+                    android:src="@drawable/calendar2" />
 
-                <Button
-                    android:id="@+id/filterDates_btn"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:layout_below="@id/selectEndDate_cat"
-                    android:layout_alignParentEnd="true"
-                    android:backgroundTint="@color/nav_unselected"
-                    android:onClick="applyFilter"
-                    android:text="Apply"
-                    android:textColor="@color/black"
-                    android:textSize="10dp" />
+
 
             </RelativeLayout>
 

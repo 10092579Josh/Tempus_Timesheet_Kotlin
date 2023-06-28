@@ -211,7 +211,7 @@
                         android:layout_below="@id/taskDescriptionInput"
                         android:layout_marginTop="19px"
                         android:layout_toRightOf="@id/selectedDateText"
-                        android:background="@drawable/calendar"
+                        android:background="@drawable/calendar1"
                         android:drawablePadding="8dp"
                         android:onClick="selectDate" />
 
