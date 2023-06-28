@@ -16,20 +16,20 @@
             android:id="@+id/logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tempus"
-            android:layout_width="300dp"
-            android:layout_height="70dp"
-            android:layout_marginLeft="-1dp"
-            android:layout_toRightOf="@id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_toEndOf="@id/logo"
             android:fontFamily="@font/baloo_bhai_2"
             android:gravity="center"
-
             android:text="TEMPUS"
             android:textColor="@color/black"
-            android:textSize="40sp" />
+            android:textSize="50sp" />
 
 
     </RelativeLayout>
@@ -45,7 +45,8 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/frame_background">
+            android:background="@drawable/frame_background"
+            android:padding="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,20 +73,20 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/imgGallery"
+                        android:id="@+id/edit_imgGallery"
                         android:layout_width="60dp"
                         android:layout_height="50dp"
-                        android:layout_below="@id/taskNameLabel"
+                        android:layout_below="@id/edit_taskNameLabel"
                         android:layout_alignParentStart="true"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="6dp"
-                        android:layout_toLeftOf="@id/taskNameInput"
+                        android:layout_toLeftOf="@id/edit_taskNameInput"
                         android:background="@drawable/circle"
                         android:scaleType="fitXY"
                         android:src="@drawable/baseline_photo_camera_24" />
 
                     <TextView
-                        android:id="@+id/taskNameLabel"
+                        android:id="@+id/edit_taskNameLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
@@ -95,10 +96,10 @@
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/taskNameInput"
+                        android:id="@+id/edit_taskNameInput"
                         android:layout_width="250dp"
                         android:layout_height="60dp"
-                        android:layout_below="@id/taskNameLabel"
+                        android:layout_below="@id/edit_taskNameLabel"
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="5dp"
                         android:layout_marginBottom="12dp"
@@ -109,10 +110,10 @@
                         android:paddingRight="5dp" />
 
                     <TextView
-                        android:id="@+id/taskDescriptionLabel"
+                        android:id="@+id/edit_taskDescriptionLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/taskNameInput"
+                        android:layout_below="@id/edit_taskNameInput"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="8dp"
                         android:text="Task Description"
@@ -120,10 +121,10 @@
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/taskDescriptionInput"
+                        android:id="@+id/edit_taskDescriptionInput"
                         android:layout_width="250dp"
                         android:layout_height="250dp"
-                        android:layout_below="@id/taskDescriptionLabel"
+                        android:layout_below="@id/edit_taskDescriptionLabel"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="12dp"
                         android:background="@drawable/description_rectangle"
@@ -136,126 +137,126 @@
                         android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/dateLabel"
+                        android:id="@+id/edit_dateLabel"
                         android:layout_width="100dp"
                         android:layout_height="50dp"
-                        android:layout_below="@id/taskDescriptionInput"
+                        android:layout_below="@id/edit_taskDescriptionInput"
                         android:layout_marginTop="8dp"
                         android:text="Date:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/selectedDateText"
+                        android:id="@+id/edit_selectedDateText"
                         android:layout_width="200dp"
                         android:layout_height="50dp"
-                        android:layout_below="@id/taskDescriptionInput"
+                        android:layout_below="@id/edit_taskDescriptionInput"
                         android:layout_marginTop="8dp"
-                        android:layout_toRightOf="@+id/dateLabel"
+                        android:layout_toRightOf="@+id/edit_dateLabel"
                         android:background="@drawable/description_rectangle"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
                     <Button
-                        android:id="@+id/selectDateButton"
+                        android:id="@+id/edit_selectDateButton"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
-                        android:layout_below="@id/taskDescriptionInput"
+                        android:layout_below="@id/edit_taskDescriptionInput"
                         android:layout_marginTop="12dp"
-                        android:layout_toRightOf="@id/selectedDateText"
+                        android:layout_toRightOf="@id/edit_selectedDateText"
                         android:background="@drawable/calendar"
                         android:drawablePadding="8dp"
                         android:onClick="selectDate" />
 
                     <View
-                        android:id="@+id/dateView"
+                        android:id="@+id/edit_dateView"
                         android:layout_width="200dp"
                         android:layout_height="1dp"
-                        android:layout_below="@id/dateLabel"
+                        android:layout_below="@id/edit_dateLabel"
                         android:layout_marginBottom="8dp" />
 
                     <TextView
-                        android:id="@+id/startTimeLabel"
+                        android:id="@+id/edit_startTimeLabel"
                         android:layout_width="100dp"
                         android:layout_height="50dp"
-                        android:layout_below="@id/dateLabel"
+                        android:layout_below="@id/edit_dateLabel"
                         android:layout_marginTop="15dp"
                         android:text="Start Time:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/selectedStartTimeText"
+                        android:id="@+id/edit_selectedStartTimeText"
                         android:layout_width="200dp"
                         android:layout_height="50dp"
-                        android:layout_below="@id/dateView"
+                        android:layout_below="@id/edit_dateView"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:layout_toRightOf="@+id/startTimeLabel"
+                        android:layout_toRightOf="@+id/edit_startTimeLabel"
                         android:background="@drawable/description_rectangle"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
                     <View
-                        android:id="@+id/startTimeView"
+                        android:id="@+id/edit_startTimeView"
                         android:layout_width="200dp"
                         android:layout_height="1dp"
-                        android:layout_below="@id/startTimeLabel"
+                        android:layout_below="@id/edit_startTimeLabel"
                         android:layout_marginBottom="8dp" />
 
                     <Button
-                        android:id="@+id/selectStartTimeButton"
+                        android:id="@+id/edit_selectStartTimeButton"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
-                        android:layout_below="@id/selectedDateText"
+                        android:layout_below="@id/edit_selectedDateText"
                         android:layout_marginTop="14dp"
-                        android:layout_toRightOf="@id/selectedStartTimeText"
+                        android:layout_toRightOf="@id/edit_selectedStartTimeText"
                         android:background="@drawable/clock"
                         android:onClick="selectTime" />
 
 
                     <TextView
-                        android:id="@+id/endTimeLabel"
+                        android:id="@+id/edit_endTimeLabel"
                         android:layout_width="100dp"
                         android:layout_height="50dp"
-                        android:layout_below="@id/startTimeLabel"
+                        android:layout_below="@id/edit_startTimeLabel"
                         android:layout_marginTop="15dp"
                         android:text="End Time:"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/selectedEndTimeText"
+                        android:id="@+id/edit_selectedEndTimeText"
                         android:layout_width="200dp"
                         android:layout_height="50dp"
-                        android:layout_below="@id/startTimeLabel"
+                        android:layout_below="@id/edit_startTimeLabel"
                         android:layout_marginTop="8dp"
-                        android:layout_toRightOf="@+id/endTimeLabel"
+                        android:layout_toRightOf="@+id/edit_endTimeLabel"
                         android:background="@drawable/description_rectangle"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
                     <Button
-                        android:id="@+id/selectEndTimeButton"
+                        android:id="@+id/edit_selectEndTimeButton"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
-                        android:layout_below="@id/selectedStartTimeText"
-                        android:layout_toRightOf="@id/selectedEndTimeText"
+                        android:layout_below="@id/edit_selectedStartTimeText"
+                        android:layout_toRightOf="@id/edit_selectedEndTimeText"
                         android:background="@drawable/clock"
                         android:onClick="selectEndTime" />
 
                     <View
-                        android:id="@+id/endTimeView"
+                        android:id="@+id/edit_endTimeView"
                         android:layout_width="200dp"
                         android:layout_height="1dp"
-                        android:layout_below="@id/endTimeLabel" />
+                        android:layout_below="@id/edit_endTimeLabel" />
 
                     <TextView
 
-                        android:id="@+id/minimumGoalLabel"
+                        android:id="@+id/edit_minimumGoalLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/endTimeView"
+                        android:layout_below="@id/edit_endTimeView"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="20dp"
                         android:text="Minimum Goal"
@@ -263,19 +264,19 @@
                         android:textSize="20sp" />
 
                     <Spinner
-                        android:id="@+id/minimumGoalSpinner"
+                        android:id="@+id/edit_minimumGoalSpinner"
                         android:layout_width="200dp"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/minimumGoalLabel"
+                        android:layout_below="@id/edit_minimumGoalLabel"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="8dp"
                         android:spinnerMode="dropdown" />
 
                     <TextView
-                        android:id="@+id/maximumGoalLabel"
+                        android:id="@+id/edit_maximumGoalLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/minimumGoalSpinner"
+                        android:layout_below="@id/edit_minimumGoalSpinner"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="16dp"
                         android:text="Maximum Goal"
@@ -283,19 +284,19 @@
                         android:textSize="20sp" />
 
                     <Spinner
-                        android:id="@+id/maximumGoalSpinner"
+                        android:id="@+id/edit_maximumGoalSpinner"
                         android:layout_width="200dp"
                         android:layout_height="45dp"
-                        android:layout_below="@id/maximumGoalLabel"
+                        android:layout_below="@id/edit_maximumGoalLabel"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="8dp"
                         android:spinnerMode="dropdown" />
 
                     <TextView
-                        android:id="@+id/breaks_spinnerName"
+                        android:id="@+id/edit_breaks_spinnerName"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/maximumGoalSpinner"
+                        android:layout_below="@id/edit_maximumGoalSpinner"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="19dp"
                         android:layout_marginEnd="147dp"
@@ -304,19 +305,19 @@
                         android:textSize="20sp" />
 
                     <Spinner
-                        android:id="@+id/breaks_spinner"
+                        android:id="@+id/edit_breaks_spinner"
                         android:layout_width="200dp"
                         android:layout_height="45dp"
-                        android:layout_below="@id/breaks_spinnerName"
+                        android:layout_below="@id/edit_breaks_spinnerName"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="8dp"
                         android:spinnerMode="dropdown" />
 
                     <TextView
-                        android:id="@+id/category_spinnerName"
+                        android:id="@+id/edit_category_spinnerName"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/breaks_spinner"
+                        android:layout_below="@id/edit_breaks_spinner"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="19dp"
                         android:layout_marginEnd="147dp"
@@ -325,19 +326,19 @@
                         android:textSize="20sp" />
 
                     <Spinner
-                        android:id="@+id/category_spinner"
+                        android:id="@+id/edit_category_spinner"
                         android:layout_width="200dp"
                         android:layout_height="50dp"
-                        android:layout_below="@id/category_spinnerName"
+                        android:layout_below="@id/edit_category_spinnerName"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="8dp"
                         android:spinnerMode="dropdown" />
 
                     <Button
-                        android:id="@+id/createTask"
+                        android:id="@+id/edit_createTask"
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_below="@id/category_spinner"
+                        android:layout_height="140px"
+                        android:layout_below="@id/edit_category_spinner"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="25dp"
                         android:text="Confirm"

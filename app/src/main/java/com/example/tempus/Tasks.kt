@@ -3,7 +3,9 @@ package com.example.tempus
 
 import android.app.DatePickerDialog
 import android.content.Context
+import androidx.recyclerview.widget.ItemTouchHelper
 import android.content.Intent
+import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,8 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -152,8 +156,6 @@ class Tasks : AppCompatActivity() {
 
                 shortcut.dismiss()
             }
-
-
         }
 
         date.setOnClickListener {
@@ -351,16 +353,172 @@ class Tasks : AppCompatActivity() {
                 val adapter = CustomAdapter(sortedItems.toMutableList())
                 recyclerview.adapter = adapter
                 adapter.notifyDataSetChanged()
+                adapter.onTaskClickListener = { _ ->
+
+                }
+                recyclerview.adapter = adapter
+
+                val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+                    0,
+                    ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                ) {
+                    override fun onMove(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        target: RecyclerView.ViewHolder
+                    ): Boolean {
+                        return false
+                    }
+
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                        val position = viewHolder.adapterPosition
+                        val item = sortedItems[position]
+
+                        if (direction == ItemTouchHelper.RIGHT) {
+                            // Swipe to the right (edit action)
+                            val intent = Intent(this@Tasks, EditTaskActivity::class.java)
+                            intent.putExtra(
+                                "item_id",
+                                item.text
+                            ) // Pass the item ID or relevant data to the EditActivity
+                            startActivity(intent)
+                            recreate()
+                        } else if (direction == ItemTouchHelper.LEFT) {
+                            // Swipe to the left (delete action)
+                            val databaseRef = itemsRef.document(item.text)
+
+                            databaseRef.delete()
+                                .addOnSuccessListener {
+                                    // Delete the item from the RecyclerView
+
+                                    sortedItems.toMutableList().removeAt(position)
+                                    adapter.notifyItemRemoved(position)
+
+                                    Toast.makeText(
+                                        this@Tasks,
+                                        "Removed successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    recreate()
+                                }
+                                .addOnFailureListener { e ->
+                                    Toast.makeText(
+                                        this@Tasks,
+                                        "Failed to remove: ${e.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                        }
+                        recreate()
+                    }
+
+                    // Add swipe action buttons
+                    override fun onChildDraw(
+                        c: Canvas,
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        dX: Float,
+                        dY: Float,
+                        actionState: Int,
+                        isCurrentlyActive: Boolean
+                    ) {
+                        super.onChildDraw(
+                            c,
+                            recyclerView,
+                            viewHolder,
+                            dX,
+                            dY,
+                            actionState,
+                            isCurrentlyActive
+                        )
+
+                        val itemView = viewHolder.itemView
+                        if (dX > 50) {
 
 
+                            // Swiping to the right (edit action)
+                            val editIcon =
+                                ContextCompat.getDrawable(
+                                    this@Tasks,
+                                    R.drawable.edit_icon
+                                )
+                            val editIconMargin =
+                                (itemView.height - editIcon?.intrinsicHeight!!) / 2
+                            val editIconTop = itemView.top + editIconMargin
+                            val editIconBottom = editIconTop + editIcon.intrinsicHeight
+                            val editIconLeft = itemView.left + editIconMargin
+                            val editIconRight =
+                                itemView.left + editIconMargin + editIcon.intrinsicWidth
+
+                            editIcon.setBounds(
+                                editIconLeft,
+                                editIconTop,
+                                editIconRight,
+                                editIconBottom
+                            )
+
+                            val editBackground = ContextCompat.getDrawable(
+                                this@Tasks,
+                                R.drawable.edit_button_background
+                            )
+                            editBackground?.setBounds(
+                                itemView.left,
+                                itemView.top,
+                                itemView.left + dX.toInt(),
+                                itemView.bottom
+                            )
+                            editBackground?.draw(c)
+                            editIcon.draw(c)
+
+
+                        } else if (dX < -50) {
+
+
+                            // Swiping to the left (delete action)
+                            val deleteIcon =
+                                ContextCompat.getDrawable(this@Tasks, R.drawable.delete_icon)
+                            val deleteIconMargin =
+                                (itemView.height - deleteIcon?.intrinsicHeight!!) / 2
+                            val deleteIconTop = itemView.top + deleteIconMargin
+                            val deleteIconBottom = deleteIconTop + deleteIcon.intrinsicHeight
+                            val deleteIconLeft =
+                                itemView.right - deleteIconMargin - deleteIcon.intrinsicWidth
+                            val deleteIconRight = itemView.right - deleteIconMargin
+
+                            deleteIcon.setBounds(
+                                deleteIconLeft,
+                                deleteIconTop,
+                                deleteIconRight,
+                                deleteIconBottom
+                            )
+
+                            val deleteBackground = ContextCompat.getDrawable(
+                                this@Tasks,
+                                R.drawable.delete_button_background
+                            )
+                            deleteBackground?.setBounds(
+                                itemView.right + dX.toInt(),
+                                itemView.top,
+                                itemView.right,
+                                itemView.bottom
+                            )
+                            deleteBackground?.draw(c)
+                            deleteIcon.draw(c)
+                        }
+                    }
+                }
+
+
+                val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+                itemTouchHelper.attachToRecyclerView(recyclerview)
             } catch (e: Exception) {
-                // stuff to do
-
-
+                // stuff to do aka error handling
             }
-
         }
+
     }
+
 
 
     data class ItemsViewModel(
@@ -369,7 +527,7 @@ class Tasks : AppCompatActivity() {
 
     class CustomAdapter(private var myDataList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
-
+        var onTaskClickListener: ((Home.Task) -> Unit)? = null
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view =
                 LayoutInflater.from(parent.context).inflate(R.layout.tastk_tab, parent, false)
@@ -416,10 +574,10 @@ class Tasks : AppCompatActivity() {
             val textView2: TextView = itemView.findViewById(R.id.mHpurs)
             val textView3: TextView = itemView.findViewById(R.id.mSubtitle)
             val imageView: ImageView = itemView.findViewById(R.id.task_item_image)
+         }
+
+
         }
-
-
-    }
 
 
 }

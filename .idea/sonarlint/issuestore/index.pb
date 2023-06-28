@@ -47,16 +47,12 @@ Q.idea/sonarlint/securityhotspotstore/b/b/bbf202272a96de5cd6b6828ffdc55fb3ce4528
 Q.idea/sonarlint/securityhotspotstore/b/2/b2f261e77b379b39fd46df02c2922dfed0170c47,d\d\ddbfc39a395808ca04fac4340620dec691f04cd3
 Å
 Q.idea/sonarlint/securityhotspotstore/a/e/ae46ca14d12e0ad9aa20a22fa42b719131a80b1c,d\c\dcdd03220e093c5d68e1d7cd4dcb147e0549929c
-Å
-Q.idea/sonarlint/securityhotspotstore/4/6/462afa10a01d7cafe3b6cd195aee53cf6dcd1cbb,7\1\71b0ae585c7cd42a63c2d7a42e0b3662831cfc98
 w
 G.idea/sonarlint/issuestore/f/0/f0e0f9cec86fe4b939ae22be5264c758801eb28f,5\0\50e216b4439d2538168c3ddca9c0c2fe23bd1c02
 w
 G.idea/sonarlint/issuestore/3/1/317c61657a610de5e83a7b161573d494532e7e00,0\d\0d1b59781976b178d7cd908cdb9f2d99792f09d5
 Å
 Q.idea/sonarlint/securityhotspotstore/7/b/7bd6c14794d626ae333a3108ac7ec43e7be9da5d,e\8\e8ad3d4076813c1bf18b320f90a731843fe139e1
-w
-G.idea/sonarlint/issuestore/4/6/462afa10a01d7cafe3b6cd195aee53cf6dcd1cbb,4\c\4cf3efd7aba4f001ed72ed0a9f14ff324d8134df
 w
 G.idea/sonarlint/issuestore/9/0/909762385fc6eb20f922a91c6865741308b57f2c,c\e\ce7799643a95553c6bee1d403d6cb738907a7f2c
 Å
@@ -65,8 +61,6 @@ w
 G.idea/sonarlint/issuestore/a/e/ae46ca14d12e0ad9aa20a22fa42b719131a80b1c,f\3\f3479a5979b4035f03c0f8a8243b20e0e58ce4b9
 Å
 Q.idea/sonarlint/securityhotspotstore/3/1/317c61657a610de5e83a7b161573d494532e7e00,4\7\477c1f53560c57599379179e34ac6f0fb42b7dcf
-Å
-Q.idea/sonarlint/securityhotspotstore/6/2/626a5c7adb70bf2f572013b253ca2cd05464066e,c\a\cada4e1c7acb74153e9bd0a58e05d5e75757f85d
 w
 G.idea/sonarlint/issuestore/b/4/b4cbef8e64d224242acb58ebf8bc3556b5ad964a,4\d\4d7fa70af00962f94260facb62d06bf76eae904c
 Å
@@ -83,8 +77,6 @@ Q.idea/sonarlint/securityhotspotstore/f/0/f0e0f9cec86fe4b939ae22be5264c758801eb2
 Q.idea/sonarlint/securityhotspotstore/a/e/ae9ddf453f55affea2d6b9e3973cac1eb2efb4e1,e\3\e36d3b35b0aa033dfcf067b2cd16117a306b1e80
 w
 G.idea/sonarlint/issuestore/6/d/6deef3c4a6a8707eb0fe1ff70546d7c47149c6e8,a\7\a7664d8efd7b8dfd0638e664d8a9002a95b61ad4
-w
-G.idea/sonarlint/issuestore/6/2/626a5c7adb70bf2f572013b253ca2cd05464066e,e\2\e25a0adef97317c143c13c75bd2f08374f418567
 w
 G.idea/sonarlint/issuestore/9/2/925136001f7176fd4084e867cb3386668232d20c,5\3\530c43eea0f6b7775fcd54ce63421f63bd594d23
 w
@@ -817,5 +809,19 @@ G.idea/sonarlint/issuestore/2/b/2b8ce565720bbd3ec2dfc5db0e5660ff10f0c893,b\5\b5
 settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
 @
 app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+_
+/app/src/main/java/com/example/tempus/Storage.kt,3\a\3a26f21834c45c91c05c9da5dddf15fa938fae34
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+e
+5app/src/main/java/com/example/tempus/PrivacyPolicy.kt,3\5\35a2f4816dd9e10df70ecf27a83acd4039e5decc
+]
+-app/src/main/java/com/example/tempus/Login.kt,4\b\4bded21f387cd4797d12f08f004d161932e81561
+c
+3app/src/main/java/com/example/tempus/AppSettings.kt,f\5\f5cbe409350da07321fa52d07f60f4ab8bea7659
+c
+3app/src/main/java/com/example/tempus/UserDetails.kt,8\b\8b96ef95b26177964def010b1bf7d9c695f26ae7
+d
+4app/src/main/java/com/example/tempus/Registration.kt,8\d\8d0ffe530fa84e079be5943b6ad3e228565fa479
+b
+2app/src/main/java/com/example/tempus/Statistics.kt,b\f\bf7c80de1130a6c8d0d0a21ebf760cc3520f53cb

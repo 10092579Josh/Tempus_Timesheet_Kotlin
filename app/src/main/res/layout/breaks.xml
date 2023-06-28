@@ -15,18 +15,19 @@
             android:id="@+id/logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="190px"
-            android:layout_toRightOf="@id/logo"
+            android:layout_toEndOf="@id/logo"
             android:fontFamily="@font/baloo_bhai_2"
             android:gravity="center"
-            android:text="Breaks"
+            android:text="BREAKS"
             android:textColor="@color/black"
-            android:textSize="45sp" />
+            android:textSize="50sp" />
 
     </RelativeLayout>
 
@@ -36,9 +37,8 @@
         android:layout_above="@id/bottom_menu"
         android:layout_below="@id/top_menu">
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <FrameLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#D6D6D6"
@@ -115,7 +115,7 @@
                     <Spinner
                         android:id="@+id/breaks_spinner"
                         android:layout_width="650px"
-                        android:layout_height="45dp"
+                        android:layout_height="50dp"
                         android:layout_below="@id/breaks_spinnerName"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="8dp"
@@ -123,8 +123,8 @@
 
                     <Button
                         android:id="@+id/add"
-                        android:layout_width="70dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="140px"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="#7445DD"
@@ -150,20 +150,20 @@
             android:layout_height="200px"
             android:layout_centerVertical="true"
             android:background="@drawable/rectangle"
-            android:contentDescription="Home"
             android:padding="5dp"
-            android:src="@drawable/home_icon" />
+            android:src="@drawable/home_icon"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/breakstbtn"
             android:layout_width="230px"
             android:layout_height="200px"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/hometbtn"
+            android:layout_toEndOf="@id/hometbtn"
             android:background="@drawable/rectangle"
             android:contentDescription="Breaks"
             android:padding="5dp"
-            android:src="@drawable/break_icon" />
+            android:src="@drawable/break_selected" />
 
         <ImageButton
             android:id="@+id/addbtn"
@@ -171,7 +171,7 @@
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/breakstbtn"
+            android:layout_toEndOf="@id/breakstbtn"
             android:background="@drawable/gradient_add"
             android:contentDescription="Add"
             android:padding="5dp"
@@ -182,7 +182,7 @@
             android:layout_width="230px"
             android:layout_height="200px"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/addbtn"
+            android:layout_toEndOf="@id/addbtn"
             android:background="@drawable/rectangle"
             android:contentDescription="Stats"
             android:padding="5dp"
@@ -193,7 +193,7 @@
             android:layout_width="230px"
             android:layout_height="200px"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/statstbtn"
+            android:layout_toEndOf="@id/statstbtn"
             android:background="@drawable/rectangle"
             android:contentDescription="Setting"
             android:padding="5dp"

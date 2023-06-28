@@ -14,9 +14,10 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="190px"
-            android:layout_height="190px"
-            android:src="@drawable/logo" />
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/logo"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tempus"

@@ -30,7 +30,8 @@ data class Errors(
     val noSName: String = "No Surname Entered",
     val InvalidCharacter: String = "Invalid Character in password or username!",
     val EmptyBreakName: String = "Break name cant be empty!",
-    val MinCantBeEmpty: String = " Minutes is empty!"
+    val MinCantBeEmpty: String = " Minutes is empty!",
+val TimesCantBeSame:String = "Start and End Time cant be the same "
 
 
 )

@@ -295,34 +295,46 @@ class Home : AppCompatActivity() {
                     }
 
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                        /*     val position = viewHolder.adapterPosition
+                             val position = viewHolder.adapterPosition
                              val item = sortedItems[position]
                              val mutableItems = sortedItems.toMutableList()
 
-                             // Remove the item from the RecyclerView
-                             mutableItems.removeAt(position)
-                             sortedItems = mutableItems
-                             adapter.notifyItemRemoved(position)
+                        if (direction == ItemTouchHelper.RIGHT) {
+                            // Swipe to the right (edit action)
+                            val intent = Intent(this@Home, EditCategoryActivity::class.java)
+                            intent.putExtra(
+                                "item_id",
+                                item.text
+                            ) // Pass the item ID or relevant data to the EditActivity
+                            startActivity(intent)
+                            recreate()
+                        } else if (direction == ItemTouchHelper.LEFT) {
 
-                             // Delete the item from the database
-                             val databaseRef = itemsRef.document(item.text)
-                             databaseRef.delete()
-                                 .addOnSuccessListener {
-                                     Toast.makeText(
-                                         this@Home,
-                                         "Removed successfully",
-                                         Toast.LENGTH_SHORT
+                            // Delete the item from the database
+                            val databaseRef = itemsRef.document(item.text)
+                            databaseRef.delete()
+                                .addOnSuccessListener {
 
-                                     ).show()
-                                     recreate()
-                                 }
-                                 .addOnFailureListener { e ->
-                                     Toast.makeText(
-                                         this@Home,
-                                         "Failed to remove: ${e.message}",
-                                         Toast.LENGTH_SHORT
-                                     ).show()
-                                 }*/
+                                    mutableItems.removeAt(position)
+                                    sortedItems = mutableItems
+                                    adapter.notifyItemRemoved(position)
+
+                                    Toast.makeText(
+                                        this@Home,
+                                        "Removed successfully",
+                                        Toast.LENGTH_SHORT
+
+                                    ).show()
+                                    recreate()
+                                }
+                                .addOnFailureListener { e ->
+                                    Toast.makeText(
+                                        this@Home,
+                                        "Failed to remove: ${e.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                        }
                     }
 
                     // Add swipe action buttons
@@ -346,7 +358,7 @@ class Home : AppCompatActivity() {
                         )
 
                         val itemView = viewHolder.itemView
-                        if (dX > 600) {
+                        if (dX > 50) {
 
                             when {
                                 dX > 0 -> {
@@ -386,7 +398,7 @@ class Home : AppCompatActivity() {
                                 }
                             }
 
-                        } else if (dX < -600) {
+                        } else if (dX < -50) {
 
 
                             // Swiping to the left (delete action)
@@ -440,12 +452,7 @@ class Home : AppCompatActivity() {
 
     fun notifs(context: Context) {
 
-        Toast.makeText(
-            context,
-            "Removed successfully",
-            Toast.LENGTH_SHORT
 
-        ).show()
     }
 
     class CustomAdapter(private val catList: MutableList<ItemsViewModel> = mutableListOf()) :
@@ -488,13 +495,7 @@ class Home : AppCompatActivity() {
 
                             when (holder.progressBar.progress) {
                                 holder.progressBar.max / 4 -> {
-                                    val context = holder.itemView.context
-                                    Toast.makeText(
-                                        context,
-                                        "Removed successfully",
-                                        Toast.LENGTH_SHORT
 
-                                    ).show()
                                 }
 
                                 holder.progressBar.max / 2 -> {

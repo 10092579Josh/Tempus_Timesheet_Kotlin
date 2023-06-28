@@ -53,6 +53,7 @@ class TaskForm : AppCompatActivity() {
     private val sTime = Crouton.makeText(this, e.startTimeNotChosen, Style.ALERT)
     private val eTime = Crouton.makeText(this, e.endTimeNotChosen, Style.ALERT)
     private val noCat = Crouton.makeText(this, e.noCat, Style.ALERT)
+    private val sameTime = Crouton.makeText(this, e.TimesCantBeSame, Style.ALERT)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
@@ -478,6 +479,10 @@ class TaskForm : AppCompatActivity() {
                         min.isEmpty() -> {
                             noMing.show()
                         }
+                        start.text.toString() == end.text.toString() ->{
+
+                            sameTime.show()
+                        }
 
                         else -> {
                             var picture: String
@@ -597,7 +602,11 @@ class TaskForm : AppCompatActivity() {
                                             Toast.LENGTH_SHORT
                                         )
                                             .show()
-
+                                        val intent = Intent(this, Home::class.java)
+                                        intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+                                        startActivity(intent)
+                                        overridePendingTransition(0, 0)
+                                        finish()
 
                                     }
                                 }
