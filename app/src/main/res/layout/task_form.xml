@@ -309,7 +309,7 @@
                         android:layout_below="@id/endTimeView"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="20dp"
-                        android:text="Minimum Goal"
+                        android:text="Min Hours Goal"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
@@ -329,7 +329,7 @@
                         android:layout_below="@id/minimumGoalSpinner"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="16dp"
-                        android:text="Maximum Goal"
+                        android:text="Max Hours Goal"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 

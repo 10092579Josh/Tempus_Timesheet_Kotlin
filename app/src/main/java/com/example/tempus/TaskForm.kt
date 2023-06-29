@@ -26,6 +26,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -34,6 +35,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 import java.io.ByteArrayOutputStream
 import java.util.Calendar
+import kotlin.IllegalArgumentException
 import kotlin.math.absoluteValue
 
 // THIS IS FOR THE CREATION OF THE TASK
@@ -484,6 +486,7 @@ class TaskForm : AppCompatActivity() {
                             sameTime.show()
                         }
 
+
                         else -> {
                             var picture: String
 
@@ -590,23 +593,29 @@ class TaskForm : AppCompatActivity() {
                                             timeRemain.toString(),
                                             userid.toString().trim()
                                         )
+try{
+    val docRef = itemsAdd.document(taskName)
+    docRef.set(tasksAdd)
+    val message = "TASK ${task.text} ADDED "
+    Toast.makeText(
+        applicationContext,
+        message,
+        Toast.LENGTH_SHORT
+    )
+        .show()
+    val intent = Intent(this, Home::class.java)
+    intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+    startActivity(intent)
+    overridePendingTransition(0, 0)
+    finish()
+}catch(s:IllegalArgumentException)
+    {
+        Toast.makeText(applicationContext, "invalid character", Toast.LENGTH_SHORT).show()
 
-                                        val docRef = itemsAdd.document(taskName)
-                                        docRef.set(tasksAdd)
+    }
 
 
-                                        val message = "TASK ${task.text} ADDED "
-                                        Toast.makeText(
-                                            applicationContext,
-                                            message,
-                                            Toast.LENGTH_SHORT
-                                        )
-                                            .show()
-                                        val intent = Intent(this, Home::class.java)
-                                        intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
-                                        startActivity(intent)
-                                        overridePendingTransition(0, 0)
-                                        finish()
+
 
                                     }
                                 }
@@ -621,6 +630,15 @@ class TaskForm : AppCompatActivity() {
                     }
                 } catch (e: Exception) {
                     noCat.show()
+
+                }
+                catch (e:DatabaseException)
+                {
+                   // stuff to do
+                }
+                catch (e:IllegalArgumentException)
+                {
+                    Toast.makeText(applicationContext, "invalid character", Toast.LENGTH_SHORT).show()
 
                 }
 
