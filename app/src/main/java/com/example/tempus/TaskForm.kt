@@ -150,12 +150,7 @@ class TaskForm : AppCompatActivity() {
                     shortcut.dismiss()
                 }
 
-                val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
-                addNewGoals.setOnClickListener {
-                    // to be implemented
 
-                    shortcut.dismiss()
-                }
 
 
             }
@@ -512,6 +507,7 @@ class TaskForm : AppCompatActivity() {
 
                                 val completedHours = 0
                                 val breaksHours = 0
+                                val completedbreaks = 0
 
                                 val userid = Firebase.auth.currentUser?.uid
                                 val start = start.text.toString().replace(Regex("[^\\w\\s:]"), "")
@@ -589,7 +585,8 @@ class TaskForm : AppCompatActivity() {
                                             picture,
                                             tabName,
                                             completedHours.toString(),
-                                            breaksHours,
+                                            breaksHours.toString(),
+                                            completedbreaks.toString(),
                                             timeRemain.toString(),
                                             userid.toString().trim()
                                         )

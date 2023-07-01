@@ -401,6 +401,14 @@
             android:padding="5dp"
             android:src="@drawable/home_icon" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HOME"
+            android:textSize="10sp"
+            android:layout_marginTop="120px"
+            android:layout_marginLeft="80px"/>
+
         <ImageButton
             android:id="@+id/breakstbtn"
             android:layout_width="230px"
@@ -411,6 +419,14 @@
             android:contentDescription="Breaks"
             android:padding="5dp"
             android:src="@drawable/break_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BREAKS"
+            android:textSize="10sp"
+            android:layout_marginTop="120px"
+            android:layout_marginLeft="300px"/>
 
         <ImageButton
             android:id="@+id/addbtn"
@@ -435,6 +451,16 @@
             android:padding="5dp"
             android:src="@drawable/stats_icon" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STATS"
+            android:textSize="10sp"
+            android:textColor="@color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="120px"
+            android:layout_marginRight="300px"/>
+
         <ImageButton
             android:id="@+id/settingstbtn"
             android:layout_width="230px"
@@ -445,6 +471,16 @@
             android:contentDescription="Setting"
             android:padding="5dp"
             android:src="@drawable/settings_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PROFILE"
+            android:textSize="10sp"
+            android:textColor="@color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="120px"
+            android:layout_marginRight="70px"/>
 
     </RelativeLayout>
 

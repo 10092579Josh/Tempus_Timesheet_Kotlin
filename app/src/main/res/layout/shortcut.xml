@@ -27,15 +27,5 @@
         android:textColor="#34A8FF"
         android:textSize="15sp" />
 
-    <Button
-        android:id="@+id/add_goals"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/add_task"
-        android:backgroundTint="@color/white"
-        android:text="Max and Min Daily goals"
-        android:textColor="#34A8FF"
-        android:textSize="15sp" />
-
 </RelativeLayout>
 

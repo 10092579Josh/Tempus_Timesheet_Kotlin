@@ -102,12 +102,16 @@
                         android:layout_below="@id/edit_taskNameLabel"
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="5dp"
+                        android:layout_marginTop="7dp"
                         android:layout_marginBottom="12dp"
                         android:background="@drawable/description_rectangle"
+                        android:editable="false"
+                        android:focusable="false"
                         android:gravity="top|start"
                         android:hint="  Enter task name"
                         android:paddingStart="20dp"
-                        android:paddingRight="5dp" />
+                        android:paddingRight="5dp"
+                        android:textIsSelectable="false" />
 
                     <TextView
                         android:id="@+id/edit_taskDescriptionLabel"
@@ -292,32 +296,12 @@
                         android:layout_marginTop="8dp"
                         android:spinnerMode="dropdown" />
 
-                    <TextView
-                        android:id="@+id/edit_breaks_spinnerName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_below="@id/edit_maximumGoalSpinner"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="19dp"
-                        android:layout_marginEnd="147dp"
-                        android:text="Breaks"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-
-                    <Spinner
-                        android:id="@+id/edit_breaks_spinner"
-                        android:layout_width="200dp"
-                        android:layout_height="45dp"
-                        android:layout_below="@id/edit_breaks_spinnerName"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="8dp"
-                        android:spinnerMode="dropdown" />
 
                     <TextView
                         android:id="@+id/edit_category_spinnerName"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/edit_breaks_spinner"
+                        android:layout_below="@id/edit_maximumGoalSpinner"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="19dp"
                         android:layout_marginEnd="147dp"
@@ -363,18 +347,26 @@
 
         <ImageButton
             android:id="@+id/hometbtn"
-            android:layout_width="86dp"
-            android:layout_height="50dp"
+            android:layout_width="230px"
+            android:layout_height="200px"
             android:layout_centerVertical="true"
             android:background="@drawable/rectangle"
             android:contentDescription="Home"
             android:padding="5dp"
             android:src="@drawable/home_icon" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HOME"
+            android:textSize="10sp"
+            android:layout_marginTop="120px"
+            android:layout_marginLeft="80px"/>
+
         <ImageButton
             android:id="@+id/breakstbtn"
-            android:layout_width="86dp"
-            android:layout_height="50dp"
+            android:layout_width="230px"
+            android:layout_height="200px"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/hometbtn"
             android:background="@drawable/rectangle"
@@ -382,10 +374,19 @@
             android:padding="5dp"
             android:src="@drawable/break_icon" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BREAKS"
+            android:textSize="10sp"
+            android:layout_marginTop="120px"
+            android:layout_marginLeft="300px"/>
+
         <ImageButton
             android:id="@+id/addbtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/breakstbtn"
             android:background="@drawable/gradient_add"
@@ -395,8 +396,8 @@
 
         <ImageButton
             android:id="@+id/statstbtn"
-            android:layout_width="86dp"
-            android:layout_height="50dp"
+            android:layout_width="230px"
+            android:layout_height="200px"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/addbtn"
             android:background="@drawable/rectangle"
@@ -404,16 +405,36 @@
             android:padding="5dp"
             android:src="@drawable/stats_icon" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STATS"
+            android:textSize="10sp"
+            android:textColor="@color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="120px"
+            android:layout_marginRight="300px"/>
+
         <ImageButton
             android:id="@+id/settingstbtn"
-            android:layout_width="86dp"
-            android:layout_height="50dp"
+            android:layout_width="230px"
+            android:layout_height="200px"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/statstbtn"
             android:background="@drawable/rectangle"
             android:contentDescription="Setting"
             android:padding="5dp"
             android:src="@drawable/settings_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PROFILE"
+            android:textSize="10sp"
+            android:textColor="@color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="120px"
+            android:layout_marginRight="70px"/>
 
     </RelativeLayout>
 

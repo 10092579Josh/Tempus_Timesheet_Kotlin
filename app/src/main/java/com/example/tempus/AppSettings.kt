@@ -179,12 +179,7 @@ class AppSettings : AppCompatActivity() {
                 shortcut.dismiss()
             }
 
-            val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
-            addNewGoals.setOnClickListener {
-                // to be implemented
 
-                shortcut.dismiss()
-            }
 
 
         }
@@ -636,6 +631,12 @@ class AppSettings : AppCompatActivity() {
                     db.collection("CategoryStorage").document(category.id).delete()
                 }
             }
+        val ref = FirebaseDatabase.getInstance().getReference()
+     ref.child("UserDetails").child(userid.toString()).removeValue()
+
+
+
+
         val tempusUser = FirebaseAuth.getInstance().currentUser
         tempusUser?.delete()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {

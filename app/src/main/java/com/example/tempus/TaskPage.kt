@@ -36,32 +36,32 @@ import java.util.Locale
 // THIS PAGE HANDLES THE DISPLAY OF THE TASKS WHEN A SPECIFIC TASK IS CLICKED
 class TaskPage : AppCompatActivity() {
 
-    private var mTextViewCountDown: TextView? = null
-    private var mTextViewCountDownBreak: TextView? = null
+    private var taskCountDown: TextView? = null
+    private var breakCount: TextView? = null
 
-    private var mButtonSet: ImageView? = null
-    private var mButtonSetBreak: ImageView? = null
+    private var stop: ImageView? = null
+    private var breakStop: ImageView? = null
 
-    private var mButtonStartPause: ImageView? = null
-    private var mButtonStartPauseBreak: ImageView? = null
+    private var playPause: ImageView? = null
+    private var playPauseBreak: ImageView? = null
 
-    private var mButtonReset: ImageView? = null
-    private var mButtonResetBreak: ImageView? = null
+    private var restart: ImageView? = null
+    private var restartBreak: ImageView? = null
 
-    private var mCountDownTimer: CountDownTimer? = null
-    private var mCountDownTimerBreaks: CountDownTimer? = null
+    private var timer: CountDownTimer? = null
+    private var timerBreaks: CountDownTimer? = null
 
-    private var mTimerRunning = false
-    private var mTimerRunningBreak = false
+    private var taskRunning = false
+    private var breaksRunning = false
 
-    private var mStartTimeInMillis: Long = 0
-    private var mStartTimeInMillisBreaks: Long = 0
+    private var startTime: Long = 0
+    private var startTimeBreaks: Long = 0
 
-    private var mTimeLeftInMillis: Long = 0
-    private var mTimeLeftInMillisBreaks: Long = 0
+    private var remainingTime: Long = 0
+    private var remainingTimeBreak: Long = 0
 
-    private var mEndTime: Long = 0
-    private var mEndTimeBreaks: Long = 0
+    private var finish: Long = 0
+    private var finishBreaks: Long = 0
 
     companion object {
         const val NOTIFICATION_CHANNEL_ID = "your_channel_id"
@@ -86,7 +86,7 @@ class TaskPage : AppCompatActivity() {
             security()
             FirebaseApp.initializeApp(this)
             taskPopulation()
-            GetBreaks()
+            getBreaks()
             val taskImage = findViewById<ImageView>(R.id.task_image)
             val homebtn = findViewById<ImageButton>(R.id.hometbtn)
             val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
@@ -94,53 +94,53 @@ class TaskPage : AppCompatActivity() {
             val settingsbtn = findViewById<ImageButton>(R.id.settingstbtn)
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
 
-            mTextViewCountDown = findViewById(R.id.text_view_countdown)
-            mTextViewCountDownBreak = findViewById(R.id.break_view_countdown)
+            taskCountDown = findViewById(R.id.text_view_countdown)
+            breakCount = findViewById(R.id.break_view_countdown)
 
-            mButtonSet = findViewById(R.id.task_set)
-            mButtonSetBreak = findViewById(R.id.break_set)
+            stop = findViewById(R.id.task_set)
+            breakStop = findViewById(R.id.break_set)
 
-            mButtonStartPause = findViewById(R.id.task_start_pause)
-            mButtonStartPauseBreak = findViewById(R.id.break_start_pause)
+            playPause = findViewById(R.id.task_start_pause)
+            playPauseBreak = findViewById(R.id.break_start_pause)
 
-            mButtonReset = findViewById(R.id.task_reset)
-            mButtonResetBreak = findViewById(R.id.break_reset)
+            restart = findViewById(R.id.task_reset)
+            restartBreak = findViewById(R.id.break_reset)
 
-            mButtonSet!!.setOnClickListener {
-                mButtonStartPause!!.visibility = View.GONE
-                mButtonReset!!.visibility = View.GONE
+            stop!!.setOnClickListener {
+                playPause!!.visibility = View.GONE
+                restart!!.visibility = View.GONE
 
             }
 
-            mButtonSetBreak!!.setOnClickListener {
-                mButtonStartPauseBreak!!.visibility = View.GONE
-                mButtonResetBreak!!.visibility = View.GONE
+            breakStop!!.setOnClickListener {
+                playPauseBreak!!.visibility = View.GONE
+                restartBreak!!.visibility = View.GONE
             }
 
-            mButtonStartPause!!.setOnClickListener {
-                if (mTimerRunning) {
-                    pauseTimer()
+            playPause!!.setOnClickListener {
+                if (taskRunning) {
+                    pauseTask()
                 } else {
                     startTimer()
                 }
             }
 
-            mButtonStartPauseBreak!!.setOnClickListener {
-                if (mTimerRunningBreak) {
-                    pauseTimerBreak()
+            playPauseBreak!!.setOnClickListener {
+                if (breaksRunning) {
+                    pauseBreaks()
                 } else {
-                    startTimerBreak()
+                    beginBreak()
                 }
             }
 
-            mButtonReset!!.setOnClickListener {
-                resetTimer()
+            restart!!.setOnClickListener {
+                reset()
                 recreate()
             }
 
 
-            mButtonResetBreak!!.setOnClickListener {
-                resetTimerBreak()
+            restartBreak!!.setOnClickListener {
+                resetBreak()
                 recreate()
             }
 
@@ -212,15 +212,15 @@ class TaskPage : AppCompatActivity() {
 
     }
 
-    private fun setTime(milliseconds: Long) {
-        mStartTimeInMillis = milliseconds
-        resetTimer()
+    private fun startTimeTask(milliseconds: Long) {
+        startTime = milliseconds
+        reset()
 
     }
 
-    private fun setTimeBreak(milliseconds: Long) {
-        mStartTimeInMillisBreaks = milliseconds
-        resetTimerBreak()
+    private fun startTimeBreaks(milliseconds: Long) {
+        startTimeBreaks = milliseconds
+        resetBreak()
 
     }
 
@@ -240,18 +240,18 @@ class TaskPage : AppCompatActivity() {
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
 
         // Set the end time for the timer
-        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis
+        finish = System.currentTimeMillis() + remainingTime
 
         // Start the countdown timer
-        mCountDownTimer = object : CountDownTimer(mTimeLeftInMillis, 1000) {
+        timer = object : CountDownTimer(remainingTime, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                mTimeLeftInMillis = millisUntilFinished
-                updateCountDownText()
-                updateNotification(getFormattedTimeLeft())
+                remainingTime = millisUntilFinished
+                updateText()
+                updates(calculationsTask())
 
-                if (mTimeLeftInMillis % (30 * 60 * 1000) == 0L) {
+                if (remainingTime % (30 * 60 * 1000) == 0L) {
                     val updatedNotificationBuilder =
-                        notificationBuilder.setContentText(getFormattedTimeLeft())
+                        notificationBuilder.setContentText(calculationsTask())
 
                     notificationManager.notify(
                         NOTIFICATION_ID,
@@ -264,8 +264,8 @@ class TaskPage : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                mTimerRunning = false
-                updateWatchInterface()
+                taskRunning = false
+                updateViewTask()
 
                 // Update the notification when the timer finishes
                 val updatedNotificationBuilder =
@@ -277,11 +277,11 @@ class TaskPage : AppCompatActivity() {
             }
         }.start()
 
-        mTimerRunning = true
-        updateWatchInterface()
+        taskRunning = true
+        updateViewTask()
     }
 
-    private fun startTimerBreak() {
+    private fun beginBreak() {
         createNotificationChannel()
         // Build the initial notification without the timer countdown
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
@@ -294,14 +294,14 @@ class TaskPage : AppCompatActivity() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
         // Set the end time for the timer
-        mEndTimeBreaks = System.currentTimeMillis() + mTimeLeftInMillisBreaks
+        finishBreaks = System.currentTimeMillis() + remainingTimeBreak
         // Start the countdown timer
-        mCountDownTimerBreaks = object : CountDownTimer(mTimeLeftInMillisBreaks, 1000) {
+        timerBreaks = object : CountDownTimer(remainingTimeBreak, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                mTimeLeftInMillisBreaks = millisUntilFinished
-                updateCountDownTextBreaks()
-                updateNotification(getFormattedTimeLeftBreak())
-                if (mTimeLeftInMillisBreaks % (30 * 60 * 1000) == 0L) {
+                remainingTimeBreak = millisUntilFinished
+                updateTimerBreaks()
+                updates(getFormattedTimeLeftBreak())
+                if (remainingTimeBreak % (30 * 60 * 1000) == 0L) {
                     val updatedNotificationBuilder =
                         notificationBuilder.setContentText(getFormattedTimeLeftBreak())
                     notificationManager.notify(
@@ -312,8 +312,8 @@ class TaskPage : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                mTimerRunningBreak = false
-                updateWatchInterfaceBreak()
+                breaksRunning = false
+                updateViewBreak()
                 // Update the notification when the timer finishes
                 val updatedNotificationBuilder =
                     notificationBuilder.setContentText("Timer finished")
@@ -323,11 +323,11 @@ class TaskPage : AppCompatActivity() {
                 )
             }
         }.start()
-        mTimerRunningBreak = true
-        updateWatchInterfaceBreak()
+        breaksRunning = true
+        updateViewBreak()
     }
 
-    private fun updateNotification(contentText: String) {
+    private fun updates(contentText: String) {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
@@ -335,23 +335,24 @@ class TaskPage : AppCompatActivity() {
             .setContentText(contentText)
             .setSmallIcon(R.drawable.clock)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setSilent(true)
 
 
         notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
 
-    private fun getFormattedTimeLeft(): String {
-        val hours = (mTimeLeftInMillis / 1000) / 3600
-        val minutes = ((mTimeLeftInMillis / 1000) / 60) % 60
-        val seconds = (mTimeLeftInMillis / 1000) % 60
+    private fun calculationsTask(): String {
+        val hours = (remainingTime / 1000) / 3600
+        val minutes = ((remainingTime / 1000) / 60) % 60
+        val seconds = (remainingTime / 1000) % 60
         return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     private fun getFormattedTimeLeftBreak(): String {
-        val hours = (mTimeLeftInMillisBreaks / 1000) / 3600
-        val minutes = ((mTimeLeftInMillisBreaks / 1000) / 60) % 60
-        val seconds = (mTimeLeftInMillisBreaks / 1000) % 60
+        val hours = (remainingTimeBreak / 1000) / 3600
+        val minutes = ((remainingTimeBreak / 1000) / 60) % 60
+        val seconds = (remainingTimeBreak / 1000) % 60
         return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
     }
 
@@ -370,13 +371,13 @@ class TaskPage : AppCompatActivity() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun pauseTimerBreak() {
-        mCountDownTimerBreaks!!.cancel()
-        mTimerRunningBreak = false
-        updateWatchInterfaceBreak()
-        val currentTime = mTimeLeftInMillisBreaks
+    private fun pauseBreaks() {
+        timerBreaks!!.cancel()
+        breaksRunning = false
+        updateViewBreak()
+        val currentTime = remainingTimeBreak
         Log.d("YourTag", "PauseDurationBreaks Retrieved: $currentTime")
-        val currentTimeFormatted = getFormattedTimeLeft()
+        val currentTimeFormatted = calculationsTask()
         Log.d("YourTag", "PauseDurationBreaks Retrieved: $currentTimeFormatted")
         val itemId = intent.getStringExtra("itemId")
         val db = FirebaseFirestore.getInstance()
@@ -389,30 +390,30 @@ class TaskPage : AppCompatActivity() {
                 // Get the document object
                 val document = queryResult.documents.lastOrNull()
                 if (document != null) {
-                    val breakdurationVar = document.get("breakDurations")
-                    Log.d("YourTag", "PauseDuration Retrieved: $breakdurationVar")
+                    val breakDurationVar = document.get("breakDurations")
+                    Log.d("YourTag", "PauseDuration Retrieved: $breakDurationVar")
                     val minutes = currentTime / 60000
                     val seconds = (currentTime % 60000) / 1000
                     val timeString = String.format("%02d:%02d", minutes, seconds)
 
-                    Log.d("YourTag", "Timer converted to mins $timeString")
 
-                    // Update the value of completedHours to result using update()
-                    val roundedMinutes = if (seconds >= 30) minutes + 1 else minutes
-                    document.reference.update("breakDurations", roundedMinutes.toInt())
-                    Log.d("YourTag", "Timer converted to mins $roundedMinutes")
+
+                    Log.d("totalmins",seconds.toString())
+
+                    document.reference.update("breakDurations",timeString)
+
 
                 }
             }
     }
 
     // Stark Code
-    private fun pauseTimer() {
-        mCountDownTimer!!.cancel()
-        mTimerRunning = false
-        updateWatchInterface()
-        val currentTime = mTimeLeftInMillis
-        val currentTimeFormatted = getFormattedTimeLeft()
+    private fun pauseTask() {
+        timer!!.cancel()
+        taskRunning = false
+        updateViewTask()
+        val currentTime = remainingTime
+        val currentTimeFormatted = calculationsTask()
         Log.d("YourTag", "PauseDuration Retrieved: $currentTimeFormatted")
         val currentTimeWithoutSeconds = currentTimeFormatted.substringBeforeLast(":")
         Log.d("YourTag", "currentTimeWithoutSeconds: $currentTimeWithoutSeconds")
@@ -444,15 +445,14 @@ class TaskPage : AppCompatActivity() {
                     val currentTimeMillis = currentTimeWithoutSeconds.toMillis()
                     Log.d("YourTag", "Hours done: $currentTimeMillis")
                     val differenceMillis = durationMillis - currentTimeMillis
-                    val differenceFormatted = formatTime(differenceMillis)
+                    val differenceFormatted = form(differenceMillis)
 
                     // Store the result in a variable
-                    val result = differenceFormatted
                     Log.d("YourTag", "Completed Time: $differenceFormatted")
 
                     // Update the value of completedHours to result using update()
                     document.reference.update("timeRemaining", currentTimeFormatted)
-                    document.reference.update("completedHours", result)
+                    document.reference.update("completedHours", differenceFormatted)
 
                     val catname = findViewById<TextView>(R.id.category_name)
 
@@ -460,8 +460,8 @@ class TaskPage : AppCompatActivity() {
                     val categoryRef =
                         db.collection("CategoryStorage").document(catname.text.toString())
                     categoryRef.get()
-                        .addOnSuccessListener { document ->
-                            val timeComponents = result.split(":")
+                        .addOnSuccessListener {
+                            val timeComponents = differenceFormatted.split(":")
                             val hours = timeComponents[0].toInt()
                             val minutes = timeComponents[1].toInt()
                             val totalMinutes = hours * 60 + minutes
@@ -487,113 +487,113 @@ class TaskPage : AppCompatActivity() {
 
     // Extension function to format milliseconds as a time string
     //Stark Code
-    private fun formatTime(millis: Long): String {
+    private fun form(millis: Long): String {
         val minutes = (millis / (1000 * 60)) % 60
         val hours = (millis / (1000 * 60 * 60)) % 24
         return String.format("%02d:%02d", hours, minutes)
     }
 
 
-    private fun resetTimer() {
-        mTimeLeftInMillis = mStartTimeInMillis
-        updateCountDownText()
-        updateWatchInterface()
+    private fun reset() {
+        remainingTime = startTime
+        updateText()
+        updateViewTask()
     }
 
-    private fun resetTimerBreak() {
-        mTimeLeftInMillisBreaks = mStartTimeInMillisBreaks
-        updateCountDownTextBreaks()
-        updateWatchInterfaceBreak()
+    private fun resetBreak() {
+        remainingTimeBreak = startTimeBreaks
+        updateTimerBreaks()
+        updateViewBreak()
     }
 
 
-    private fun updateCountDownText() {
-        val hours = (mTimeLeftInMillis / 1000).toInt() / 3600
-        val minutes = ((mTimeLeftInMillis / 1000) % 3600).toInt() / 60
-        val seconds = (mTimeLeftInMillis / 1000).toInt() % 60
+    private fun updateText() {
+        val hours = (remainingTime / 1000).toInt() / 3600
+        val minutes = ((remainingTime / 1000) % 3600).toInt() / 60
+        val seconds = (remainingTime / 1000).toInt() % 60
         val timeLeftFormatted: String = if (hours > 0) {
             String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds)
         } else {
             String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
         }
-        mTextViewCountDown!!.text = timeLeftFormatted
+        taskCountDown!!.text = timeLeftFormatted
     }
 
-    private fun updateCountDownTextBreaks() {
-        val hours = (mTimeLeftInMillisBreaks / 1000).toInt() / 3600
-        val minutes = ((mTimeLeftInMillisBreaks / 1000) % 3600).toInt() / 60
-        val seconds = (mTimeLeftInMillisBreaks / 1000).toInt() % 60
+    private fun updateTimerBreaks() {
+        val hours = (remainingTimeBreak / 1000).toInt() / 3600
+        val minutes = ((remainingTimeBreak / 1000) % 3600).toInt() / 60
+        val seconds = (remainingTimeBreak / 1000).toInt() % 60
         val timeLeftFormatted: String = if (hours > 0) {
             String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds)
         } else {
             String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
         }
-        mTextViewCountDownBreak!!.text = timeLeftFormatted
+        breakCount!!.text = timeLeftFormatted
     }
 
-    private fun updateWatchInterface() {
+    private fun updateViewTask() {
         when {
-            mTimerRunning -> {
-                mButtonSet!!.visibility = View.INVISIBLE
-                mButtonReset!!.visibility = View.INVISIBLE
-                mButtonStartPause?.setImageResource(R.drawable.pause_icon)
+            taskRunning -> {
+                stop!!.visibility = View.INVISIBLE
+                restart!!.visibility = View.INVISIBLE
+                playPause?.setImageResource(R.drawable.pause_icon)
 
             }
 
             else -> {
 
-                mButtonSet!!.visibility = View.VISIBLE
-                mButtonStartPause?.setImageResource(R.drawable.play_icon)
+                stop!!.visibility = View.VISIBLE
+                playPause?.setImageResource(R.drawable.play_icon)
 
                 when {
-                    mTimeLeftInMillis < 1000 -> {
-                        mButtonStartPause!!.visibility = View.INVISIBLE
+                    remainingTime < 1000 -> {
+                        playPause!!.visibility = View.INVISIBLE
                     }
 
                     else -> {
-                        mButtonStartPause!!.visibility = View.VISIBLE
+                        playPause!!.visibility = View.VISIBLE
                     }
                 }
                 when {
-                    mTimeLeftInMillis < mStartTimeInMillis -> {
-                        mButtonReset!!.visibility = View.VISIBLE
+                    remainingTime < startTime -> {
+                        restart!!.visibility = View.VISIBLE
                     }
 
                     else -> {
-                        mButtonReset!!.visibility = View.INVISIBLE
+                        restart!!.visibility = View.INVISIBLE
                     }
                 }
             }
         }
     }
 
-    private fun updateWatchInterfaceBreak() {
+    private fun updateViewBreak() {
         when {
-            mTimerRunningBreak -> {
-                mButtonSetBreak!!.visibility = View.INVISIBLE
-                mButtonResetBreak!!.visibility = View.INVISIBLE
-                mButtonStartPauseBreak?.setImageResource(R.drawable.pause_icon)
+            breaksRunning -> {
+                breakStop!!.visibility = View.INVISIBLE
+                restartBreak!!.visibility = View.INVISIBLE
+                playPauseBreak?.setImageResource(R.drawable.pause_icon)
             }
 
             else -> {
-                mButtonSetBreak!!.visibility = View.VISIBLE
-                mButtonStartPauseBreak?.setImageResource(R.drawable.play_icon)
+                breakStop!!.visibility = View.VISIBLE
+                playPauseBreak?.setImageResource(R.drawable.play_icon)
                 when {
-                    mTimeLeftInMillisBreaks < 1000 -> {
-                        mButtonStartPauseBreak!!.visibility = View.INVISIBLE
+                    remainingTimeBreak < 1000 -> {
+                        playPauseBreak!!.visibility = View.INVISIBLE
                     }
 
                     else -> {
-                        mButtonStartPauseBreak!!.visibility = View.VISIBLE
+                        playPauseBreak!!.visibility = View.VISIBLE
                     }
                 }
                 when {
-                    mTimeLeftInMillisBreaks < mStartTimeInMillisBreaks -> {
-                        mButtonResetBreak!!.visibility = View.VISIBLE
+                    remainingTimeBreak < startTimeBreaks -> {
+                        restartBreak!!.visibility = View.VISIBLE
                     }
 
                     else -> {
-                        mButtonResetBreak!!.visibility = View.INVISIBLE
+                        restartBreak!!.visibility = View.INVISIBLE
                     }
                 }
             }
@@ -605,14 +605,14 @@ class TaskPage : AppCompatActivity() {
         super.onStop()
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
         val editor = prefs.edit()
-        editor.putLong("startTimeInMillis", mStartTimeInMillis)
-        editor.putLong("millisLeft", mTimeLeftInMillis)
-        editor.putBoolean("timerRunning", mTimerRunning)
-        editor.putLong("endTime", mEndTime)
+        editor.putLong("startTimeInMillis", startTime)
+        editor.putLong("millisLeft", remainingTime)
+        editor.putBoolean("timerRunning", taskRunning)
+        editor.putLong("endTime", finish)
         editor.apply()
         when {
-            mCountDownTimer != null -> {
-                mCountDownTimer!!.cancel()
+            timer == null && !taskRunning-> {
+                timer?.cancel()
             }
         }
     }
@@ -621,14 +621,14 @@ class TaskPage : AppCompatActivity() {
 
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
         val editor = prefs.edit()
-        editor.putLong("startTimeInMillisBreak", mStartTimeInMillisBreaks)
-        editor.putLong("millisLeftBreak", mTimeLeftInMillisBreaks)
-        editor.putBoolean("timerRunningBreak", mTimerRunningBreak)
-        editor.putLong("endTimeBreak", mEndTimeBreaks)
+        editor.putLong("startTimeInMillisBreak", startTimeBreaks)
+        editor.putLong("millisLeftBreak", remainingTimeBreak)
+        editor.putBoolean("timerRunningBreak", breaksRunning)
+        editor.putLong("endTimeBreak", finishBreaks)
         editor.apply()
         when {
-            mCountDownTimerBreaks != null -> {
-                mCountDownTimerBreaks!!.cancel()
+            timerBreaks != null -> {
+                timerBreaks!!.cancel()
             }
         }
     }
@@ -636,21 +636,21 @@ class TaskPage : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
-        mStartTimeInMillis = prefs.getLong("startTimeInMillis", 600000)
-        mTimeLeftInMillis = prefs.getLong("millisLeft", mStartTimeInMillis)
-        mTimerRunning = prefs.getBoolean("timerRunning", false)
-        updateCountDownText()
-        updateWatchInterface()
+        startTime = prefs.getLong("startTimeInMillis", 600000)
+        remainingTime = prefs.getLong("millisLeft", startTime)
+        taskRunning = prefs.getBoolean("timerRunning", false)
+        updateText()
+        updateViewTask()
         when {
-            mTimerRunning -> {
-                mEndTime = prefs.getLong("endTime", 0)
-                mTimeLeftInMillis = mEndTime - System.currentTimeMillis()
+            taskRunning -> {
+                finish = prefs.getLong("endTime", 0)
+                remainingTime = finish - System.currentTimeMillis()
                 when {
-                    mTimeLeftInMillis < 0 -> {
-                        mTimeLeftInMillis = 0
-                        mTimerRunning = false
-                        updateCountDownText()
-                        updateWatchInterface()
+                    remainingTime < 0 -> {
+                        remainingTime = 0
+                        taskRunning = false
+                        updateText()
+                        updateViewTask()
                     }
 
                     else -> {
@@ -664,25 +664,25 @@ class TaskPage : AppCompatActivity() {
     fun onStartBreak() {
 
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
-        mStartTimeInMillisBreaks = prefs.getLong("startTimeInMillisBreak", 600000)
-        mTimeLeftInMillisBreaks = prefs.getLong("millisLeftBreak", mStartTimeInMillisBreaks)
-        mTimerRunningBreak = prefs.getBoolean("timerRunningBreak", false)
-        updateCountDownTextBreaks()
-        updateWatchInterfaceBreak()
+        startTimeBreaks = prefs.getLong("startTimeInMillisBreak", 600000)
+        remainingTimeBreak = prefs.getLong("millisLeftBreak", startTimeBreaks)
+        breaksRunning = prefs.getBoolean("timerRunningBreak", false)
+        updateTimerBreaks()
+        updateViewBreak()
         when {
-            mTimerRunningBreak -> {
-                mEndTimeBreaks = prefs.getLong("endTimeBreak", 0)
-                mTimeLeftInMillisBreaks = mEndTimeBreaks - System.currentTimeMillis()
+            breaksRunning -> {
+                finishBreaks = prefs.getLong("endTimeBreak", 0)
+                remainingTimeBreak = finishBreaks - System.currentTimeMillis()
                 when {
-                    mTimeLeftInMillisBreaks < 0 -> {
-                        mTimeLeftInMillisBreaks = 0
-                        mTimerRunningBreak = false
-                        updateCountDownTextBreaks()
-                        updateWatchInterfaceBreak()
+                    remainingTimeBreak < 0 -> {
+                        remainingTimeBreak = 0
+                        breaksRunning = false
+                        updateTimerBreaks()
+                        updateViewBreak()
                     }
 
                     else -> {
-                        startTimerBreak()
+                        beginBreak()
                     }
                 }
             }
@@ -739,13 +739,13 @@ class TaskPage : AppCompatActivity() {
 
     }
 
-    private fun GetBreaks() {
+    private fun getBreaks() {
         val itemId = intent.getStringExtra("itemId")
-        Log.d("YourTag", "ItemID: " + itemId)
+        Log.d("YourTag", "ItemID: $itemId")
         //THIS INDEX LETS THE FOR LOOP SORT THE SPECIFIC INDEX WHICH WONT CHANGE AS PER THE POSITION WHICH WILL CHANGE
         val db = FirebaseFirestore.getInstance()
         val userid = FirebaseAuth.getInstance().currentUser?.uid
-        Log.d("YourTag", "userid: " + userid)
+        Log.d("YourTag", "userid: $userid")
         // Query Firestore to get the data for the clicked item
         db.collection("TaskStorage")
             .whereEqualTo("userIdTask", userid.toString().trim())
@@ -757,13 +757,24 @@ class TaskPage : AppCompatActivity() {
                 if (document != null) {
                     // Get the data for the clicked item from the document
                     // Use the data from Firestore to populate the fields in your form
-                    val breakVal = document.getLong("breakDurations")
-                    Log.d("YourTag", "BreakVal: " + breakVal)
-                    val breakValInMilliseconds = breakVal?.times(60000)
-                    Log.d("YourTag", "BreakVal: " + breakValInMilliseconds)
-                    if (breakValInMilliseconds != null) {
-                        setTimeBreak(breakValInMilliseconds)
+                    val breakVal = document.get("breakDurations")
+                    val breakval = breakVal.toString()
+                    val breakParts = breakval?.split(":")
+                    val breakValInMilliseconds = when (breakParts?.size) {
+                        2 -> {
+                            val minutes = breakParts[0].toLongOrNull() ?: 0
+                            val seconds = breakParts[1].toLongOrNull() ?: 0
+                            minutes * 60000 + seconds * 1000
+                        }
+                        1 -> {
+                            val minutes = breakval.toLongOrNull() ?: 0
+                            minutes * 60000
+                        }
+                        else -> 0
                     }
+                    Log.d("YourTag", "BreakVal: $breakValInMilliseconds")
+                    startTimeBreaks(breakValInMilliseconds)
+
                 }
             }
     }
@@ -810,18 +821,30 @@ class TaskPage : AppCompatActivity() {
                         sDate.text = document.getString("starTime")
                         eDate.text = document.getString("endTime")
                         hours2.text = document.getString("duration")
-                        val timerem = document.getString("timeRemaining")
+                        val timeRem = document.getString("timeRemaining")
                         Log.d("YourTag", "Duration: " + hours2.text)
 
                         min.text = document.getString("minGoal")
                         max.text = document.getString("maxGoal")
                         date.text = document.getString("dateAdded")
                         val url = document.getString("imageURL")
-                        val durationParts = timerem?.split(":")
-                        val hours = durationParts!![0].toLong()
-                        val minutes = durationParts!![1].toLong()
-                        val durationInMillis = hours * 60 * 60 * 1000 + minutes * 60 * 1000
-                        setTime(durationInMillis)
+                        val durationParts = timeRem?.split(":")
+                        val durationInMillis = when (durationParts?.size) {
+                            3 -> {
+                                val hours = durationParts[0].toLong()
+                                val minutes = durationParts[1].toLong()
+                                val seconds = durationParts[2].toLong()
+                                hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000
+                            }
+                            2 -> {
+                                val hours = durationParts[0].toLong()
+                                val minutes = durationParts[1].toLong()
+                                hours * 60 * 60 * 1000 + minutes * 60 * 1000
+                            }
+                            else -> 0
+                        }
+                        startTimeTask(durationInMillis)
+
 
                         Glide.with(this)
                             .load(url)

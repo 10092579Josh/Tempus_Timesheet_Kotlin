@@ -91,12 +91,6 @@ class Statistics : AppCompatActivity() {
                 shortcut.dismiss()
             }
 
-            val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
-            addNewGoals.setOnClickListener {
-                // to be implemented
-
-                shortcut.dismiss()
-            }
 
 
         }
@@ -161,7 +155,7 @@ class Statistics : AppCompatActivity() {
                 val whenAdded = data["dateAdded"] as String
                 val initialHours = data["duration"] as String
                 val notedHours: String = data["completedHours"] as String
-                val breakHours: String = data["breakDurations"].toString()
+                val breakHours: String = data["completedBreak"].toString()
                 val breakup = initialHours.split(":")
                 val initialTime = breakup[0].toInt() * 60
                 val initialMin = breakup[1].toInt()
@@ -175,15 +169,29 @@ class Statistics : AppCompatActivity() {
                 val resultNoted = initialNoteHours + initialNoteMin
                 val graphPointsNoted = resultNoted / 60.0f
 
-                val point = breakHours.toFloat() / 60f
-                val total = graphPoints - point
+                val breaks2 = breakHours.split(":")
+                val resultbreaks = when (breaks2.size) {
+                    2 -> {
+                        val intialbreaksmins = breaks2[0].toInt()
+                        val intialbreakseconds = breaks2[1].toInt()
+                        intialbreaksmins + intialbreakseconds / 60.0
+                    }
+                    1 -> breaks2[0].toDouble()
+                    else -> 0.0
+                }
+
+
+
+                val new = resultbreaks/60
+                 val graphbreaks = graphPoints * 60 - resultbreaks
+                val total = graphbreaks/60
                 min.add(tempusMingoal.toFloat())
                 mags.add(tempusMaxGoal.toFloat())
                 userTasks.add(task)
                 dateDatabase.add(whenAdded)
                 compList.add(graphPointsNoted)
-                durationList.add(total)
-                breakHour.add(point)
+                durationList.add(total.toFloat())
+                breakHour.add(new.toFloat())
             }
 
 

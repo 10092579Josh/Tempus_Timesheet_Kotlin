@@ -38,9 +38,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-
-// THIS PAGE DEALS WITH THE CATEGORY
-// THIS POPULATES THE RECYCLER VIEW
+// this is the home page where the summary is stored
+// tasks are found under categories and each leads to its own pages
 class Home : AppCompatActivity() {
     private var selectedTabIndex = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +62,7 @@ class Home : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, refresh)
         securGuard()
         populateFields()
-// Set up the ViewPager and the TabLayout
+
 
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
         when {
@@ -76,6 +75,7 @@ class Home : AppCompatActivity() {
         try {
             FirebaseApp.initializeApp(this)
             print()
+            // the assigning of the buttons
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
             val homebtn = findViewById<ImageButton>(R.id.hometbtn)
             val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
@@ -84,8 +84,8 @@ class Home : AppCompatActivity() {
 
             val cat = findViewById<Button>(R.id.category_selected)
             val task = findViewById<Button>(R.id.task_selected)
-            task.setOnClickListener()
-            {
+            task.setOnClickListener() {
+                //changes page to home
                 val intent = Intent(this, Home::class.java)
                 intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
                 startActivity(intent)
@@ -93,8 +93,8 @@ class Home : AppCompatActivity() {
                 finish()
 
             }
-            cat.setOnClickListener()
-            {
+            cat.setOnClickListener() {
+                // changes to tasks
                 val tasks = Intent(this, Tasks::class.java)
                 startActivity(tasks)
                 overridePendingTransition(0, 0)
@@ -102,7 +102,7 @@ class Home : AppCompatActivity() {
 
             }
             homebtn.setOnClickListener {
-
+// changes to home
                 val intent = Intent(this, Home::class.java)
                 intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
                 startActivity(intent)
@@ -113,6 +113,7 @@ class Home : AppCompatActivity() {
             }
 
             breaksbtn.setOnClickListener {
+                // changes to breaks
                 val breakspage = Intent(this, Breaks::class.java)
                 startActivity(breakspage)
                 overridePendingTransition(0, 0)
@@ -121,6 +122,7 @@ class Home : AppCompatActivity() {
             }
 
             statsbtn.setOnClickListener {
+                // changes to statistics
                 val statspage = Intent(this, Statistics::class.java)
                 startActivity(statspage)
                 overridePendingTransition(0, 0)
@@ -129,6 +131,7 @@ class Home : AppCompatActivity() {
             }
 
             settingsbtn.setOnClickListener {
+                // changes to settings page
                 val settingspage = Intent(this, AppSettings::class.java)
                 startActivity(settingspage)
                 overridePendingTransition(0, 0)
@@ -136,10 +139,9 @@ class Home : AppCompatActivity() {
 
             }
 
-            addbtn.setOnClickListener()
-            {
+            addbtn.setOnClickListener() {
 
-
+               // changes to quick view
                 val shortcut = BottomSheetDialog(this)
                 val shortcutView = layoutInflater.inflate(R.layout.shortcut, null)
 
@@ -169,12 +171,6 @@ class Home : AppCompatActivity() {
                     shortcut.dismiss()
                 }
 
-                val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
-                addNewGoals.setOnClickListener {
-                    // to be implemented
-
-                    shortcut.dismiss()
-                }
 
 
             }
@@ -191,7 +187,9 @@ class Home : AppCompatActivity() {
     }
 
     private fun securGuard() {
-
+// this checks user tokens
+        // if invalid forces the user to login again
+        // if deleted forces the user out of the app
         val tempusSecurity = FirebaseAuth.getInstance()
         tempusSecurity.addAuthStateListener { firebaseAuth ->
             when (firebaseAuth.currentUser) {
@@ -283,8 +281,7 @@ class Home : AppCompatActivity() {
                 recyclerview.adapter = adapter
 
                 val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
-                    0,
-                    ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                    0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
                 ) {
                     override fun onMove(
                         recyclerView: RecyclerView,
@@ -295,16 +292,15 @@ class Home : AppCompatActivity() {
                     }
 
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                             val position = viewHolder.adapterPosition
-                             val item = sortedItems[position]
-                             val mutableItems = sortedItems.toMutableList()
+                        val position = viewHolder.adapterPosition
+                        val item = sortedItems[position]
+                        val mutableItems = sortedItems.toMutableList()
 
                         if (direction == ItemTouchHelper.RIGHT) {
                             // Swipe to the right (edit action)
                             val intent = Intent(this@Home, EditCategoryActivity::class.java)
                             intent.putExtra(
-                                "item_id",
-                                item.text
+                                "item_id", item.text
                             ) // Pass the item ID or relevant data to the EditActivity
                             startActivity(intent)
                             recreate()
@@ -312,22 +308,18 @@ class Home : AppCompatActivity() {
 
                             // Delete the item from the database
                             val databaseRef = itemsRef.document(item.text)
-                            databaseRef.delete()
-                                .addOnSuccessListener {
+                            databaseRef.delete().addOnSuccessListener {
 
                                     mutableItems.removeAt(position)
                                     sortedItems = mutableItems
                                     adapter.notifyItemRemoved(position)
 
                                     Toast.makeText(
-                                        this@Home,
-                                        "Removed successfully",
-                                        Toast.LENGTH_SHORT
+                                        this@Home, "Removed successfully", Toast.LENGTH_SHORT
 
                                     ).show()
                                     recreate()
-                                }
-                                .addOnFailureListener { e ->
+                                }.addOnFailureListener { e ->
                                     Toast.makeText(
                                         this@Home,
                                         "Failed to remove: ${e.message}",
@@ -348,13 +340,7 @@ class Home : AppCompatActivity() {
                         isCurrentlyActive: Boolean
                     ) {
                         super.onChildDraw(
-                            c,
-                            recyclerView,
-                            viewHolder,
-                            dX,
-                            dY,
-                            actionState,
-                            isCurrentlyActive
+                            c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive
                         )
 
                         val itemView = viewHolder.itemView
@@ -363,11 +349,9 @@ class Home : AppCompatActivity() {
                             when {
                                 dX > 0 -> {
                                     // Swiping to the right (edit action)
-                                    val editIcon =
-                                        ContextCompat.getDrawable(
-                                            this@Home,
-                                            R.drawable.edit_icon
-                                        )
+                                    val editIcon = ContextCompat.getDrawable(
+                                        this@Home, R.drawable.edit_icon
+                                    )
                                     val editIconMargin =
                                         (itemView.height - editIcon?.intrinsicHeight!!) / 2
                                     val editIconTop = itemView.top + editIconMargin
@@ -377,15 +361,11 @@ class Home : AppCompatActivity() {
                                         itemView.left + editIconMargin + editIcon.intrinsicWidth
 
                                     editIcon.setBounds(
-                                        editIconLeft,
-                                        editIconTop,
-                                        editIconRight,
-                                        editIconBottom
+                                        editIconLeft, editIconTop, editIconRight, editIconBottom
                                     )
 
                                     val editBackground = ContextCompat.getDrawable(
-                                        this@Home,
-                                        R.drawable.edit_button_background
+                                        this@Home, R.drawable.edit_button_background
                                     )
                                     editBackground?.setBounds(
                                         itemView.left,
@@ -413,15 +393,11 @@ class Home : AppCompatActivity() {
                             val deleteIconRight = itemView.right - deleteIconMargin
 
                             deleteIcon.setBounds(
-                                deleteIconLeft,
-                                deleteIconTop,
-                                deleteIconRight,
-                                deleteIconBottom
+                                deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom
                             )
 
                             val deleteBackground = ContextCompat.getDrawable(
-                                this@Home,
-                                R.drawable.delete_button_background
+                                this@Home, R.drawable.delete_button_background
                             )
                             deleteBackground?.setBounds(
                                 itemView.right + dX.toInt(),
@@ -462,8 +438,7 @@ class Home : AppCompatActivity() {
 
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.category, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.category, parent, false)
             return ViewHolder(view)
         }
 
@@ -480,10 +455,8 @@ class Home : AppCompatActivity() {
             val checkTime = 300000L // Update progress every 300000 milliseconds (5 minutes)
 
             val db = Firebase.firestore
-            val categoryRef =
-                db.collection("CategoryStorage").document(itemsViewModel.text)
-            categoryRef.get()
-                .addOnSuccessListener { document ->
+            val categoryRef = db.collection("CategoryStorage").document(itemsViewModel.text)
+            categoryRef.get().addOnSuccessListener { document ->
                     val categoryHours = document.get("totalTimeCompleted").toString().toInt()
 
                     val loop = Handler(Looper.getMainLooper())
@@ -628,8 +601,7 @@ class Home : AppCompatActivity() {
             holder.textView.text = task.name
             holder.textView2.text = task.hours2
 
-            holder.itemView.setOnClickListener()
-            {
+            holder.itemView.setOnClickListener() {
                 val clickedData = tasks[position]
                 val context = holder.itemView.context
                 val homeIntent = Intent(context, TaskPage::class.java)
@@ -671,24 +643,20 @@ class Home : AppCompatActivity() {
         val tempusManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         tempusManager.createNotificationChannel(notificationChannel)
 
-        val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.user)
-            .setContentTitle("$user logged in")
-            .setContentText("welcome to tempus $user")
+        val builder = NotificationCompat.Builder(this, channelId).setSmallIcon(R.drawable.user)
+            .setContentTitle("$user logged in").setContentText("welcome to tempus $user")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_EVENT)
-            .setContentIntent(settingsIntent)
+            .setCategory(NotificationCompat.CATEGORY_EVENT).setContentIntent(settingsIntent)
             .setAutoCancel(true)
 
 
-        val unverifiedBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.user)
-            .setContentTitle("$user logged in")
-            .setContentText("welcome to tempus new $user please verify your account")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_EVENT)
-            .setContentIntent(settingsIntent)
-            .setAutoCancel(true)
+        val unverifiedBuilder =
+            NotificationCompat.Builder(this, channelId).setSmallIcon(R.drawable.user)
+                .setContentTitle("$user logged in")
+                .setContentText("welcome to tempus new $user please verify your account")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_EVENT).setContentIntent(settingsIntent)
+                .setAutoCancel(true)
 
 
         val userid = FirebaseAuth.getInstance().currentUser?.uid

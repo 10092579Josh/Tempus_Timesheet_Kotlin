@@ -150,12 +150,6 @@ class Tasks : AppCompatActivity() {
                 shortcut.dismiss()
             }
 
-            val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
-            addNewGoals.setOnClickListener {
-                // to be implemented
-
-                shortcut.dismiss()
-            }
         }
 
         date.setOnClickListener {

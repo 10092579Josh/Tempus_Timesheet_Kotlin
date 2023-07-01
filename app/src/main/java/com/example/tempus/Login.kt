@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -42,8 +43,18 @@ class Login : AppCompatActivity() {
         login()
         notifications()
         FirebaseApp.initializeApp(this)
+        val forgotPassword = findViewById<TextView>(R.id.forgopass_login)
+        forgotPassword.setOnClickListener()
+        {
+
+                val intent = Intent(this, ForgotPassword::class.java)
+                overridePendingTransition(0,0)
+                startActivity(intent)
+                finish()
+        }
 
     }
+
 
     private fun notifications() {
 
@@ -123,6 +134,7 @@ class Login : AppCompatActivity() {
         signup.setOnClickListener()
         {
             val intent = Intent(this, Registration::class.java)
+            overridePendingTransition(0,0)
             startActivity(intent)
             finish()
 

@@ -11,46 +11,55 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 
+
+
 class SplashScreen : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var percentageText: TextView
     private lateinit var progressText: TextView
+    private lateinit var imageView: ImageView
 
     private val splashDelay: Long = 5000 // 3 seconds delay
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.load_screen)
+
         withq()
         try {
             progressBar = findViewById(R.id.progressBar)
             percentageText = findViewById(R.id.percentageText)
             progressText = findViewById(R.id.progressText2)
-            updateBar(progressBar, progressText, 25)
+            imageView = findViewById(R.id.imageView)
+            updateBar(progressBar, progressText, 25, imageView)
+
+            Glide.with(this).load(R.drawable.tempusgif).into(imageView)
 
             val auth = FirebaseAuth.getInstance()
             val currentUser = auth.currentUser
             Log.d("MyApp", "$currentUser")
             when {
                 currentUser != null -> {
-                    updateBar(progressBar, progressText, 50)
+                    updateBar(progressBar, progressText, 50, imageView)
 
                     Log.d("MyApp", "Method X started")
 
 
-                    updateBar(progressBar, progressText, 75)
-                    val splashImageView = findViewById<ImageView>(R.id.splashImageView)
-                    splashImageView.setImageResource(R.drawable.splash_screen_logo)
+                    updateBar(progressBar, progressText, 75, imageView)
+                    val imageView = findViewById<ImageView>(R.id.imageView)
+                    imageView.setImageResource(R.drawable.tempusgif)
 
-                    splashImageView.bringToFront()
-                    splashImageView.invalidate()
-                    updateBar(progressBar, progressText, 100)
+                    imageView.bringToFront()
+
+                    imageView.invalidate()
+                    updateBar(progressBar, progressText, 100, imageView)
                     Handler(Looper.getMainLooper()).postDelayed({
                         val homepage = Intent(this@SplashScreen, Home::class.java)
                         homepage.putExtra("home", R.layout.home)
@@ -62,13 +71,14 @@ class SplashScreen : AppCompatActivity() {
                 }
 
                 else -> {
-                    updateBar(progressBar, progressText, 50)
-                    val splashImageView = findViewById<ImageView>(R.id.splashImageView)
-                    splashImageView.setImageResource(R.drawable.splash_screen_logo)
+                    updateBar(progressBar, progressText, 50, imageView)
+                    val imageView = findViewById<ImageView>(R.id.imageView)
 
-                    splashImageView.bringToFront()
-                    splashImageView.invalidate()
-                    updateBar(progressBar, progressText, 75)
+
+                    imageView.bringToFront()
+
+                    imageView.invalidate()
+                    updateBar(progressBar, progressText, 75, imageView)
 
                     Handler(Looper.getMainLooper()).postDelayed({
 
@@ -80,7 +90,7 @@ class SplashScreen : AppCompatActivity() {
                         finish()
 
                     }, splashDelay)
-                    updateBar(progressBar, progressText, 100)
+                    updateBar(progressBar, progressText, 100, imageView)
                 }
             }
         } catch (E: Exception) {
@@ -89,7 +99,7 @@ class SplashScreen : AppCompatActivity() {
         }
     }
 
-    private fun updateBar(progressBar: ProgressBar, progressText: TextView, progress: Int) {
+    private fun updateBar(progressBar: ProgressBar, progressText: TextView, progress: Int, imageView: ImageView) {
         try {
             val animator =
                 ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, progress)

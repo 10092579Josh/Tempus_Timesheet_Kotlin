@@ -113,14 +113,6 @@ class Breaks : AppCompatActivity() {
                 shortcut.dismiss()
             }
 
-            val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
-            addNewGoals.setOnClickListener {
-                // to be implemented
-
-                shortcut.dismiss()
-            }
-
-
         }
 
     }
@@ -222,7 +214,7 @@ class Breaks : AppCompatActivity() {
                     val t = spinner.selectedItem.toString()
                     val m = minutes.text.toString()
 
-                    val breaks = BreakStorage(b, t, m.toInt(), userid.toString().trim())
+                    val breaks = BreakStorage(b, t, m, userid.toString().trim())
 
                     val docRef = itemAdd.document(b)
                     docRef.set(breaks)
@@ -232,6 +224,7 @@ class Breaks : AppCompatActivity() {
                         .addOnSuccessListener { documents ->
                             for (document in documents) {
                                 document.reference.update("breakDurations", m.toInt())
+                                document.reference.update("completedBreak", m)
 
                                 val message = "Break $b ADDED "
                                 Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)

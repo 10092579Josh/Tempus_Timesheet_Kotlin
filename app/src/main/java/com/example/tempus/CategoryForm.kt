@@ -19,9 +19,7 @@ import com.google.firebase.ktx.Firebase
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 
-// THIS ALLOWS THE USER TO CREATE A CATEGORY
-// THIS HOLDS THE DATA ASSIGNMENT
-//ASSIGNS TO THE ARRAY
+
 class CategoryForm : AppCompatActivity() {
 
     private val e = Errors()
@@ -116,13 +114,6 @@ class CategoryForm : AppCompatActivity() {
                     startActivity(newTask)
                     overridePendingTransition(0, 0)
                     finish()
-
-                    shortcut.dismiss()
-                }
-
-                val addNewGoals = shortcutView.findViewById<Button>(R.id.add_goals)
-                addNewGoals.setOnClickListener {
-                    // to be implemented
 
                     shortcut.dismiss()
                 }

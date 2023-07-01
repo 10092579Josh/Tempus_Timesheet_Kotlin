@@ -6,7 +6,7 @@
     android:id="@+id/newcard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="#EDFFF4">
+    android:backgroundTint="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"

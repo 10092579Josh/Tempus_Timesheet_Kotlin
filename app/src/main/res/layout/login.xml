@@ -101,24 +101,34 @@
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:id="@+id/forgopass_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="10dp"
+            android:text="Forgot password?"
+            android:textColor="#8847E4"
+            android:textSize="18sp" />
+
         <Button
             android:id="@+id/insign"
             android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:text="sign in"
-            android:textColor="#19013A">
+            android:textColor="#FFFFFF">
 
         </Button>
 
         <Button
             android:id="@+id/signup"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
-            android:background="#00000000"
             android:text="Sign up"
-            android:textColor="@color/black">
+            android:backgroundTint="#921CDC"
+            android:textColor="@color/white">
 
         </Button>
 
