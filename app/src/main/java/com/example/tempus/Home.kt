@@ -457,7 +457,9 @@ class Home : AppCompatActivity() {
             val db = Firebase.firestore
             val categoryRef = db.collection("CategoryStorage").document(itemsViewModel.text)
             categoryRef.get().addOnSuccessListener { document ->
+                try {
                     val categoryHours = document.get("totalTimeCompleted").toString().toInt()
+
 
                     val loop = Handler(Looper.getMainLooper())
 
@@ -484,12 +486,16 @@ class Home : AppCompatActivity() {
                                 }
                             }
 
+
                             // Schedule the next update
                             loop.postDelayed(this, checkTime)
                         }
                     }
                     loop.post(updater)
-
+                }catch (e:Exception)
+                {
+                    //STUFF
+                }
                 }
 
 

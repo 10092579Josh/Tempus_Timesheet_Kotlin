@@ -36,6 +36,15 @@
                 android:textStyle="normal" />
 
             <TextView
+                android:id="@+id/mNum_tasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@id/mTitle"
+                android:text="task number goes here"
+                android:textSize="17sp" />
+
+            <TextView
                 android:id="@+id/mHours_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,7 +59,7 @@
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/mHours_category"
+                android:layout_below="@+id/mNum_tasks"
                 android:padding="10dp" />
 
 
