@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -35,7 +36,6 @@ import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 import java.io.ByteArrayOutputStream
 import java.util.Calendar
-import kotlin.IllegalArgumentException
 import kotlin.math.absoluteValue
 
 // THIS IS FOR THE CREATION OF THE TASK
@@ -45,17 +45,10 @@ class TaskForm : AppCompatActivity() {
     private lateinit var selectedDateText: TextView
     private lateinit var selectedStartTimeText: TextView
     private lateinit var selectedEndTimeText: TextView
-
-    private val catEmpty = Crouton.makeText(this, e.emptyCat, Style.ALERT)
-    private val taskEmpty = Crouton.makeText(this, e.emptyTaskName, Style.ALERT)
     private val noMing = Crouton.makeText(this, e.noMinGoal, Style.ALERT)
     private val noMx = Crouton.makeText(this, e.noMaxGoal, Style.ALERT)
-    private val emptyBody = Crouton.makeText(this, e.emptyDesc, Style.ALERT)
-    private val sDate = Crouton.makeText(this, e.noStartDate, Style.ALERT)
-    private val sTime = Crouton.makeText(this, e.startTimeNotChosen, Style.ALERT)
-    private val eTime = Crouton.makeText(this, e.endTimeNotChosen, Style.ALERT)
     private val noCat = Crouton.makeText(this, e.noCat, Style.ALERT)
-    private val sameTime = Crouton.makeText(this, e.TimesCantBeSame, Style.ALERT)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
@@ -149,8 +142,6 @@ class TaskForm : AppCompatActivity() {
 
                     shortcut.dismiss()
                 }
-
-
 
 
             }
@@ -442,30 +433,36 @@ class TaskForm : AppCompatActivity() {
                     val selectedItem = spinner.selectedItem.toString()
                     when {
                         task.text.toString().isEmpty() -> {
-                            taskEmpty.show()
+                            Snackbar.make(task, e.emptyTaskName, Snackbar.LENGTH_SHORT).show()
+
                         }
 
                         description.text.toString().isEmpty() -> {
-                            emptyBody.show()
+                            Snackbar.make(description, e.emptyDesc, Snackbar.LENGTH_SHORT).show()
+
                         }
 
                         start.text.toString().isEmpty() -> {
 
-                            sTime.show()
+                            Snackbar.make(start, e.startTimeNotChosen, Snackbar.LENGTH_SHORT).show()
+
                         }
 
                         end.text.toString().isEmpty() -> {
-                            eTime.show()
+                            Snackbar.make(end, e.endTimeNotChosen, Snackbar.LENGTH_SHORT).show()
+
 
                         }
 
                         dates.text.toString().isEmpty() -> {
-                            sDate.show()
+                            Snackbar.make(dates, e.noStartDate, Snackbar.LENGTH_SHORT).show()
+
 
                         }
 
                         selectedItem.isEmpty() -> {
-                            catEmpty.show()
+                            Snackbar.make(dates, e.emptyCat, Snackbar.LENGTH_SHORT).show()
+
 
                         }
 
@@ -476,9 +473,11 @@ class TaskForm : AppCompatActivity() {
                         min.isEmpty() -> {
                             noMing.show()
                         }
-                        start.text.toString() == end.text.toString() ->{
 
-                            sameTime.show()
+                        start.text.toString() == end.text.toString() -> {
+
+                            Snackbar.make(start, e.TimesCantBeSame, Snackbar.LENGTH_SHORT).show()
+
                         }
 
 
@@ -590,28 +589,32 @@ class TaskForm : AppCompatActivity() {
                                             timeRemain.toString(),
                                             userid.toString().trim()
                                         )
-try{
-    val docRef = itemsAdd.document(taskName)
-    docRef.set(tasksAdd)
-    val message = "TASK ${task.text} ADDED "
-    Toast.makeText(
-        applicationContext,
-        message,
-        Toast.LENGTH_SHORT
-    )
-        .show()
-    val intent = Intent(this, Home::class.java)
-    intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
-    startActivity(intent)
-    overridePendingTransition(0, 0)
-    finish()
-}catch(s:IllegalArgumentException)
-    {
-        Toast.makeText(applicationContext, "invalid character", Toast.LENGTH_SHORT).show()
+                                        try {
+                                            val docRef = itemsAdd.document(taskName)
+                                            docRef.set(tasksAdd)
+                                            val message = "TASK ${task.text} ADDED "
+                                            Toast.makeText(
+                                                applicationContext,
+                                                message,
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                            val intent = Intent(this, Home::class.java)
+                                            intent.putExtra(
+                                                "home",
+                                                getIntent().getIntExtra("home", R.layout.home)
+                                            )
+                                            startActivity(intent)
+                                            overridePendingTransition(0, 0)
+                                            finish()
+                                        } catch (s: IllegalArgumentException) {
+                                            Toast.makeText(
+                                                applicationContext,
+                                                "invalid character",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
 
-    }
-
-
+                                        }
 
 
                                     }
@@ -628,14 +631,11 @@ try{
                 } catch (e: Exception) {
                     noCat.show()
 
-                }
-                catch (e:DatabaseException)
-                {
-                   // stuff to do
-                }
-                catch (e:IllegalArgumentException)
-                {
-                    Toast.makeText(applicationContext, "invalid character", Toast.LENGTH_SHORT).show()
+                } catch (e: DatabaseException) {
+                    // stuff to do
+                } catch (e: IllegalArgumentException) {
+                    Toast.makeText(applicationContext, "invalid character", Toast.LENGTH_SHORT)
+                        .show()
 
                 }
 

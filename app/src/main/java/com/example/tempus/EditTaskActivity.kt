@@ -676,6 +676,13 @@ class EditTaskActivity : AppCompatActivity() {
                                                         breaksHours
                                                     )
                                                     document.reference.update("tabID", tabName)
+                                                    val message = "New Details Captured"
+                                                    Toast.makeText(
+                                                        applicationContext,
+                                                        message,
+                                                        Toast.LENGTH_SHORT
+                                                    )
+                                                        .show()
                                                 }
 
                                             }

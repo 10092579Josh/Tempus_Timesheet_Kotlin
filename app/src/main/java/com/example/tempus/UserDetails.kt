@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -33,10 +34,6 @@ import de.keyboardsurfer.android.widget.crouton.Style
 class UserDetails : AppCompatActivity() {
     private val e = Errors()
     private val m = Messages()
-    private val emailEmpty = Crouton.makeText(this, e.emailValidationEmptyError, Style.ALERT)
-    private val passwordEmpty = Crouton.makeText(this, e.passwordCantBeEmpty, Style.ALERT)
-    private val confirmEmpty = Crouton.makeText(this, e.confirmPasswordCantBeEmpty, Style.ALERT)
-    private val passwordMatch = Crouton.makeText(this, e.passwordNotMatch, Style.ALERT)
     private val validMessage = Crouton.makeText(this, m.confirmedLogin, Style.INFO)
     private val returns = Crouton.makeText(this, e.newSignInRequired, Style.INFO)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -398,31 +395,51 @@ class UserDetails : AppCompatActivity() {
 
                     when {
                         emailVerification.text.isNullOrEmpty() -> {
-
-                            emailEmpty.show()
+                            Snackbar.make(emailVerification, e.regEmailError, Snackbar.LENGTH_SHORT)
+                                .show()
 
 
                         }
 
                         confirmInput.text.isNullOrEmpty() -> {
-                            confirmEmpty.show()
+                            Snackbar.make(
+                                confirmInput,
+                                e.confirmPasswordCantBeEmpty,
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+
 
                         }
 
                         passwordInput.text.isNullOrEmpty() -> {
-                            passwordEmpty.show()
+                            Snackbar.make(
+                                passwordInput,
+                                e.passwordCantBeEmpty,
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+
 
                         }
 
                         emailVerification.text.isNullOrEmpty() && confirmInput.text.isNullOrEmpty() -> {
-                            emailEmpty.show()
-                            confirmEmpty.show()
+                            Snackbar.make(
+                                emailVerification,
+                                e.emailValidationEmptyError,
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+
+                            Snackbar.make(
+                                emailVerification,
+                                e.confirmPasswordCantBeEmpty,
+                                Snackbar.LENGTH_SHORT
+                            ).show()
 
 
                         }
 
                         passwordInput.text.toString() != confirmInput.text.toString() -> {
-                            passwordMatch.show()
+                            Snackbar.make(passwordInput, e.passwordNotMatch, Snackbar.LENGTH_SHORT)
+                                .show()
 
 
                         }

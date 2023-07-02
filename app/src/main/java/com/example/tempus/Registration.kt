@@ -32,15 +32,7 @@ import de.keyboardsurfer.android.widget.crouton.Style
 
 class Registration : AppCompatActivity() {
     private val e = Errors()
-    private val emptyEmail = Crouton.makeText(this, e.emailValidationEmptyError, Style.ALERT)
-    private val noUserName = Crouton.makeText(this, e.emptyUserName, Style.ALERT)
-    private val noMatchPass = Crouton.makeText(this, e.passwordNotMatch, Style.ALERT)
-    private val confirmPassTooShort = Crouton.makeText(this, e.confirmPasswordTooShort, Style.ALERT)
-    private val passTooShort = Crouton.makeText(this, e.passwordTooShort, Style.ALERT)
-    private val noSName = Crouton.makeText(this, e.noSName, Style.ALERT)
-    private val noFName = Crouton.makeText(this, e.noFName, Style.ALERT)
     private val emailRegAlready = Crouton.makeText(this, e.regEmailError, Style.ALERT)
-    private val hashCharacter = Crouton.makeText(this, e.illegalCharacterHash, Style.ALERT)
     private val invalidCharacter = Crouton.makeText(this, e.InvalidCharacter, Style.ALERT)
 
 
@@ -229,32 +221,32 @@ class Registration : AppCompatActivity() {
             //action statements tp check fields if empty
             when {
                 names?.text.toString().isEmpty() -> {
-                    noFName.show()
+                    Snackbar.make(email1, e.noFName, Snackbar.LENGTH_SHORT).show()
                 }
 
                 surnames?.text.toString().isEmpty() -> {
-                    noSName.show()
+                    Snackbar.make(email1, e.noSName, Snackbar.LENGTH_SHORT).show()
                 }
 
                 user2?.text.toString().isEmpty() -> {
-                    noUserName.show()
+                    Snackbar.make(email1, e.emptyUserName, Snackbar.LENGTH_SHORT).show()
                 }
 
                 pass?.text.toString().length < 7 -> {
-                    passTooShort.show()
+                    Snackbar.make(email1, e.passwordTooShort, Snackbar.LENGTH_SHORT).show()
                 }
 
                 pass2?.text.toString().length < 7 -> {
-                    confirmPassTooShort.show()
+                    Snackbar.make(email1, e.confirmPasswordTooShort, Snackbar.LENGTH_SHORT).show()
 
                 }
 
                 emails?.text.toString().isEmpty() -> {
-                    emptyEmail.show()
+                    Snackbar.make(email1, e.emailValidationEmptyError, Snackbar.LENGTH_SHORT).show()
                 }
 
                 pass?.text.toString() != pass2?.text.toString() -> {
-                    noMatchPass.show()
+                    Snackbar.make(email1, e.passwordNotMatch, Snackbar.LENGTH_SHORT).show()
 
                 }
 
@@ -316,7 +308,7 @@ class Registration : AppCompatActivity() {
                                         overridePendingTransition(0, 0)
                                         finish()
                                     } catch (E: DatabaseException) {
-                                        invalidCharacter.show()
+                                        Snackbar.make(email1, e.InvalidCharacter, Snackbar.LENGTH_SHORT).show()
 
                                     } catch (e: Exception) {// stuff to do
 
@@ -336,7 +328,7 @@ class Registration : AppCompatActivity() {
                                 }
 
                                 exception is FirebaseAuthException && exception.errorCode == "ERROR_EMAIL_ALREADY_IN_USE" -> {
-                                    emailRegAlready.show()
+                                    Snackbar.make(email1, e.regEmailError, Snackbar.LENGTH_SHORT).show()
 
 
                                 }

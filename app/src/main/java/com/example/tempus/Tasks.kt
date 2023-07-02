@@ -3,7 +3,6 @@ package com.example.tempus
 
 import android.app.DatePickerDialog
 import android.content.Context
-import androidx.recyclerview.widget.ItemTouchHelper
 import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
@@ -14,10 +13,11 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -489,7 +489,7 @@ class Tasks : AppCompatActivity() {
 
                         } else if (dX < -50) {
 
-                             imageDelete()
+                            imageDelete()
                             // Swiping to the left (delete action)
                             val deleteIcon =
                                 ContextCompat.getDrawable(this@Tasks, R.drawable.delete_icon)
@@ -520,6 +520,8 @@ class Tasks : AppCompatActivity() {
                             )
                             deleteBackground?.draw(c)
                             deleteIcon.draw(c)
+
+
                         }
                     }
                 }
@@ -533,7 +535,6 @@ class Tasks : AppCompatActivity() {
         }
 
     }
-
 
 
     data class ItemsViewModel(
@@ -589,10 +590,10 @@ class Tasks : AppCompatActivity() {
             val textView2: TextView = itemView.findViewById(R.id.mHpurs)
             val textView3: TextView = itemView.findViewById(R.id.mSubtitle)
             val imageView: ImageView = itemView.findViewById(R.id.task_item_image)
-         }
-
-
         }
+
+
+    }
 
 
 }
