@@ -37,8 +37,7 @@
         android:layout_above="@id/bottom_menu"
         android:layout_below="@id/top_menu">
 
-        <FrameLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#D6D6D6"
@@ -156,10 +155,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="HOME"
-            android:textSize="10sp"
+            android:layout_marginLeft="80px"
             android:layout_marginTop="120px"
-            android:layout_marginLeft="80px"/>
+            android:text="HOME"
+            android:textSize="10sp" />
 
         <ImageButton
             android:id="@+id/breakstbtn"
@@ -175,11 +174,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BREAKS"
-            android:textSize="11sp"
-            android:textColor="#6644F2"
+            android:layout_marginLeft="300px"
             android:layout_marginTop="129px"
-            android:layout_marginLeft="300px"/>
+            android:text="BREAKS"
+            android:textColor="#6644F2"
+            android:textSize="11sp" />
 
         <ImageButton
             android:id="@+id/addbtn"
@@ -207,12 +206,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="STATS"
-            android:textSize="10sp"
-            android:textColor="@color/black"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="120px"
-            android:layout_marginRight="300px"/>
+            android:layout_marginRight="300px"
+            android:text="STATS"
+            android:textColor="@color/black"
+            android:textSize="10sp" />
 
         <ImageButton
             android:id="@+id/settingstbtn"
@@ -228,12 +227,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PROFILE"
-            android:textSize="10sp"
-            android:textColor="@color/black"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="120px"
-            android:layout_marginRight="70px"/>
+            android:layout_marginRight="70px"
+            android:text="PROFILE"
+            android:textColor="@color/black"
+            android:textSize="10sp" />
 
     </RelativeLayout>
 

@@ -126,8 +126,8 @@
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:text="Sign up"
             android:backgroundTint="#921CDC"
+            android:text="Sign up"
             android:textColor="@color/white">
 
         </Button>
