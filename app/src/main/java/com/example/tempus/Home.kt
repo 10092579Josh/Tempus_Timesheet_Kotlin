@@ -3,6 +3,7 @@ package com.example.tempus
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.graphics.Canvas
@@ -10,17 +11,21 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -37,11 +42,13 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 // this is the home page where the summary is stored
 // tasks are found under categories and each leads to its own pages
 class Home : AppCompatActivity() {
     private var selectedTabIndex = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,111 +79,108 @@ class Home : AppCompatActivity() {
             }
         }
 
-        try {
-            FirebaseApp.initializeApp(this)
-            print()
-            // the assigning of the buttons
-            val addbtn = findViewById<ImageButton>(R.id.addbtn)
-            val homebtn = findViewById<ImageButton>(R.id.hometbtn)
-            val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
-            val statsbtn = findViewById<ImageButton>(R.id.statstbtn)
-            val settingsbtn = findViewById<ImageButton>(R.id.settingstbtn)
 
-            val cat = findViewById<Button>(R.id.category_selected)
-            val task = findViewById<Button>(R.id.task_selected)
-            task.setOnClickListener() {
-                //changes page to home
-                val intent = Intent(this, Home::class.java)
-                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
-                startActivity(intent)
-                overridePendingTransition(0, 0)
-                finish()
+        FirebaseApp.initializeApp(this)
+        print()
+        // the assigning of the buttons
+        val addbtn = findViewById<ImageButton>(R.id.addbtn)
+        val homebtn = findViewById<ImageButton>(R.id.hometbtn)
+        val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
+        val statsbtn = findViewById<ImageButton>(R.id.statstbtn)
+        val settingsbtn = findViewById<ImageButton>(R.id.settingstbtn)
 
-            }
-            cat.setOnClickListener() {
-                // changes to tasks
-                val tasks = Intent(this, Tasks::class.java)
-                startActivity(tasks)
-                overridePendingTransition(0, 0)
-                finish()
+        val cat = findViewById<Button>(R.id.category_selected)
+        val task = findViewById<Button>(R.id.task_selected)
+        task.setOnClickListener() {
+            //changes page to home
+            val intent = Intent(this, Home::class.java)
+            intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
 
-            }
-            homebtn.setOnClickListener {
-// changes to home
-                val intent = Intent(this, Home::class.java)
-                intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
-                startActivity(intent)
-                overridePendingTransition(0, 0)
-                finish()
-
-
-            }
-
-            breaksbtn.setOnClickListener {
-                // changes to breaks
-                val breakspage = Intent(this, Breaks::class.java)
-                startActivity(breakspage)
-                overridePendingTransition(0, 0)
-                finish()
-
-            }
-
-            statsbtn.setOnClickListener {
-                // changes to statistics
-                val statspage = Intent(this, Statistics::class.java)
-                startActivity(statspage)
-                overridePendingTransition(0, 0)
-                finish()
-
-            }
-
-            settingsbtn.setOnClickListener {
-                // changes to settings page
-                val settingspage = Intent(this, AppSettings::class.java)
-                startActivity(settingspage)
-                overridePendingTransition(0, 0)
-                finish()
-
-            }
-
-            addbtn.setOnClickListener() {
-
-               // changes to quick view
-                val shortcut = BottomSheetDialog(this)
-                val shortcutView = layoutInflater.inflate(R.layout.shortcut, null)
-
-                shortcut.setContentView(shortcutView)
-
-                shortcut.show()
-
-                val createNewCat = shortcutView.findViewById<Button>(R.id.add_category)
-
-                createNewCat.setOnClickListener {
-                    val newForm = Intent(this, CategoryForm::class.java)
-                    startActivity(newForm)
-                    overridePendingTransition(0, 0)
-                    finish()
-
-                    shortcut.dismiss()
-                }
-
-                val createNewTask = shortcutView.findViewById<Button>(R.id.add_task)
-                createNewTask.setOnClickListener {
-
-                    val newTask = Intent(this, TaskForm::class.java)
-                    startActivity(newTask)
-                    overridePendingTransition(0, 0)
-                    finish()
-
-                    shortcut.dismiss()
-                }
-
-
-
-            }
-        } catch (e: Exception) {
-            Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
+        cat.setOnClickListener() {
+            // changes to tasks
+            val tasks = Intent(this, Tasks::class.java)
+            startActivity(tasks)
+            overridePendingTransition(0, 0)
+            finish()
+
+        }
+        homebtn.setOnClickListener {
+// changes to home
+            val intent = Intent(this, Home::class.java)
+            intent.putExtra("home", getIntent().getIntExtra("home", R.layout.home))
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+
+
+        }
+
+        breaksbtn.setOnClickListener {
+            // changes to breaks
+            val breakspage = Intent(this, Breaks::class.java)
+            startActivity(breakspage)
+            overridePendingTransition(0, 0)
+            finish()
+
+        }
+
+        statsbtn.setOnClickListener {
+            // changes to statistics
+            val statspage = Intent(this, Statistics::class.java)
+            startActivity(statspage)
+            overridePendingTransition(0, 0)
+            finish()
+
+        }
+
+        settingsbtn.setOnClickListener {
+            // changes to settings page
+            val settingspage = Intent(this, AppSettings::class.java)
+            startActivity(settingspage)
+            overridePendingTransition(0, 0)
+            finish()
+
+        }
+
+        addbtn.setOnClickListener() {
+
+            // changes to quick view
+            val shortcut = BottomSheetDialog(this)
+            val shortcutView = layoutInflater.inflate(R.layout.shortcut, null)
+
+            shortcut.setContentView(shortcutView)
+
+            shortcut.show()
+
+            val createNewCat = shortcutView.findViewById<Button>(R.id.add_category)
+
+            createNewCat.setOnClickListener {
+                val newForm = Intent(this, CategoryForm::class.java)
+                startActivity(newForm)
+                overridePendingTransition(0, 0)
+                finish()
+
+                shortcut.dismiss()
+            }
+
+            val createNewTask = shortcutView.findViewById<Button>(R.id.add_task)
+            createNewTask.setOnClickListener {
+
+                val newTask = Intent(this, TaskForm::class.java)
+                startActivity(newTask)
+                overridePendingTransition(0, 0)
+                finish()
+
+                shortcut.dismiss()
+            }
+
+
+        }
+
 
     }
 
@@ -251,12 +255,46 @@ class Home : AppCompatActivity() {
 
     }
 
+
+    private fun allDelete() {
+
+        val db = FirebaseFirestore.getInstance()
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+
+        val storage = Firebase.storage
+
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
+            .addOnSuccessListener { tasks ->
+                for (task in tasks) {
+                    val taskName = task.getString("taskName") ?: ""
+                    val imageRef = storage.reference.child(taskName)
+                    imageRef.delete()
+                }
+            }
+
+
+
+
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
+            .addOnSuccessListener { tasks ->
+                for (task in tasks) {
+                    db.collection("TaskStorage").document(task.id).delete()
+                }
+            }
+
+
+
+
+    }
+
+
+    private var animationsPlayed = false
     private fun print() {
         val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_category)
         recyclerview.layoutManager = LinearLayoutManager(this)
         val db = FirebaseFirestore.getInstance()
         val itemsRef = db.collection("CategoryStorage")
-
+        val cv: CardView = findViewById(R.id.interval_cardview)
         val userid = FirebaseAuth.getInstance().currentUser?.uid
         val categoryQuery = itemsRef.whereEqualTo("userIdCat", userid.toString().trim())
         val task = categoryQuery.get()
@@ -270,10 +308,189 @@ class Home : AppCompatActivity() {
                 val description = document.getString("totalHours") ?: ""
                 val item = ItemsViewModel(name, description)
                 items.add(item)
-            }
 
-            var sortedItems = items.sortedBy { it.text }
+val close = findViewById<ImageButton>(R.id.interval_btn_exit)
+
+                val checkTime = 300000L // Update progress every 300000 milliseconds (5 minutes)
+                val db = Firebase.firestore
+                val categoryRef = db.collection("CategoryStorage").document(name)
+                categoryRef.get().addOnSuccessListener { document ->
+                    try {
+
+                        val totalHours = findViewById<ProgressBar>(R.id.progress_category)
+                        val categoryHours = document.get("totalTimeCompleted").toString().toInt()
+                        Log.d("stuff23", categoryHours.toString())
+
+                        val loop = Handler(Looper.getMainLooper())
+
+                        val updater = object : Runnable {
+                            override fun run() {
+                                val quarter = when (totalHours.progress) {
+                                    totalHours.max / 4 -> "25"
+                                    totalHours.max / 2 -> "50"
+                                    totalHours.max * 3 / 4 -> "75"
+                                    totalHours.max -> "100"
+                                    else -> ""
+                                }
+
+                                val taskPreference =
+                                    getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+                                val taskPlayed = taskPreference.getStringSet(
+                                    "${name}_played_quarters",
+                                    setOf()
+                                )
+                                val catAnimation = taskPlayed?.contains(quarter)
+
+
+
+                                if (totalHours.progress != null && totalHours.progress != 0) {
+                                    when (totalHours.progress) {
+
+                                        totalHours.max / 4 -> {
+                                            if (!catAnimation!!) {
+
+                                                animationsPlayed = true
+
+                                                cv.findViewById<TextView>(R.id.interval_title_first).text =
+                                                    name
+                                                cv.findViewById<TextView>(R.id.interval_title_second).text =
+                                                    "is 25% completed. \n" +
+                                                            " \n" +
+                                                            " WELL DONE!!!"
+                                                cv.findViewById<ImageView>(R.id.interval_icon)
+                                                    .setImageResource(R.drawable.twentyfive)
+                                                cv.visibility = View.VISIBLE
+                                                val animation = AnimationUtils.loadAnimation(
+                                                    this@Home,
+                                                    R.anim.transition_one
+                                                )
+                                                cv.startAnimation(animation)
+                                                val editor = taskPreference.edit()
+                                                editor.putStringSet(
+                                                    "${name}_played_quarters",
+                                                    taskPlayed + quarter
+                                                )
+                                                editor.apply()
+                                                close.setOnClickListener()
+                                                {cv.visibility = View.GONE
+
+                                                }
+
+
+                                            }
+
+                                        }
+
+                                        totalHours.max / 2 -> {
+                                            if (!catAnimation!!) {
+
+                                                cv.findViewById<TextView>(R.id.interval_title_first).text =
+                                                    name
+                                                cv.findViewById<TextView>(R.id.interval_title_second).text =
+                                                    "is 50% completed. \n" +
+                                                            " \n" +
+                                                            " WELL DONE!!!"
+                                                cv.findViewById<ImageView>(R.id.interval_icon)
+                                                    .setImageResource(R.drawable.fifty)
+                                                cv.visibility = View.VISIBLE
+                                                val animation = AnimationUtils.loadAnimation(
+                                                    this@Home,
+                                                    R.anim.transition_two
+                                                )
+                                                cv.startAnimation(animation)
+                                                val editor = taskPreference.edit()
+                                                editor.putStringSet(
+                                                    "${name}_played_quarters",
+                                                    taskPlayed + quarter
+                                                )
+                                                editor.apply()
+                                                close.setOnClickListener()
+                                                {cv.visibility = View.GONE
+
+                                                }
+
+                                            }
+                                        }
+
+                                        totalHours.max * 3 / 4 -> {
+                                            if (!catAnimation!!) {
+                                                cv.findViewById<TextView>(R.id.interval_title_first).text =
+                                                    name
+                                                cv.findViewById<TextView>(R.id.interval_title_second).text =
+                                                    "is 75% completed. \n" +
+                                                            " \n" +
+                                                            " WELL DONE!!!"
+                                                cv.findViewById<ImageView>(R.id.interval_icon)
+                                                    .setImageResource(R.drawable.seventyfive)
+                                                cv.visibility = View.VISIBLE
+                                                val animation = AnimationUtils.loadAnimation(
+                                                    this@Home,
+                                                    R.anim.transition_three
+                                                )
+                                                cv.startAnimation(animation)
+
+                                                val editor = taskPreference.edit()
+                                                editor.putStringSet(
+                                                    "${name}_played_quarters",
+                                                    taskPlayed + quarter
+                                                )
+                                                editor.apply()
+                                                close.setOnClickListener()
+                                                {cv.visibility = View.GONE
+
+                                                }
+                                            }
+                                        }
+
+                                        totalHours.max -> {
+                                            if (!catAnimation!!) {
+                                                cv.visibility = View.VISIBLE
+                                                cv.findViewById<TextView>(R.id.interval_title_first).text =
+                                                    name
+                                                cv.findViewById<TextView>(R.id.interval_title_second).text =
+                                                    "is completed. \n" +
+                                                            " \n" +
+                                                            " WELL DONE!!!"
+                                                cv.findViewById<ImageView>(R.id.interval_icon)
+                                                    .setImageResource(R.drawable.hundred)
+                                                val animation = AnimationUtils.loadAnimation(
+                                                    this@Home,
+                                                    R.anim.transition_four
+                                                )
+                                                cv.startAnimation(animation)
+                                                val editor = taskPreference.edit()
+                                                editor.putStringSet(
+                                                    "${name}_played_quarters",
+                                                    taskPlayed + quarter
+                                                )
+                                                editor.apply()
+                                                close.setOnClickListener()
+                                                {cv.visibility = View.GONE
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+
+                                // Schedule the next update
+                                loop.postDelayed(this, checkTime)
+                            }
+                        }
+                        loop.post(updater)
+                    } catch (e: Exception) {
+                        //ddf
+                    }
+
+                }
+
+            }
             try {
+
+
+                var sortedItems = items.sortedBy { it.text }
+
                 val adapter = CustomAdapter(sortedItems as MutableList<ItemsViewModel>)
                 adapter.onTaskClickListener = { _ ->
 
@@ -310,24 +527,25 @@ class Home : AppCompatActivity() {
                             val databaseRef = itemsRef.document(item.text)
                             databaseRef.delete().addOnSuccessListener {
 
-                                    mutableItems.removeAt(position)
-                                    sortedItems = mutableItems
-                                    adapter.notifyItemRemoved(position)
+                                mutableItems.removeAt(position)
+                                sortedItems = mutableItems
+                                adapter.notifyItemRemoved(position)
 
-                                    Toast.makeText(
-                                        this@Home, "Removed successfully", Toast.LENGTH_SHORT
+                                Toast.makeText(
+                                    this@Home, "Removed successfully", Toast.LENGTH_SHORT
 
-                                    ).show()
-                                    recreate()
-                                }.addOnFailureListener { e ->
-                                    Toast.makeText(
-                                        this@Home,
-                                        "Failed to remove: ${e.message}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                ).show()
+                                recreate()
+                            }.addOnFailureListener { e ->
+                                Toast.makeText(
+                                    this@Home,
+                                    "Failed to remove: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
+
 
                     // Add swipe action buttons
                     override fun onChildDraw(
@@ -380,7 +598,7 @@ class Home : AppCompatActivity() {
 
                         } else if (dX < -50) {
 
-
+                               allDelete()
                             // Swiping to the left (delete action)
                             val deleteIcon =
                                 ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)
@@ -414,8 +632,9 @@ class Home : AppCompatActivity() {
 
                 val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
                 itemTouchHelper.attachToRecyclerView(recyclerview)
+
             } catch (e: Exception) {
-                // stuff to do aka error handling
+                //sds
             }
         }
     }
@@ -424,17 +643,30 @@ class Home : AppCompatActivity() {
     data class Task(val name: String, val hours2: String)
 
     data class ItemsViewModel(val text: String, val hours: String)
-
+    data class store(
+        var numbers: Int = 0
+    )
 
     fun notifs(context: Context) {
 
 
     }
 
+    private var num = 0
+
     class CustomAdapter(private val catList: MutableList<ItemsViewModel> = mutableListOf()) :
         RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
+        val s = store()
         var onTaskClickListener: ((Task) -> Unit)? = null
+        private var totalItemCount = 0
+
+        fun setTotalItemCount(count: Int) {
+            this.totalItemCount = count
+            s.numbers = count
+            Log.d("stuf3", s.numbers.toString())
+            notifyDataSetChanged()
+        }
 
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -451,52 +683,36 @@ class Home : AppCompatActivity() {
             val minutes = timeComponents[1].toInt()
             val totalMinutes = hours * 60 + minutes
             holder.progressBar.max = totalMinutes
-
-            val checkTime = 300000L // Update progress every 300000 milliseconds (5 minutes)
-
             val db = Firebase.firestore
-            val categoryRef = db.collection("CategoryStorage").document(itemsViewModel.text)
+            val tasksRef = db.collection("TaskStorage")
+            val category = itemsViewModel.text
+            Log.d("stuff5", itemsViewModel.text.toString())
+            val categoryRef =
+                db.collection("CategoryStorage").document(itemsViewModel.text.toString())
             categoryRef.get().addOnSuccessListener { document ->
-                try {
-                    val categoryHours = document.get("totalTimeCompleted").toString().toInt()
+
+try {
 
 
-                    val loop = Handler(Looper.getMainLooper())
-
-                    val updater = object : Runnable {
-                        override fun run() {
-
-                            holder.progressBar.progress = categoryHours
-
-                            when (holder.progressBar.progress) {
-                                holder.progressBar.max / 4 -> {
-
-                                }
-
-                                holder.progressBar.max / 2 -> {
-                                    // Perform action when progress reaches 50%
-                                }
-
-                                holder.progressBar.max * 3 / 4 -> {
-                                    // Perform action when progress reaches 75%
-                                }
-
-                                holder.progressBar.max -> {
-                                    // Perform action when progress reaches 100%
-                                }
-                            }
+    val categoryHours = document.get("totalTimeCompleted").toString().toInt()
+    holder.progressBar.progress = categoryHours
+}
+catch (e:Exception)
+{
+    /////ddfdfd
+}
+            }
+            tasksRef.whereEqualTo("categoryName", category).get()
+                .addOnSuccessListener { documents ->
+                    val count = documents.size()
+                    holder.textView3.text = "Tasks:${count.toString()}"
 
 
-                            // Schedule the next update
-                            loop.postDelayed(this, checkTime)
-                        }
-                    }
-                    loop.post(updater)
-                }catch (e:Exception)
-                {
-                    //STUFF
                 }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents: ", exception)
                 }
+
 
 
             holder.itemView.setOnClickListener {
@@ -516,6 +732,7 @@ class Home : AppCompatActivity() {
 
         }
 
+
         override fun getItemCount(): Int {
             return catList.size
         }
@@ -525,6 +742,7 @@ class Home : AppCompatActivity() {
             val textView2: TextView = this.itemView.findViewById(R.id.mHours_category)
             val tasksLayout: LinearLayout = this.itemView.findViewById(R.id.tasksLayout)
             val progressBar: ProgressBar = this.itemView.findViewById(R.id.progress_category)
+            val textView3: TextView = this.itemView.findViewById(R.id.mNum_tasks)
         }
 
         private fun populateTasks(holder: ViewHolder, categoryTask: String) {
@@ -564,6 +782,8 @@ class Home : AppCompatActivity() {
                     }
 
                 }
+                var totalItemCount = 0
+
 
                 holder.tasksLayout.removeAllViews()
 
@@ -576,6 +796,13 @@ class Home : AppCompatActivity() {
                     newView.layoutManager = LinearLayoutManager(holder.itemView.context)
                     val subAdapter = SubTasksAdapter(tasks)
                     newView.adapter = subAdapter
+                    totalItemCount += subAdapter.getItemCount()
+                    Log.d("stuff", subAdapter.getItemCount().toString())
+                    val e = store()
+                    e.numbers = totalItemCount
+                    val custom = CustomAdapter()
+                    custom.setTotalItemCount(totalItemCount)
+                    Log.d("STUFF2", e.numbers.toString())
                     holder.tasksLayout.addView(newView)
                 }
 
@@ -628,7 +855,11 @@ class Home : AppCompatActivity() {
         }
 
         override fun getItemCount(): Int {
+
+
             return tasks.size
+
+
         }
     }
 

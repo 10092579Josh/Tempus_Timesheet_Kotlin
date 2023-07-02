@@ -432,20 +432,30 @@ class TaskPage : AppCompatActivity() {
                 val document = queryResult.documents.lastOrNull()
                 if (document != null) {
                     val durationVar = document.getString("timeRemaining")
+                    val completedstuff = document.getString("completedHours")
+                    val intialduration = document.getString("duration")
                     Log.d("YourTag", "PauseDuration Retrieved: $durationVar")
+                    val hourd = intialduration?.split(":")
+                    val dhour1 = hourd?.getOrNull(0)?.toIntOrNull() ?: 0
+                    val min2 = hourd?.getOrNull(1)?.toIntOrNull() ?: 0
+                    val sec2 = hourd?.getOrNull(2)?.toIntOrNull() ?: 0
 
-                    // Split the duration string into hours and minutes
+                    val hourpart = completedstuff?.split(":")
+                    val dhour = hourpart?.getOrNull(0)?.toIntOrNull() ?: 0
+                    val min = hourpart?.getOrNull(1)?.toIntOrNull() ?: 0
+                    val sec = hourpart?.getOrNull(2)?.toIntOrNull() ?: 0
+
                     val parts = durationVar?.split(":")
                     val hours = parts?.getOrNull(0)?.toIntOrNull() ?: 0
                     val minutes = parts?.getOrNull(1)?.toIntOrNull() ?: 0
+                    val seconds = parts?.getOrNull(2)?.toIntOrNull() ?: 0
+                    var millis3 = (dhour1 * 60 * 60 * 1000) + (min2 * 60 * 1000) + (sec2 * 1000)
+                    val millis2 = (dhour * 60 * 60 * 1000) + (min * 60 * 1000) + (sec * 1000)
+                    val durationMillis = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000)
+                    var new = millis3 - durationMillis
 
-                    // Calculate the total duration in milliseconds
-                    val durationMillis = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000)
 
-                    val currentTimeMillis = currentTimeWithoutSeconds.toMillis()
-                    Log.d("YourTag", "Hours done: $currentTimeMillis")
-                    val differenceMillis = durationMillis - currentTimeMillis
-                    val differenceFormatted = form(differenceMillis)
+                    val differenceFormatted = form(new.toLong())
 
                     // Store the result in a variable
                     Log.d("YourTag", "Completed Time: $differenceFormatted")
@@ -464,18 +474,19 @@ class TaskPage : AppCompatActivity() {
                             val timeComponents = differenceFormatted.split(":")
                             val hours = timeComponents[0].toInt()
                             val minutes = timeComponents[1].toInt()
-                            val totalMinutes = hours * 60 + minutes
-                            categoryRef.update(
-                                "totalTimeCompleted", totalMinutes
+                            val seconds = timeComponents[2].toInt()
+                            val totalMinutes = hours * 60 + minutes + (seconds / 60)
+                            Log.d("total",totalMinutes.toString())
+                            categoryRef.update("totalTimeCompleted", totalMinutes.toString())
 
-                            )
+
+
                         }
                 }
 
 
             }
     }
-
     // Stark Code
     private fun String.toMillis(): Long {
         val parts = this.split(":")
@@ -488,9 +499,10 @@ class TaskPage : AppCompatActivity() {
     // Extension function to format milliseconds as a time string
     //Stark Code
     private fun form(millis: Long): String {
-        val minutes = (millis / (1000 * 60)) % 60
-        val hours = (millis / (1000 * 60 * 60)) % 24
-        return String.format("%02d:%02d", hours, minutes)
+        val hours = (millis / 1000) / 3600
+        val minutes = ((millis/ 1000) / 60) % 60
+        val seconds = (millis / 1000) % 60
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
     }
 
 

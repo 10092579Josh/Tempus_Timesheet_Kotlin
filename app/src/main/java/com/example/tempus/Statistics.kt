@@ -3,6 +3,7 @@ package com.example.tempus
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.OnBackPressedCallback
@@ -162,12 +163,21 @@ class Statistics : AppCompatActivity() {
                 val result = initialTime + initialMin
                 val graphPoints = result / 60.0f
 
-
                 val breakup2 = notedHours.split(":")
-                val initialNoteHours = breakup2[0].toInt() * 60
-                val initialNoteMin = breakup[1].toInt()
-                val resultNoted = initialNoteHours + initialNoteMin
-                val graphPointsNoted = resultNoted / 60.0f
+                var graphPointsNoted = 0.0f
+                if (breakup2.size == 3) {
+                    val initialNoteHours = breakup2[0].toInt() * 60 * 60
+                    val initialNoteMin = breakup2[1].toInt() * 60
+                    val initialNoteSec = breakup2[2].toInt()
+                    val resultNoted = initialNoteHours + initialNoteMin + initialNoteSec
+                    graphPointsNoted = resultNoted / 3600.0f
+                } else {
+                    Log.e("error", "Invalid time format: $notedHours")
+                    // Set graphPointsNoted to a default value or handle the error as appropriate for your application
+                }
+
+
+
 
                 val breaks2 = breakHours.split(":")
                 val resultbreaks = when (breaks2.size) {

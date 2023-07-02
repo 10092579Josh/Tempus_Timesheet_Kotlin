@@ -25,6 +25,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 import java.util.Calendar
@@ -309,6 +311,25 @@ class Tasks : AppCompatActivity() {
         datePickerDialog.show()
     }
 
+    private fun imageDelete() {
+
+
+        val db = FirebaseFirestore.getInstance()
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+
+        val storage = Firebase.storage
+
+        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
+            .addOnSuccessListener { tasks ->
+                for (task in tasks) {
+                    val taskName = task.getString("taskName") ?: ""
+                    val imageRef = storage.reference.child(taskName)
+                    imageRef.delete()
+                }
+            }
+
+
+    }
 
     private fun print() {
         val recyclerview = findViewById<RecyclerView>(R.id.mRecycler_task)
@@ -468,7 +489,7 @@ class Tasks : AppCompatActivity() {
 
                         } else if (dX < -50) {
 
-
+                             imageDelete()
                             // Swiping to the left (delete action)
                             val deleteIcon =
                                 ContextCompat.getDrawable(this@Tasks, R.drawable.delete_icon)

@@ -25,11 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="190px"
             android:layout_toRightOf="@id/logo"
-            android:fontFamily="@font/roboto"
+            android:fontFamily="@font/baloo_bhai_2"
             android:gravity="center"
             android:text="TEMPUS"
             android:textColor="@color/black"
-            android:textSize="40sp" />
+            android:textSize="50sp" />
 
 
         <ImageButton
@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
 
                 android:layout_height="wrap_content"
-                android:hint="username">
+                android:hint="Username">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -145,7 +145,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="password"
+                android:hint="Password"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -162,7 +162,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="confirm password"
+                android:hint="Confirm Password"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
