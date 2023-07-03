@@ -4,52 +4,46 @@ import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class TempusWidgetConfigureActivity : AppCompatActivity() {
-    private lateinit var spinnerTheme: Spinner
-    private lateinit var seekBarFontSize: SeekBar
-    private lateinit var textViewFontSize: TextView
-    private lateinit var buttonConfirm: Button
-    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+    private lateinit var theme: Spinner
+    private lateinit var seeksize: SeekBar
+    private lateinit var fsize: TextView
+    private lateinit var sub: Button
+    private var aid = AppWidgetManager.INVALID_APPWIDGET_ID
 
     @SuppressLint("SetTextI18n", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tempus_widget_configure)
 
-        spinnerTheme = findViewById(R.id.spinner_theme)
-        seekBarFontSize = findViewById(R.id.seek_bar_font_size)
-        textViewFontSize = findViewById(R.id.text_view_font_size)
-        buttonConfirm = findViewById(R.id.button_confirm)
-
-        // Set up the spinner with some theme options
-        val themes = arrayOf("Light", "Dark", "Colorful")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, themes)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerTheme.adapter = adapter
-
-        // Set up the seek bar with some font size options
-        seekBarFontSize.progress = 50 // Default value is 50%
-        textViewFontSize.text = "50%" // Show the progress as a percentage
+        theme = findViewById(R.id.spinner_theme)
+        seeksize = findViewById(R.id.seek_bar_font_size)
+        fsize = findViewById(R.id.text_view_font_size)
+        sub = findViewById(R.id.button_confirm)
 
 
+        val ct = arrayOf("Light", "Dark", "Colorful")
+        val tadapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ct)
+        tadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        theme.adapter = tadapter
 
-        // Listen to the spinner selection and save the theme preference
-        spinnerTheme.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+        seeksize.progress = 50
+        fsize.text = "50%"
+
+        theme.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val theme = parent?.getItemAtPosition(position) as String // Get the selected theme
-                saveThemePreference(theme) // Save it to a shared preferences file or a database
+                val timus = parent?.getItemAtPosition(position) as String
+                tpref(timus)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -57,11 +51,10 @@ class TempusWidgetConfigureActivity : AppCompatActivity() {
             }
         }
 
-        // Listen to the seek bar progress and save the font size preference
-        seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        seeksize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                textViewFontSize.text = "$progress%" // Show the progress as a percentage
-                saveFontSizePreference(progress) // Save it to a shared preferences file or a database
+                fsize.text = "$progress%"
+                fsizes(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -73,33 +66,27 @@ class TempusWidgetConfigureActivity : AppCompatActivity() {
             }
         })
 
-        // Listen to the edit text input and save the default time preference
 
-
-        // Listen to the button click and finish the configuration activity
-        buttonConfirm.setOnClickListener {
-            finishConfiguration() // Finish the configuration activity and update the widget
+        sub.setOnClickListener {
+            config()
         }
 
-        // Retrieve the app widget id from the intent
-        appWidgetId = intent?.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)!!
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+        aid = intent?.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)!!
+        if (aid == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish()
         }
     }
 
-    private fun saveThemePreference(theme: String) {
-        // Save the theme preference to a shared preferences file or a database
-        // For example, using a shared preferences file:
+    private fun tpref(theme: String) {
+
         val sharedPreferences = getSharedPreferences("widget_preferences", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString("theme", theme)
         editor.apply()
     }
 
-    private fun saveFontSizePreference(fontSize: Int) {
-        // Save the font size preference to a shared preferences file or a database
-        // For example, using a shared preferences file:
+    private fun fsizes(fontSize: Int) {
+
         val sharedPreferences = getSharedPreferences("widget_preferences", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putInt("font_size", fontSize)
@@ -107,9 +94,8 @@ class TempusWidgetConfigureActivity : AppCompatActivity() {
     }
 
 
-    private fun finishConfiguration() {
-        // Finish the configuration activity and update the widget
-        // For example, using an intent:
+    private fun config() {
+
         val appWidgetId = intent?.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
         val appWidgetManager = AppWidgetManager.getInstance(this)
         TempusWidget.updateAppWidget(this, appWidgetManager, appWidgetId ?: return)

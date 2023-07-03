@@ -197,7 +197,6 @@ class TaskForm : AppCompatActivity() {
         convertNoImage.compress(Bitmap.CompressFormat.PNG, 100, gotten)
         gotten.close()
 
-        // Upload the file to Firebase Storage
         val url = Uri.fromFile(drawPic)
         val picsUpload = noPicstore.putFile(url)
 

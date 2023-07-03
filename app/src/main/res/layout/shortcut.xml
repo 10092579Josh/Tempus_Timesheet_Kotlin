@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- this is the pop up menu that the user will see once the quick add, on the navigation bar, is clicked-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"

@@ -12,9 +12,9 @@ import android.widget.RemoteViews
 class TempusWidget : AppWidgetProvider() {
 
     companion object {
-        const val ACTION_START_STOPWATCH = "com.example.tempus.ACTION_START_STOPWATCH"
-        const val ACTION_STOP_STOPWATCH = "com.example.tempus.ACTION_STOP_STOPWATCH"
-        const val EXTRA_WIDGET_ID = "widgetId"
+        const val timer = "com.example.tempus.timer"
+        const val timer2 = "com.example.tempus.timer2"
+        const val id = "widgetId"
 
         fun updateAppWidget(
             context: Context,
@@ -23,50 +23,48 @@ class TempusWidget : AppWidgetProvider() {
         ) {
             val remoteViews = RemoteViews(context.packageName, R.layout.tempus_widget)
 
-            // Set click listeners for start and stop buttons
-            val intentStart = Intent(context, TempusWidget::class.java).apply {
-                action = ACTION_START_STOPWATCH
-                putExtra(EXTRA_WIDGET_ID, appWidgetId)
+
+            val timerintent = Intent(context, TempusWidget::class.java).apply {
+                action = timer
+                putExtra(id, appWidgetId)
             }
-            val pendingIntentStart = PendingIntent.getBroadcast(
+            val pending = PendingIntent.getBroadcast(
                 context,
                 appWidgetId,
-                intentStart,
+                timerintent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
-            remoteViews.setOnClickPendingIntent(R.id.button_start, pendingIntentStart)
+            remoteViews.setOnClickPendingIntent(R.id.button_start, pending)
 
             val intentStop = Intent(context, TempusWidget::class.java).apply {
-                action = ACTION_STOP_STOPWATCH
-                putExtra(EXTRA_WIDGET_ID, appWidgetId)
+                action = timer2
+                putExtra(id, appWidgetId)
             }
-            val pendingIntentStop = PendingIntent.getBroadcast(
+            val timerStop = PendingIntent.getBroadcast(
                 context,
                 appWidgetId,
                 intentStop,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
-            remoteViews.setOnClickPendingIntent(R.id.button_stop, pendingIntentStop)
+            remoteViews.setOnClickPendingIntent(R.id.button_stop, timerStop)
 
-            // Get the preferences for the widget
-            val sharedPreferences = context.getSharedPreferences(
+
+            val timerprefernce = context.getSharedPreferences(
                 "widget_preferences",
                 Context.MODE_PRIVATE
             )
-            val theme = sharedPreferences.getString("theme", "Light") ?: "Light"
-            val fontSize = sharedPreferences.getInt("font_size", 50)
-            val defaultTime = sharedPreferences.getLong("default_time", 10)
+            val timerstyle = timerprefernce.getString("theme", "Light") ?: "Light"
+            val fontSize = timerprefernce.getInt("font_size", 50)
+            val defaultTime = timerprefernce.getLong("default_time", 10)
 
-            // Apply the theme preference to the widget background
-            val backgroundColor = when (theme) {
+            val bc = when (timerstyle) {
                 "Light" -> Color.WHITE
                 "Dark" -> Color.GRAY
                 "Colorful" -> Color.rgb(116, 69, 221)
                 else -> Color.WHITE
             }
-            remoteViews.setInt(R.id.widget_layout, "setBackgroundColor", backgroundColor)
+            remoteViews.setInt(R.id.widget_layout, "setBackgroundColor", bc)
 
-            // Apply the font size preference to the widget text view
             remoteViews.setFloat(R.id.text_view_countdown, "setTextSize", fontSize.toFloat())
 
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
@@ -87,26 +85,26 @@ class TempusWidget : AppWidgetProvider() {
         super.onReceive(context, intent)
 
         when (intent.action) {
-            ACTION_START_STOPWATCH -> {
-                val widgetId =
-                    intent.getIntExtra(EXTRA_WIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-                if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            timer -> {
+                val ids =
+                    intent.getIntExtra(id, AppWidgetManager.INVALID_APPWIDGET_ID)
+                if (ids != AppWidgetManager.INVALID_APPWIDGET_ID) {
                     val remoteViews =
                         RemoteViews(context.packageName, R.layout.tempus_widget)
 
                     val intentStop = Intent(context, TempusWidget::class.java).apply {
-                        action = ACTION_STOP_STOPWATCH
-                        putExtra(EXTRA_WIDGET_ID, widgetId)
+                        action = timer2
+                        putExtra(id, ids)
                     }
                     val pendingIntentStop = PendingIntent.getBroadcast(
                         context,
-                        widgetId,
+                        ids,
                         intentStop,
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     )
                     remoteViews.setOnClickPendingIntent(R.id.button_stop, pendingIntentStop)
 
-                    // Start the stopwatch
+
                     remoteViews.setChronometer(
                         R.id.chronometer_stopwatch,
                         SystemClock.elapsedRealtime(),
@@ -114,30 +112,30 @@ class TempusWidget : AppWidgetProvider() {
                         true
                     )
 
-                    val appWidgetManager = AppWidgetManager.getInstance(context)
-                    appWidgetManager.updateAppWidget(widgetId, remoteViews)
+                    val tempmanagewr = AppWidgetManager.getInstance(context)
+                    tempmanagewr.updateAppWidget(ids, remoteViews)
                 }
             }
-            ACTION_STOP_STOPWATCH -> {
-                val widgetId =
-                    intent.getIntExtra(EXTRA_WIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-                if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            timer2 -> {
+                val tempus =
+                    intent.getIntExtra(id, AppWidgetManager.INVALID_APPWIDGET_ID)
+                if (tempus != AppWidgetManager.INVALID_APPWIDGET_ID) {
                     val remoteViews =
                         RemoteViews(context.packageName, R.layout.tempus_widget)
 
                     val intentStart = Intent(context, TempusWidget::class.java).apply {
-                        action = ACTION_START_STOPWATCH
-                        putExtra(EXTRA_WIDGET_ID, widgetId)
+                        action = timer
+                        putExtra(id, tempus)
                     }
-                    val pendingIntentStart = PendingIntent.getBroadcast(
+                    val tStart = PendingIntent.getBroadcast(
                         context,
-                        widgetId,
+                        tempus,
                         intentStart,
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     )
-                    remoteViews.setOnClickPendingIntent(R.id.button_start, pendingIntentStart)
+                    remoteViews.setOnClickPendingIntent(R.id.button_start, tStart)
 
-                    // Stop the stopwatch
+
                     remoteViews.setChronometer(
                         R.id.chronometer_stopwatch,
                         SystemClock.elapsedRealtime(),
@@ -145,8 +143,8 @@ class TempusWidget : AppWidgetProvider() {
                         false
                     )
 
-                    val appWidgetManager = AppWidgetManager.getInstance(context)
-                    appWidgetManager.updateAppWidget(widgetId, remoteViews)
+                    val awm = AppWidgetManager.getInstance(context)
+                    awm.updateAppWidget(tempus, remoteViews)
                 }
             }
         }

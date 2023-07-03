@@ -295,15 +295,15 @@ class AppSettings : AppCompatActivity() {
     private var isDialogOpen = false
     private fun restartApp() {
         val intent = Intent(applicationContext, Home::class.java)
-        val mPendingIntentId = 0
-        val mPendingIntent = PendingIntent.getActivity(
+        val nid = 0
+        val nid2 = PendingIntent.getActivity(
             applicationContext,
-            mPendingIntentId,
+            nid,
             intent,
             PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val mgr = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+        val amgr = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        amgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, nid2)
         exitProcess(0)
     }
 
