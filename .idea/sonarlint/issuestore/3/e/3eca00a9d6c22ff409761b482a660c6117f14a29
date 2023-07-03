@@ -1,0 +1,10 @@
+
+>kotlin:S1128-"Remove this unused import.(¡ùøüÿÿÿÿ8Å¹Ş‘1
+gkotlin:S101ç"HRename class "store" to match the regular expression ^[A-Z][a-zA-Z0-9]*$(¾¯×à8Üö“¸‘1
+skotlin:S1192È"NDefine a constant instead of duplicating this literal " WELL DONE!!!" 4 times.(ƒÕËíÿÿÿÿÿ8İö“¸‘1
+wkotlin:S3776…"RRefactor this method to reduce its Cognitive Complexity from 65 to the 15 allowed.(Éöú¥øÿÿÿÿ8àö“¸‘1
+wkotlin:S3776¨"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ñûÌùúÿÿÿÿ8áö“¸‘1
+lkotlin:S6516§"LReplace explicit functional interface implementation with lambda expression.(âó‘¥8äö“¸‘1
+zkotlin:S1186ë"ZAdd a nested comment explaining why this function is empty or complete the implementation.(ùà¢Û8äö“¸‘1
+Lkotlin:S6518š",Replace function call with indexed accessor.(¹®à8èö“¸‘1
+Lkotlin:S6518¢",Replace function call with indexed accessor.(¹®à8èö“¸‘1
