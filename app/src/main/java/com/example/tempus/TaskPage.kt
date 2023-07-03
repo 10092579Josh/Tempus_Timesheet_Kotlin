@@ -36,6 +36,7 @@ import java.util.Locale
 // THIS PAGE HANDLES THE DISPLAY OF THE TASKS WHEN A SPECIFIC TASK IS CLICKED
 class TaskPage : AppCompatActivity() {
 
+    //Button object instantiaion
     private var taskCountDown: TextView? = null
     private var breakCount: TextView? = null
 
@@ -83,26 +84,25 @@ class TaskPage : AppCompatActivity() {
                 }
             }
             onBackPressedDispatcher.addCallback(this, tasksBack)
+            //Instantiation of methods
             security()
             FirebaseApp.initializeApp(this)
             taskPopulation()
             getBreaks()
+            //Assigning the UI elements to variables
             val taskImage = findViewById<ImageView>(R.id.task_image)
             val homebtn = findViewById<ImageButton>(R.id.hometbtn)
             val breaksbtn = findViewById<ImageButton>(R.id.breakstbtn)
             val statsbtn = findViewById<ImageButton>(R.id.statstbtn)
             val settingsbtn = findViewById<ImageButton>(R.id.settingstbtn)
             val addbtn = findViewById<ImageButton>(R.id.addbtn)
-
+            //Linking the text views
             taskCountDown = findViewById(R.id.text_view_countdown)
             breakCount = findViewById(R.id.break_view_countdown)
-
             stop = findViewById(R.id.task_set)
             breakStop = findViewById(R.id.break_set)
-
             playPause = findViewById(R.id.task_start_pause)
             playPauseBreak = findViewById(R.id.break_start_pause)
-
             restart = findViewById(R.id.task_reset)
             restartBreak = findViewById(R.id.break_reset)
 
@@ -116,7 +116,7 @@ class TaskPage : AppCompatActivity() {
                 playPauseBreak!!.visibility = View.GONE
                 restartBreak!!.visibility = View.GONE
             }
-
+            //The playPause for tasktimer setOnClickListener
             playPause!!.setOnClickListener {
                 if (taskRunning) {
                     pauseTask()
@@ -124,7 +124,7 @@ class TaskPage : AppCompatActivity() {
                     startTimer()
                 }
             }
-
+            //The playPause21 breakstimer setOnClickListener
             playPauseBreak!!.setOnClickListener {
                 if (breaksRunning) {
                     pauseBreaks()
@@ -212,18 +212,21 @@ class TaskPage : AppCompatActivity() {
 
     }
 
+    //sets the start time of the task timer
     private fun startTimeTask(milliseconds: Long) {
         startTime = milliseconds
         reset()
 
     }
 
+    //sets the start time of the break timer
     private fun startTimeBreaks(milliseconds: Long) {
         startTimeBreaks = milliseconds
         resetBreak()
 
     }
 
+    // This function starts the timer and handles the notifications
     private fun startTimer() {
         createNotificationChannel()
 
@@ -242,7 +245,7 @@ class TaskPage : AppCompatActivity() {
         // Set the end time for the timer
         finish = System.currentTimeMillis() + remainingTime
 
-        // Start the countdown timer
+        // Starting of the countdown timer
         timer = object : CountDownTimer(remainingTime, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 remainingTime = millisUntilFinished
@@ -259,10 +262,10 @@ class TaskPage : AppCompatActivity() {
                     )
                 }
 
-                // Update the notification with the current countdown time
 
             }
 
+            // When the timer is done this methods runs
             override fun onFinish() {
                 taskRunning = false
                 updateViewTask()
@@ -281,6 +284,7 @@ class TaskPage : AppCompatActivity() {
         updateViewTask()
     }
 
+    // This method begins the break timer and handles the notifications
     private fun beginBreak() {
         createNotificationChannel()
         // Build the initial notification without the timer countdown
@@ -311,6 +315,7 @@ class TaskPage : AppCompatActivity() {
                 }
             }
 
+            // This function is tasked to handle what happens when the break timer is done
             override fun onFinish() {
                 breaksRunning = false
                 updateViewBreak()
@@ -327,6 +332,7 @@ class TaskPage : AppCompatActivity() {
         updateViewBreak()
     }
 
+    //Method to handle the updating of the notification
     private fun updates(contentText: String) {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
@@ -341,7 +347,7 @@ class TaskPage : AppCompatActivity() {
         notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
-
+    //The function calculates the remaining time in hours, minutes, and seconds from a variable remainingTime
     private fun calculationsTask(): String {
         val hours = (remainingTime / 1000) / 3600
         val minutes = ((remainingTime / 1000) / 60) % 60
@@ -357,6 +363,7 @@ class TaskPage : AppCompatActivity() {
     }
 
 
+    //This function establishes the creation of the notification channel that the timers are using
     private fun createNotificationChannel() {
         val channelName = "Timer Channel"
         val channelDescription = "Channel for displaying timer notifications"
@@ -371,44 +378,10 @@ class TaskPage : AppCompatActivity() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun pauseBreaks() {
-        timerBreaks!!.cancel()
-        breaksRunning = false
-        updateViewBreak()
-        val currentTime = remainingTimeBreak
-        Log.d("YourTag", "PauseDurationBreaks Retrieved: $currentTime")
-        val currentTimeFormatted = calculationsTask()
-        Log.d("YourTag", "PauseDurationBreaks Retrieved: $currentTimeFormatted")
-        val itemId = intent.getStringExtra("itemId")
-        val db = FirebaseFirestore.getInstance()
-        val userid = FirebaseAuth.getInstance().currentUser?.uid
-        db.collection("TaskStorage")
-            .whereEqualTo("userIdTask", userid.toString().trim())
-            .whereEqualTo("taskName", itemId)
-            .get()
-            .addOnSuccessListener { queryResult ->
-                // Get the document object
-                val document = queryResult.documents.lastOrNull()
-                if (document != null) {
-                    val breakDurationVar = document.get("breakDurations")
-                    Log.d("YourTag", "PauseDuration Retrieved: $breakDurationVar")
-                    val minutes = currentTime / 60000
-                    val seconds = (currentTime % 60000) / 1000
-                    val timeString = String.format("%02d:%02d", minutes, seconds)
 
-
-
-                    Log.d("totalmins",seconds.toString())
-
-                    document.reference.update("breakDurations",timeString)
-
-
-                }
-            }
-    }
-
-    // Stark Code
+    //Pauses the task timer, updates the view, and performs database operations to store the remaining time and calculate completed time for the task.
     private fun pauseTask() {
+        // Cancel the timer and update taskRunning and the view.
         timer!!.cancel()
         taskRunning = false
         updateViewTask()
@@ -417,12 +390,14 @@ class TaskPage : AppCompatActivity() {
         Log.d("YourTag", "PauseDuration Retrieved: $currentTimeFormatted")
         val currentTimeWithoutSeconds = currentTimeFormatted.substringBeforeLast(":")
         Log.d("YourTag", "currentTimeWithoutSeconds: $currentTimeWithoutSeconds")
-
+        // Retrieve the itemId from the intent.
         val itemId = intent.getStringExtra("itemId")
 
         val db = FirebaseFirestore.getInstance()
-
+        //gets the currnt value of the signed in user id
         val userid = FirebaseAuth.getInstance().currentUser?.uid
+
+        //Perform database operations.
         db.collection("TaskStorage")
             .whereEqualTo("userIdTask", userid.toString().trim())
             .whereEqualTo("taskName", itemId)
@@ -431,36 +406,42 @@ class TaskPage : AppCompatActivity() {
                 // Get the document object
                 val document = queryResult.documents.lastOrNull()
                 if (document != null) {
+                    // Retrieve relevant fields from the document.
                     val durationVar = document.getString("timeRemaining")
                     val completedstuff = document.getString("completedHours")
                     val intialduration = document.getString("duration")
                     Log.d("YourTag", "PauseDuration Retrieved: $durationVar")
+                    // Split and parse hour, minute, and second components of initial duration.
                     val hourd = intialduration?.split(":")
                     val dhour1 = hourd?.getOrNull(0)?.toIntOrNull() ?: 0
                     val min2 = hourd?.getOrNull(1)?.toIntOrNull() ?: 0
                     val sec2 = hourd?.getOrNull(2)?.toIntOrNull() ?: 0
-
+                    // Split and parse hour, minute, and second components of completed hours.
                     val hourpart = completedstuff?.split(":")
                     val dhour = hourpart?.getOrNull(0)?.toIntOrNull() ?: 0
                     val min = hourpart?.getOrNull(1)?.toIntOrNull() ?: 0
                     val sec = hourpart?.getOrNull(2)?.toIntOrNull() ?: 0
-
+                    // Split and parse hour, minute, and second components of remaining time.
                     val parts = durationVar?.split(":")
                     val hours = parts?.getOrNull(0)?.toIntOrNull() ?: 0
                     val minutes = parts?.getOrNull(1)?.toIntOrNull() ?: 0
                     val seconds = parts?.getOrNull(2)?.toIntOrNull() ?: 0
+                    // Calculate millis3 and millis2 for duration calculations.
                     var millis3 = (dhour1 * 60 * 60 * 1000) + (min2 * 60 * 1000) + (sec2 * 1000)
                     val millis2 = (dhour * 60 * 60 * 1000) + (min * 60 * 1000) + (sec * 1000)
-                    val durationMillis = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000)
+                    // Calculate durationMillis for remaining time calculations.
+                    val durationMillis =
+                        (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000)
+                    // Calculate the new remaining time.
                     var new = millis3 - durationMillis
 
-
+                    // Format the calculated difference.
                     val differenceFormatted = form(new.toLong())
 
-                    // Store the result in a variable
+
                     Log.d("YourTag", "Completed Time: $differenceFormatted")
 
-                    // Update the value of completedHours to result using update()
+                    // Update the value of "timeRemaining" and "completedHours" fields in the document.
                     document.reference.update("timeRemaining", currentTimeFormatted)
                     document.reference.update("completedHours", differenceFormatted)
 
@@ -469,25 +450,24 @@ class TaskPage : AppCompatActivity() {
                     val db = Firebase.firestore
                     val categoryRef =
                         db.collection("CategoryStorage").document(catname.text.toString())
+                    // Retrieve the category document and perform updates.
                     categoryRef.get()
                         .addOnSuccessListener {
+                            // Split and parse hour, minute, and second components of the calculated difference.
                             val timeComponents = differenceFormatted.split(":")
                             val hours = timeComponents[0].toInt()
                             val minutes = timeComponents[1].toInt()
                             val seconds = timeComponents[2].toInt()
                             val totalMinutes = hours * 60 + minutes + (seconds / 60)
-                            Log.d("total",totalMinutes.toString())
+                            Log.d("total", totalMinutes.toString())
+                            // Update the "totalTimeCompleted" field in the category document.
                             categoryRef.update("totalTimeCompleted", totalMinutes.toString())
-
-
-
                         }
                 }
-
-
             }
     }
-    // Stark Code
+
+
     private fun String.toMillis(): Long {
         val parts = this.split(":")
         val hours = parts.getOrNull(0)?.toLongOrNull() ?: 0
@@ -496,22 +476,66 @@ class TaskPage : AppCompatActivity() {
     }
 
 
-    // Extension function to format milliseconds as a time string
-    //Stark Code
-    private fun form(millis: Long): String {
-        val hours = (millis / 1000) / 3600
-        val minutes = ((millis/ 1000) / 60) % 60
-        val seconds = (millis / 1000) % 60
-        return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
+    // Pauses the breaks timer, updates the view, and performs database operations to store the remaining break time.
+    private fun pauseBreaks() {
+        // Cancel the breaks timer and update breaksRunning and the view.
+        timerBreaks!!.cancel()
+        breaksRunning = false
+        updateViewBreak()
+        //Retrieve the remaining break time
+        val currentTime = remainingTimeBreak
+        Log.d("YourTag", "PauseDurationBreaks Retrieved: $currentTime")
+        // Retrieve the formatted current time.
+        val currentTimeFormatted = calculationsTask()
+        Log.d("YourTag", "PauseDurationBreaks Retrieved: $currentTimeFormatted")
+        // Retrieve the itemId from the intent.
+        val itemId = intent.getStringExtra("itemId")
+        val db = FirebaseFirestore.getInstance()
+        // Retrieve the current user's ID.
+        val userid = FirebaseAuth.getInstance().currentUser?.uid
+        // Perform database operations.
+        db.collection("TaskStorage")
+            .whereEqualTo("userIdTask", userid.toString().trim())
+            .whereEqualTo("taskName", itemId)
+            .get()
+            .addOnSuccessListener { queryResult ->
+                // Get the document object
+                val document = queryResult.documents.lastOrNull()
+                if (document != null) {
+                    // Retrieve the break duration from the document.
+                    val breakDurationVar = document.get("breakDurations")
+                    Log.d("YourTag", "PauseDuration Retrieved: $breakDurationVar")
+                    // Calculate minutes and seconds from the remaining break time.
+                    val minutes = currentTime / 60000
+                    val seconds = (currentTime % 60000) / 1000
+                    // Format the time as a string.
+                    val timeString = String.format("%02d:%02d", minutes, seconds)
+                    Log.d("totalmins", seconds.toString())
+                    // Update the "breakDurations" field in the document with the remaining break time.
+                    document.reference.update("breakDurations", timeString)
+                }
+            }
     }
 
+    // Extension function to format milliseconds as a time string
 
+    //resets the task timer
     private fun reset() {
         remainingTime = startTime
         updateText()
         updateViewTask()
     }
 
+
+    //Formats the time in mills to a hour min and seconds format
+    private fun form(millis: Long): String {
+        val hours = (millis / 1000) / 3600
+        val minutes = ((millis / 1000) / 60) % 60
+        val seconds = (millis / 1000) % 60
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
+    }
+
+    //Resets the break timer when the button is pressed
     private fun resetBreak() {
         remainingTimeBreak = startTimeBreaks
         updateTimerBreaks()
@@ -519,6 +543,7 @@ class TaskPage : AppCompatActivity() {
     }
 
 
+    //The function calculates the remaining time in hours, minutes, and seconds from a variable for the task timer
     private fun updateText() {
         val hours = (remainingTime / 1000).toInt() / 3600
         val minutes = ((remainingTime / 1000) % 3600).toInt() / 60
@@ -531,6 +556,7 @@ class TaskPage : AppCompatActivity() {
         taskCountDown!!.text = timeLeftFormatted
     }
 
+    //The function calculates the remaining time in hours, minutes, and seconds from a variable for the break timer
     private fun updateTimerBreaks() {
         val hours = (remainingTimeBreak / 1000).toInt() / 3600
         val minutes = ((remainingTimeBreak / 1000) % 3600).toInt() / 60
@@ -543,6 +569,7 @@ class TaskPage : AppCompatActivity() {
         breakCount!!.text = timeLeftFormatted
     }
 
+    //Method to controll the visability of the buttons for the task timer
     private fun updateViewTask() {
         when {
             taskRunning -> {
@@ -579,6 +606,7 @@ class TaskPage : AppCompatActivity() {
         }
     }
 
+    //Method to controll the visability of the buttons for the break timer
     private fun updateViewBreak() {
         when {
             breaksRunning -> {
@@ -613,6 +641,7 @@ class TaskPage : AppCompatActivity() {
     }
 
 
+    //Method to that triggers when the timer is stoped it is stored in SharedPreferences
     override fun onStop() {
         super.onStop()
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
@@ -623,7 +652,7 @@ class TaskPage : AppCompatActivity() {
         editor.putLong("endTime", finish)
         editor.apply()
         when {
-            timer == null && !taskRunning-> {
+            timer == null && !taskRunning -> {
                 timer?.cancel()
             }
         }
@@ -645,6 +674,7 @@ class TaskPage : AppCompatActivity() {
         }
     }
 
+    //Method to that triggers when the timer is started it is stored in SharedPreferences
     override fun onStart() {
         super.onStart()
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
@@ -701,6 +731,7 @@ class TaskPage : AppCompatActivity() {
         }
     }
 
+
     private fun security() {
 
         val auth = FirebaseAuth.getInstance()
@@ -723,7 +754,7 @@ class TaskPage : AppCompatActivity() {
         user?.reload()?.addOnCompleteListener { task ->
             when {
                 task.isSuccessful -> {
-                    //stuff to do
+
 
                 }
 
@@ -751,6 +782,7 @@ class TaskPage : AppCompatActivity() {
 
     }
 
+    //Method to get the breaks value from the database
     private fun getBreaks() {
         val itemId = intent.getStringExtra("itemId")
         Log.d("YourTag", "ItemID: $itemId")
@@ -778,10 +810,12 @@ class TaskPage : AppCompatActivity() {
                             val seconds = breakParts[1].toLongOrNull() ?: 0
                             minutes * 60000 + seconds * 1000
                         }
+
                         1 -> {
                             val minutes = breakval.toLongOrNull() ?: 0
                             minutes * 60000
                         }
+
                         else -> 0
                     }
                     Log.d("YourTag", "BreakVal: $breakValInMilliseconds")
@@ -791,10 +825,11 @@ class TaskPage : AppCompatActivity() {
             }
     }
 
+    //This method gets the values from the database and displaies them in the text fields. It is also responsible for getting the value using by the task timer
     private fun taskPopulation() {
-//THIS INSTANTIATES THE FIELDS AND CREATES VARIABLES
-        try {
 
+        try {
+            // Retrieve references to various TextView and ImageView UI elements used in the task details screen.
             val tName = findViewById<TextView>(R.id.task_name)
             val catname = findViewById<TextView>(R.id.category_name)
             val desc = findViewById<TextView>(R.id.description_text)
@@ -815,7 +850,7 @@ class TaskPage : AppCompatActivity() {
 
 
             val userid = FirebaseAuth.getInstance().currentUser?.uid
-// Query Firestore to get the data for the clicked item
+            // Query Firestore to get the data for the clicked item
             db.collection("TaskStorage")
                 .whereEqualTo("userIdTask", userid.toString().trim())
                 .whereEqualTo("taskName", itemId)
@@ -840,6 +875,7 @@ class TaskPage : AppCompatActivity() {
                         max.text = document.getString("maxGoal")
                         date.text = document.getString("dateAdded")
                         val url = document.getString("imageURL")
+                        //The below code gets the duration field in the database and then spits it up into three parts
                         val durationParts = timeRem?.split(":")
                         val durationInMillis = when (durationParts?.size) {
                             3 -> {
@@ -848,13 +884,16 @@ class TaskPage : AppCompatActivity() {
                                 val seconds = durationParts[2].toLong()
                                 hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000
                             }
+
                             2 -> {
                                 val hours = durationParts[0].toLong()
                                 val minutes = durationParts[1].toLong()
                                 hours * 60 * 60 * 1000 + minutes * 60 * 1000
                             }
+
                             else -> 0
                         }
+                        //sets the Task timer to the value of the duration in millis
                         startTimeTask(durationInMillis)
 
 
@@ -899,6 +938,8 @@ class TaskPage : AppCompatActivity() {
                 }
             }
         }
+
+    //Takes a picture using the device's camera, displays it in an ImageView, and uploads it to Firebase Storage.
     private val camera =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { photo: Bitmap? ->
 
@@ -928,6 +969,7 @@ class TaskPage : AppCompatActivity() {
         }
 
 
+    //Deletes all files and directories within the cache directory of the given context.
     private fun cacheClosure(context: Context) {
         try {
             val location: File = context.cacheDir
@@ -937,6 +979,7 @@ class TaskPage : AppCompatActivity() {
         }
     }
 
+    //Recursively deletes all files and directories under the given directory.
     private fun appFiles(dir: File?): Boolean {
         if (dir != null && dir.isDirectory) {
             val sub: Array<String> = dir.list() as Array<String>

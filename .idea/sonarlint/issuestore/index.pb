@@ -699,8 +699,6 @@ G.idea/sonarlint/issuestore/2/b/2b8ce565720bbd3ec2dfc5db0e5660ff10f0c893,b\5\b5
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 e
 5app/src/main/java/com/example/tempus/PrivacyPolicy.kt,3\5\35a2f4816dd9e10df70ecf27a83acd4039e5decc
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 @
 app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
 d
@@ -713,3 +711,21 @@ f
 -app/src/main/java/com/example/tempus/Login.kt,4\b\4bded21f387cd4797d12f08f004d161932e81561
 u
 Eapp/src/main/java/com/example/tempus/TempusWidgetConfigureActivity.kt,7\5\752e4cf7dd2d3fa6fb0943d72ca2d6b4925ec58b
+d
+4app/src/main/java/com/example/tempus/SplashScreen.kt,7\e\7e89f39c0ae53f0621d1acf587e9dfd33dc8c90b
+d
+4app/src/main/java/com/example/tempus/TempusWidget.kt,5\4\54e5ecc6c80eb3e02b9c9bfee984a8e3956e36ad
+c
+3app/src/main/java/com/example/tempus/AppSettings.kt,f\5\f5cbe409350da07321fa52d07f60f4ab8bea7659
+b
+2app/src/main/java/com/example/tempus/Statistics.kt,b\f\bf7c80de1130a6c8d0d0a21ebf760cc3520f53cb
+_
+/app/src/main/java/com/example/tempus/Storage.kt,3\a\3a26f21834c45c91c05c9da5dddf15fa938fae34
+^
+.app/src/main/java/com/example/tempus/Breaks.kt,e\c\ecf53e93639713defe00939f639849a4e03123a9
+^
+.app/src/main/java/com/example/tempus/Errors.kt,f\c\fc837ed61b22d047e121f3b3bf182a554df84078
+d
+4app/src/main/java/com/example/tempus/Registration.kt,8\d\8d0ffe530fa84e079be5943b6ad3e228565fa479
+c
+3app/src/main/java/com/example/tempus/UserDetails.kt,8\b\8b96ef95b26177964def010b1bf7d9c695f26ae7

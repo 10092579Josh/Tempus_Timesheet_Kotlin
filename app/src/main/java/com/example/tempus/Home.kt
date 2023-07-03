@@ -256,37 +256,6 @@ class Home : AppCompatActivity() {
     }
 
 
-    private fun allDelete() {
-
-        val db = FirebaseFirestore.getInstance()
-        val userid = FirebaseAuth.getInstance().currentUser?.uid
-
-        val storage = Firebase.storage
-
-        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
-            .addOnSuccessListener { tasks ->
-                for (task in tasks) {
-                    val taskName = task.getString("taskName") ?: ""
-                    val imageRef = storage.reference.child(taskName)
-                    imageRef.delete()
-                }
-            }
-
-
-
-
-        db.collection("TaskStorage").whereEqualTo("userIdTask", userid).get()
-            .addOnSuccessListener { tasks ->
-                for (task in tasks) {
-                    db.collection("TaskStorage").document(task.id).delete()
-                }
-            }
-
-
-
-
-    }
-
 
     private var animationsPlayed = false
     private fun print() {
@@ -598,7 +567,7 @@ val close = findViewById<ImageButton>(R.id.interval_btn_exit)
 
                         } else if (dX < -50) {
 
-                               allDelete()
+
                             // Swiping to the left (delete action)
                             val deleteIcon =
                                 ContextCompat.getDrawable(this@Home, R.drawable.delete_icon)

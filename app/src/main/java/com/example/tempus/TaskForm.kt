@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -35,6 +36,8 @@ import com.google.firebase.storage.ktx.storage
 import de.keyboardsurfer.android.widget.crouton.Crouton
 import de.keyboardsurfer.android.widget.crouton.Style
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Calendar
 import kotlin.math.absoluteValue
 
@@ -95,11 +98,12 @@ class TaskForm : AppCompatActivity() {
                 } else {
                     val builder = AlertDialog.Builder(this)
                     builder.setTitle("Choose an option")
-                    builder.setItems(arrayOf("Take a photo", "Pick from gallery")) { _, which ->
+                    builder.setItems(arrayOf("Take a photo?", "Pick from gallery?","No Picture?")) { _, which ->
                         when (which) {
 
                             0 -> camera.launch(null)
                             1 -> galleryContent.launch("imageURL/*")
+                            2 -> noPic()
                         }
                     }
                     val dialog = builder.create()
@@ -178,6 +182,31 @@ class TaskForm : AppCompatActivity() {
         } catch (e: Exception) {
             Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
         }
+    }
+    fun noPic() {
+        val task = findViewById<EditText>(R.id.taskNameInput)
+        val noPicstore = Firebase.storage.reference.child(task.text.toString().trim())
+        val noTaskimages = findViewById<ImageView>(R.id.imgGallery)
+        noTaskimages.setImageResource(R.drawable.task)
+
+        val convertNoImage = BitmapFactory.decodeResource(resources, R.drawable.task)
+
+
+        val drawPic = File(cacheDir, "task.png")
+        val gotten = FileOutputStream(drawPic)
+        convertNoImage.compress(Bitmap.CompressFormat.PNG, 100, gotten)
+        gotten.close()
+
+        // Upload the file to Firebase Storage
+        val url = Uri.fromFile(drawPic)
+        val picsUpload = noPicstore.putFile(url)
+
+        picsUpload.addOnSuccessListener {
+
+        }.addOnFailureListener {
+
+        }
+
     }
 
     private fun security() {
@@ -272,6 +301,8 @@ class TaskForm : AppCompatActivity() {
             }
         }
 
+    //method for the datepicker
+    // to display selected  date
 
     fun selectDate(view: View) {
         try {
@@ -290,6 +321,7 @@ class TaskForm : AppCompatActivity() {
                 month,
                 dayOfMonth
             )
+            //convert to text format
             datePickerDialog.show()
         } catch (e: Exception) {
             Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
@@ -297,7 +329,8 @@ class TaskForm : AppCompatActivity() {
 
 
     }
-
+    //method for the timepicker start time
+    // to display selected  start time
     fun selectTime(view: View) {
         try {
             val calendar = Calendar.getInstance()
@@ -307,7 +340,7 @@ class TaskForm : AppCompatActivity() {
                 this,
                 { _, hourOfDay, minute ->
                     val selectedStartTime =
-                        String.format("%02d:%02d", hourOfDay, minute - minute % 15)
+                        String.format("%02d:%02d", hourOfDay, minute)
                     selectedStartTimeText.text = selectedStartTime
                 },
                 hourOfDay,
@@ -315,7 +348,7 @@ class TaskForm : AppCompatActivity() {
                 true
             ) {
                 override fun onTimeChanged(view: TimePicker?, hourOfDay: Int, minute: Int) {
-                    val roundedMinute = (minute / 15) * 15
+                    val roundedMinute = (minute / 1) * 1
                     when {
                         minute != roundedMinute -> {
                             view?.minute = roundedMinute
@@ -323,7 +356,7 @@ class TaskForm : AppCompatActivity() {
                     }
                 }
             }
-
+            //convert start time to text format
             timePickerDialog.show()
         } catch (e: Exception) {
             Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
@@ -331,7 +364,8 @@ class TaskForm : AppCompatActivity() {
 
 
     }
-
+    //method for the timepicker end time
+    // to display selected end time
     fun selectEndTime(view: View) {
         try {
 
@@ -345,7 +379,7 @@ class TaskForm : AppCompatActivity() {
                 this,
                 { _, hourOfDay, minute ->
                     val selectedEndTime =
-                        String.format("%02d:%02d", hourOfDay, minute - minute % 15)
+                        String.format("%02d:%02d", hourOfDay, minute )
                     selectedEndTimeText.text = selectedEndTime
                 },
                 hourOfDay,
@@ -353,7 +387,7 @@ class TaskForm : AppCompatActivity() {
                 true
             ) {
                 override fun onTimeChanged(view: TimePicker?, hourOfDay: Int, minute: Int) {
-                    val roundedMinute = (minute / 15) * 15
+                    val roundedMinute = (minute / 1) * 1
                     when {
                         minute != roundedMinute -> {
                             view?.minute = roundedMinute
@@ -361,7 +395,7 @@ class TaskForm : AppCompatActivity() {
                     }
                 }
             }
-
+            //convert to end time to text format
             timePickerDialog.show()
         } catch (e: Exception) {
             Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()

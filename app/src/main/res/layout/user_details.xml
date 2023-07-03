@@ -84,7 +84,7 @@
 
                         <EditText
                             android:id="@+id/nameEditText"
-                            android:layout_width="match_parent"
+                            android:layout_width="250dp"
                             android:layout_height="50dp"
                             android:layout_below="@id/nameTextview"
                             android:inputType="text"
@@ -102,7 +102,7 @@
 
                         <EditText
                             android:id="@+id/surnameEditText"
-                            android:layout_width="match_parent"
+                            android:layout_width="250dp"
                             android:layout_height="50dp"
                             android:layout_below="@id/surnameView"
                             android:inputType="text"
@@ -120,7 +120,7 @@
 
                         <EditText
                             android:id="@+id/emailEditText"
-                            android:layout_width="match_parent"
+                            android:layout_width="250dp"
                             android:layout_height="50dp"
                             android:layout_below="@id/emailView"
                             android:inputType="textEmailAddress"
@@ -138,7 +138,7 @@
 
                         <EditText
                             android:id="@+id/userName_text"
-                            android:layout_width="match_parent"
+                            android:layout_width="250dp"
                             android:layout_height="50dp"
                             android:layout_below="@id/userName"
                             android:inputType="textEmailAddress"
@@ -156,7 +156,7 @@
 
                         <EditText
                             android:id="@+id/passwordEditText"
-                            android:layout_width="match_parent"
+                            android:layout_width="250dp"
                             android:layout_height="50dp"
                             android:layout_below="@id/passwordView"
                             android:contentDescription="accPassword"
@@ -175,7 +175,7 @@
 
                         <EditText
                             android:id="@+id/confirmPasswordEditText"
-                            android:layout_width="match_parent"
+                            android:layout_width="250dp"
                             android:layout_height="50dp"
                             android:layout_below="@id/confirmPasswordView"
                             android:inputType="textPassword"
